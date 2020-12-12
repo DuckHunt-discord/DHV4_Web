@@ -22,6 +22,7 @@ ENV DB_USER=""
 ENV DB_PASSWORD=""
 ENV DB_NAME=""
 ENV DH_API_KEY=""
+ENV DH_API_URL=""
 
 COPY docker_run.sh /run.sh
 
