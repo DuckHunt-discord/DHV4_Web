@@ -3,9 +3,9 @@ from django.contrib import admin
 from . import models
 # Register your models here.
 
-admin.register(models.Aerich)
-admin.register(models.Channels)
-admin.register(models.Guilds)
-admin.register(models.Members)
-admin.register(models.Players)
-admin.register(models.Users)
+admin.site.register(models.Aerich)
+admin.site.register(models.Channels)
+admin.site.register(models.Guilds)
+admin.site.register(models.Members)
+admin.site.register(models.Players)
+admin.site.register(models.Users)

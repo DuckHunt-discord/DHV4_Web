@@ -71,7 +71,7 @@ TEMPLATES = [
         'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
-            "match_extension": ".jinja",
+            "match_extension": ".jinja2",
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
