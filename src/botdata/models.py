@@ -57,6 +57,9 @@ class Channels(models.Model):
     super_ducks_max_life = models.SmallIntegerField()
     guild = models.ForeignKey('Guilds', models.DO_NOTHING)
 
+    def __str__(self):
+        return f"#{self.name}"
+
     class Meta:
         db_table = 'channels'
 
@@ -68,6 +71,9 @@ class Guilds(models.Model):
     vip = models.BooleanField()
     language = models.CharField(max_length=6)
 
+    def __str__(self):
+        return f"{self.name} ({self.discord_id})"
+
     class Meta:
         db_table = 'guilds'
 
@@ -76,6 +82,9 @@ class Members(models.Model):
     access_level = models.SmallIntegerField()
     guild = models.ForeignKey(Guilds, models.DO_NOTHING)
     user = models.ForeignKey('Users', models.DO_NOTHING)
+
+    def __str__(self):
+        return f"{self.user} (access={self.access_level})"
 
     class Meta:
         db_table = 'members'
@@ -106,6 +115,9 @@ class Players(models.Model):
     channel = models.ForeignKey(Channels, models.DO_NOTHING)
     member = models.ForeignKey(Members, models.DO_NOTHING)
 
+    def __str__(self):
+        return f"{self.member} playing on {self.channel}"
+
     class Meta:
         db_table = 'players'
 
@@ -121,6 +133,9 @@ class Users(models.Model):
     language = models.CharField(max_length=6)
     first_use = models.BooleanField()
     access_level_override = models.SmallIntegerField()
+
+    def __str__(self):
+        return f"{self.name}#{self.discriminator}"
 
     class Meta:
         db_table = 'users'
