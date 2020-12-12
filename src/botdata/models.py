@@ -58,7 +58,6 @@ class Channels(models.Model):
     guild = models.ForeignKey('Guilds', models.DO_NOTHING)
 
     class Meta:
-        managed = False
         db_table = 'channels'
 
 
@@ -70,7 +69,6 @@ class Guilds(models.Model):
     language = models.CharField(max_length=6)
 
     class Meta:
-        managed = False
         db_table = 'guilds'
 
 
@@ -80,7 +78,6 @@ class Members(models.Model):
     user = models.ForeignKey('Users', models.DO_NOTHING)
 
     class Meta:
-        managed = False
         db_table = 'members'
 
 
@@ -110,7 +107,6 @@ class Players(models.Model):
     member = models.ForeignKey(Members, models.DO_NOTHING)
 
     class Meta:
-        managed = False
         db_table = 'players'
 
 
@@ -127,5 +123,4 @@ class Users(models.Model):
     access_level_override = models.SmallIntegerField()
 
     class Meta:
-        managed = False
         db_table = 'users'
