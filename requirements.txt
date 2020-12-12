@@ -1,4 +1,5 @@
 django
+django-enumfield
 psycopg2
 django-jinja
 gunicorn
