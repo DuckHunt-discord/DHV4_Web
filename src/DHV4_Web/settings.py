@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'public.apps.PublicConfig',
+    'botdata.apps.BotdataConfig',
     'django_jinja'
 ]
 
