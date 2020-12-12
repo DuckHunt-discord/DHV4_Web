@@ -38,6 +38,8 @@ if not DEBUG:
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
     CONN_MAX_AGE = None
+else:
+    ALLOWED_HOSTS.append("12e6064752a9.ngrok.io")
 
 # Application definition
 
@@ -169,4 +171,4 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR.parent / "static"
 
 DH_API_KEY = os.environ.get("DH_API_KEY", "")
-DH_API_URL = os.environ.get("DH_API_URL", "http://localhost:8000/api")
+DH_API_URL = os.environ.get("DH_API_URL", "http://localhost:8080/api")

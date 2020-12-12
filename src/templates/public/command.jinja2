@@ -1,0 +1,35 @@
+{% extends "base.jinja2" %}
+
+{% block title %}
+    DuckHunt V4
+{% endblock %}
+
+{% block content %}
+    <h1><code>{{ command['name'] }}</code></h1>
+    <div class="card background-normal h-100">
+        <div class="card-body">
+            <h5 class="card-title flex-grow-1">{{ command['name'] }}</h5>
+            {% if command['aliases'] %}
+                <h6 class="card-subtitle mb-2 text-muted">Aliases: {% for alias in command['aliases'] %}
+                    <span class="badge bg-secondary">{{ alias }}</span> {% endfor %}</h6>
+            {% endif %}
+            <p>{{ command['help'] }}</p>
+            Invoke with:
+            <pre>{{ prefix }}{{ command['invoke_with'] }}</pre>
+
+        </div>
+
+        {% if command.get('subcommands', []) %}
+            <div class="card-footer">
+                This command has some subcommands: <br/>
+                <div class="row row-cols-2">
+                    {% for subcommand_name, subcommand in command['subcommands'].items() %}
+                        <div class="col-3"><a href="?command={{ command['name'] }} {{ subcommand_name }}" class="card-link"><span
+                                class="badge rounded-pill bg-dark">{{ subcommand_name }}</span></a></div>
+                        <div class="col-9">{{ subcommand['short_doc'] }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

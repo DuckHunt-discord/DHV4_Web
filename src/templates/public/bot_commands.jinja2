@@ -6,5 +6,39 @@
 
 {% block content %}
     <h1>DuckHunt V4 Commands list</h1>
-    Hello
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+        {% for command_name, command in commands.items() %}
+            <div class="col">
+                <div class="card background-normal h-100">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <h5 class="card-title flex-grow-1">{{ command['name'] }}</h5>
+                            <span><a class="text-decoration-none" href="?command={{ command['name'] }}">🔗</a></span>
+                        </div>
+                        {% if command['aliases'] %}
+                            <h6 class="card-subtitle mb-2 text-muted">Aliases: {% for alias in command['aliases'] %}
+                                <span class="badge bg-secondary">{{ alias }}</span> {% endfor %}</h6>
+                        {% endif %}
+                        <p>{{ command['help'] }}</p>
+                        Invoke with:
+                                <pre>{{ prefix }}{{ command['invoke_with'] }}</pre>
+
+                    </div>
+
+                    {% if command.get('subcommands', []) %}
+                        <div class="card-footer">
+                            This command has some <a href="?command={{ command['name'] }}"
+                                                     class="card-link">subcommands</a>:<br/>
+                            {% for subcommand_name in command['subcommands'] %}
+                                <a href="?command={{ command['name'] }} {{ subcommand_name }}" class="card-link"><span
+                                        class="badge rounded-pill bg-dark">{{ subcommand_name }}</span></a>
+                            {% endfor %}
+
+                        </div>
+                    {% endif %}
+                </div>
+                <br/>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

@@ -1,6 +1,16 @@
-body {
-    background-color: #2C2F33 !important;
+.background-light {
+    background-color: #36393f !important;
 }
+
+.background-normal {
+    background-color: #2f3136 !important;
+}
+
+.background-dark {
+    background-color: #202225 !important;
+}
+
+
 
 nav {
     background-color: #7289DA;
