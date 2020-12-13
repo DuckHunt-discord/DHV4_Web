@@ -16,6 +16,17 @@ def index(request):
     return render(request, "public/index.jinja2")
 
 
+def get_command(commands, name):
+    direct = commands.get(name)
+
+    if direct:
+        return direct
+    else:
+        for command_name, command in commands.items():
+            if name in command.get('aliases', []):
+                return command
+
+
 def bot_commands(request):
     command_to_see: Optional[str] = request.GET.get("command", None)
     commands_url = settings.DH_API_URL + "/help/commands"
@@ -23,13 +34,17 @@ def bot_commands(request):
 
     if command_to_see:
         scs = command_to_see.split()
-        commands = commands[scs[0]]
-        if len(scs) != 1:
-            for sc in scs[1:]:
-                commands = commands['subcommands'][sc]
+        commands = get_command(commands, scs[0])
 
-    if command_to_see:
-        ctx = {"command_to_see": command_to_see, "command": commands, "prefix": "d!"}
+        parent = None
+        parent_name = None
+        if len(scs) != 1:
+            parent_name = ' '.join(scs[:-1])
+            for sc in scs[1:]:
+                parent = commands
+                commands = get_command(commands['subcommands'], sc)
+
+        ctx = {"command_to_see": command_to_see, "parent_name": parent_name, "command": commands, "prefix": "d!", "parent": parent}
         return render(request, "public/command.jinja2", ctx)
     else:
         ctx = {"commands": commands, "prefix": "d!"}

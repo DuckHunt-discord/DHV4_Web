@@ -5,13 +5,19 @@
 {% endblock %}
 
 {% block content %}
-    <h1><code>{{ command['name'] }}</code></h1>
+    <h1><code>{{ command_to_see }}</code>{% if command['name'] != command_to_see %} (<code>{{ command['name'] }}</code>){% endif %}</h1>
     <div class="card background-normal h-100">
         <div class="card-body">
-            <h5 class="card-title flex-grow-1">{{ command['name'] }}</h5>
+            <h5 class="card-title flex-grow-1">{{ command['name'] }} {% if command.get('access_name') %} <span class="badge bg-danger">{{ command.get('access_name') }}</span>{% endif %}</h5>
             {% if command['aliases'] %}
-                <h6 class="card-subtitle mb-2 text-muted">Aliases: {% for alias in command['aliases'] %}
-                    <span class="badge bg-secondary">{{ alias }}</span> {% endfor %}</h6>
+                <h6 class="card-subtitle mb-2 text-muted">Aliases:
+
+                    {% for alias in command['aliases'] %}
+                        <a class="text-decoration-none" href="?command={% if parent_name %}{{ parent_name }} {% endif %}{{ alias }}">
+                            <span class="badge bg-secondary">{{ alias }}</span>
+                        </a>
+                    {% endfor %}
+                </h6>
             {% endif %}
             <p>{{ command['help'] }}</p>
             Invoke with:
@@ -24,12 +30,19 @@
                 This command has some subcommands: <br/>
                 <div class="row row-cols-2">
                     {% for subcommand_name, subcommand in command['subcommands'].items() %}
-                        <div class="col-3"><a href="?command={{ command['name'] }} {{ subcommand_name }}" class="card-link"><span
-                                class="badge rounded-pill bg-dark">{{ subcommand_name }}</span></a></div>
+                        <div class="col-3">
+                            <a href="?command={{ command_to_see }} {{ subcommand_name }}" class="card-link"><span
+                                class="badge rounded-pill bg-dark">{{ subcommand_name }}</span></a>
+                        </div>
                         <div class="col-9">{{ subcommand['short_doc'] }}</div>
                     {% endfor %}
                 </div>
             </div>
         {% endif %}
     </div>
+    {% if parent %}
+        You can got back to the <a href="?command={{ parent_name }}">{{ parent_name }} help page</a>, or <a href="?">see all the commands</a>.
+    {% else %}
+        You can also <a href="?">see all the commands</a>.
+    {% endif %}
 {% endblock %}

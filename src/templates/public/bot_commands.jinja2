@@ -12,16 +12,22 @@
                 <div class="card background-normal h-100">
                     <div class="card-body">
                         <div class="d-flex">
-                            <h5 class="card-title flex-grow-1">{{ command['name'] }}</h5>
+                            <h5 class="card-title flex-grow-1">{{ command['name'] }} {% if command.get('access_name') %}
+                                <span class="badge bg-danger">{{ command.get('access_name') }}</span>{% endif %}</h5>
                             <span><a class="text-decoration-none" href="?command={{ command['name'] }}">🔗</a></span>
                         </div>
                         {% if command['aliases'] %}
-                            <h6 class="card-subtitle mb-2 text-muted">Aliases: {% for alias in command['aliases'] %}
-                                <span class="badge bg-secondary">{{ alias }}</span> {% endfor %}</h6>
+                            <h6 class="card-subtitle mb-2 text-muted">Aliases:
+                                {% for alias in command['aliases'] %}
+                                    <a class="text-decoration-none" href="?command={{ alias }}">
+                                        <span class="badge bg-secondary">{{ alias }}</span>
+                                    </a>
+                                {% endfor %}
+                            </h6>
                         {% endif %}
                         <p>{{ command['help'] }}</p>
                         Invoke with:
-                                <pre>{{ prefix }}{{ command['invoke_with'] }}</pre>
+                        <pre>{{ prefix }}{{ command['invoke_with'] }}</pre>
 
                     </div>
 
