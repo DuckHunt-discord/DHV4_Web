@@ -56,5 +56,6 @@ def bot_commands(request):
         ctx = {"command_to_see": command_to_see, "parent_name": parent_name, "command": commands, "prefix": "d!", "parent": parent}
         return render(request, "public/command.jinja2", ctx)
     else:
+        commands = dict(sorted(commands.items(), key=lambda d: d[1].get('access_value', 50)))
         ctx = {"commands": commands, "prefix": "d!"}
         return render(request, "public/bot_commands.jinja2", ctx)
