@@ -52,7 +52,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'public.apps.PublicConfig',
     'botdata.apps.BotdataConfig',
-    'django_jinja'
+    'django_jinja',
+    'django_extensions'
 ]
 
 MIDDLEWARE = [

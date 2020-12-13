@@ -5,6 +5,14 @@ from django.conf import settings
 
 # Create your views here.
 import requests
+from django.views.decorators.cache import cache_page
+
+SECOND = 1
+MINUTE = 60 * SECOND
+HOUR = 60 * MINUTE
+DAY = 24 * HOUR
+MONTH = 30 * DAY
+YEAR = 365 * DAY
 
 
 def get_from_api(url):
@@ -27,6 +35,7 @@ def get_command(commands, name):
                 return command
 
 
+@cache_page(MONTH)
 def bot_commands(request):
     command_to_see: Optional[str] = request.GET.get("command", None)
     commands_url = settings.DH_API_URL + "/help/commands"
