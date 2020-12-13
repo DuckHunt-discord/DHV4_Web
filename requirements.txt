@@ -4,3 +4,4 @@ django_extensions
 psycopg2
 django-jinja
 gunicorn
+requests
