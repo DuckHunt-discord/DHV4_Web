@@ -23,12 +23,22 @@
             {% endif %}
         {% endfor %}
     </ul>
+
+    {% if player.prestige >= 1 %}
+        <h2>Prestige</h2>
+        You've got to prestige level {{ player.prestige }}, and claimed {{ player.prestige_dailies }} prestige dailies
+    {% endif %}
+
+
     {% if player.killed|length %}
         <h2>Ducks killed</h2>
         <div id="chart-ducks-killed"></div>
     {% endif %}
 
-    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+    <h2>Shooting range</h2>
+    <div id="chart-best-times"></div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 justify-content-around">
 
         {% if player.hugged|length %}
             <div class="col">
@@ -52,10 +62,12 @@
         {% endif %}
     </div>
 
+
+
     {% set powerups = player.get_only_active_powerups() %}
     <h2>Backpack</h2>
 
-    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 justify-content-center">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 justify-content-around">
         <div class="card text-dark col">
             <div class="card-body">
                 <table class="table">
@@ -157,7 +169,8 @@
                         <td class="text-center" colspan="2">
                             <br/><br/>
                             Thanks for buying in the shop.<br/>
-                            We hope to see you soon.<br/><br/>
+                            We hope to see you soon.<br/>
+                            Thanks for spending {{ intcomma(player.spent_experience) }} exp in there<br/><br/><br/>
 
                             <svg class="barcode"
                                  jsbarcode-format="auto"
@@ -173,12 +186,32 @@
                 </table>
             </div>
         </div>
+        <div class="col align-self-center">
+            <div class="h5">Purchased and used...</div>
+            <ul>
+                {% for item, qty in player.bought_items.items() %}
+                    <li>{{ qty }} {{ item.replace('_', ' ').capitalize() }}</li>
+                {% endfor %}
+            </ul>
+            <br/>
+            <div class="h5">Found in bushes...</div>
+            <ul>
+                {% for item, qty in player.found_items.items() %}
+                    <li>{{ qty }} {{ item.replace('_', ' ').capitalize() }}</li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 
+    <h2>Shooting stats</h2>
 
-    <h2>Shooting range</h2>
+    {{ player.shooting_stats }}
+
 
     <h2>Misc</h2>
+
+    {{ player.bullets }} bullets in gun, {{ player.magazines }} magazines in backpack.
+
 
     <script>
         Highcharts.setOptions({
@@ -253,5 +286,47 @@
                 }]
             });
         {% endif %}
+
+        Highcharts.chart('chart-best-times', {
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: 'Best times'
+            },
+            yAxis: {
+                title: {
+                    text: 'Time to kill (seconds)',
+                    align: 'high'
+                },
+            },
+            xAxis: {
+                labels: {
+                    enabled: false,
+                }
+            },
+            tooltip: {
+                valueSuffix: ' seconds'
+            },
+            plotOptions: {
+                bar: {
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            series: [{
+                name: 'Best Times',
+                colorByPoint: true,
+                data: {{ dict_to_highcharts(player.best_times) }},
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.name}: {point.y:.1f}s'
+                }
+            }]
+        });
     </script>
 {% endblock %}
