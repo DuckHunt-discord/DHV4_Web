@@ -40,6 +40,7 @@ if not DEBUG:
     CONN_MAX_AGE = None
 else:
     ALLOWED_HOSTS.append("12e6064752a9.ngrok.io")
+    INTERNAL_IPS = ALLOWED_HOSTS
 
 # Application definition
 
@@ -50,6 +51,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'debug_toolbar',
     'public.apps.PublicConfig',
     'botdata.apps.BotdataConfig',
     'django_jinja',
@@ -64,6 +66,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware'
 ]
 
 ROOT_URLCONF = 'DHV4_Web.urls'
@@ -107,8 +110,12 @@ WSGI_APPLICATION = 'DHV4_Web.wsgi.application'
 if DEBUG:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ.get("DB_NAME", "mybot"),
+            'USER': os.environ.get("DB_USER", "mybot"),
+            'PASSWORD': os.environ.get("DB_PASSWORD", "mybot"),
+            'HOST': os.environ.get("DB_HOST", "localhost"),
+            'PORT': os.environ.get("DB_PORT", "5432"),
         }
     }
 else:

@@ -1,7 +1,8 @@
 django
 django-enumfield
 django_extensions
-psycopg2
+django-debug-toolbar
 django-jinja
+psycopg2
 gunicorn
 requests

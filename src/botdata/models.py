@@ -20,7 +20,7 @@ def default_dict_generator(default_factory):
 
 
 class DefaultDictJSONField(models.JSONField):
-    def __init__(self, default_factory: typing.Callable = int, **kwargs: typing.Dict):
+    def __init__(self, default_factory: typing.Callable = int, **kwargs: typing.Any):
         self.default_factory = default_factory
         super().__init__(**kwargs)
 
@@ -31,9 +31,9 @@ class DefaultDictJSONField(models.JSONField):
         ret = super().to_python(value)
         return collections.defaultdict(self.default_factory, ret)
 
-    def from_db_value(self, value: typing.Optional[collections.defaultdict], **kwargs) -> typing.Optional[str]:
-        value = dict(value)
-        return super().from_db_value(value, **kwargs)
+    def from_db_value(self, value: str, expression, connection) -> typing.Optional[collections.defaultdict]:
+        parsed = super().from_db_value(value, expression, connection)
+        return collections.defaultdict(self.default_factory, parsed)
 
 
 class DiscordGuild(models.Model):
@@ -165,7 +165,7 @@ class Player(models.Model):
     active_powerups = DefaultDictJSONField(default_factory=int)
     shooting_stats = DefaultDictJSONField(default_factory=int)
 
-    stored_achievements = DefaultDictJSONField(default_factory=bool)
+    stored_achievements = DefaultDictJSONField(default_factory=bool, blank=True)
 
     experience = models.BigIntegerField(default=0)
     spent_experience = models.BigIntegerField(default=0)
