@@ -53,7 +53,7 @@ class DiscordGuild(models.Model):
 class DiscordChannel(models.Model):
     discord_id = models.BigAutoField(primary_key=True)
 
-    guild = models.ForeignKey(DiscordGuild, models.CASCADE)
+    guild = models.ForeignKey(DiscordGuild, models.CASCADE, related_name="channels")
     name = models.TextField()
 
     webhook_urls = models.JSONField(default=list, blank=True)
@@ -144,8 +144,8 @@ class DiscordUser(models.Model):
 class DiscordMember(models.Model):
     access_level = EnumField(AccessLevel, default=AccessLevel.DEFAULT)
 
-    guild = models.ForeignKey(DiscordGuild, models.CASCADE)
-    user = models.ForeignKey(DiscordUser, models.CASCADE)
+    guild = models.ForeignKey(DiscordGuild, models.CASCADE, related_name="members")
+    user = models.ForeignKey(DiscordUser, models.CASCADE, related_name="members")
 
     def __str__(self):
         return f"{self.user} (access={self.access_level})"
@@ -155,7 +155,7 @@ class DiscordMember(models.Model):
 
 
 class Player(models.Model):
-    channel = models.ForeignKey(DiscordChannel, models.CASCADE)
+    channel = models.ForeignKey(DiscordChannel, models.CASCADE, related_name="players")
     member = models.ForeignKey(DiscordMember, models.CASCADE)
 
     prestige = models.SmallIntegerField(default=8)
