@@ -20,11 +20,14 @@
                         {% for channel in guild.channels.all() %}
                             <li class="list-group-item background-dark">
                                 <div class="row row-cols-2">
-                                    <div class="col-9">
+                                    <div class="col-8">
                                         <a href="{{ url('channel', pk=channel.pk) }}">#{{ channel.name }}</a>
                                     </div>
                                     <div class="col-3">
                                         <span class="badge bg-info text-dark">{{ channel.player_count }} players</span>
+                                    </div>
+                                    <div class="col-1">
+                                        <a class="text-decoration-none" title="Settings" href="{{ url('channel_settings', pk=channel.pk) }}">⚙️</a>
                                     </div>
                                 </div>
                             </li>

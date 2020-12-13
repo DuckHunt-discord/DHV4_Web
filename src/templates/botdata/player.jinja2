@@ -1,0 +1,257 @@
+{% extends "base.jinja2" %}
+
+{% block title %}
+    DuckHunt V4 - Player
+{% endblock %}
+
+{% block content %}
+    <h1>{{ current_user.name }}#{{ current_user.discriminator }} statistics on #{{ channel.name }}</h1>
+
+    <h2>General statistics</h2>
+
+    <p>
+        <span class="statistic">{{ player.givebacks }}</span> days played,
+        <span class="statistic">{{ intcomma(player.experience) }}</span> experience points.
+    </p>
+
+    <h2>Achievements</h2>
+
+    <ul>
+        {% for achievement, unlocked in player.achievements.items() %}
+            {% if unlocked %}
+                <li>{{ achievements[achievement]['name'] }}: {{ achievements[achievement]['description'] }}</li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+    {% if player.killed|length %}
+        <h2>Ducks killed</h2>
+        <div id="chart-ducks-killed"></div>
+    {% endif %}
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+
+        {% if player.hugged|length %}
+            <div class="col">
+                <h2>Ducks hugged</h2>
+                <div id="chart-ducks-hugged"></div>
+            </div>
+        {% endif %}
+
+        {% if player.hurted|length %}
+            <div class="col">
+                <h2>Ducks hurt</h2>
+                <div id="chart-ducks-hurt"></div>
+            </div>
+        {% endif %}
+
+        {% if player.frightened|length %}
+            <div class="col">
+                <h2>Ducks frightened</h2>
+                <div id="chart-ducks-frightened"></div>
+            </div>
+        {% endif %}
+    </div>
+
+    {% set powerups = player.get_only_active_powerups() %}
+    <h2>Backpack</h2>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 justify-content-center">
+        <div class="card text-dark col">
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                    <tr style="border-bottom: hidden;">
+                        <th colspan="2" class="text-center h4">DuckHunt Shop<br/><br/><br/></th>
+                    </tr>
+                    <tr>
+                        <th>
+                            <span class="text-muted fw-lighter">Invoice No.</span><br/>
+                            <span class="fw-lighter fs-6">{{ current_user.pk }}</span><br/><br/>
+                        </th>
+                        <th class="text-end">
+                            <span class="text-muted fw-lighter">Payment Date.</span><br/>
+                            <span class="fw-lighter fs-6">{{ player.last_giveback|date }}</span><br/><br/>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% if powerups.get('ap_ammo', False) %}
+                        <tr>
+                            <td>Armor Piercing ammo</td>
+                            <td class="text-end">{{ show_timestamp(powerups['ap_ammo']) }} left</td>
+                        </tr>
+                    {% endif %}
+                    {% if powerups.get('explosive_ammo', False) %}
+                        <tr>
+                            <td>Explosive ammo</td>
+                            <td class="text-end">{{ show_timestamp(powerups['explosive_ammo']) }} left</td>
+                        </tr>
+                    {% endif %}
+                    {% if powerups.get('grease', False) %}
+                        <tr>
+                            <td>Gun grease</td>
+                            <td class="text-end">{{ show_timestamp(powerups['grease']) }} left</td>
+                        </tr>
+                    {% endif %}
+                    {% if powerups.get('sight', False) %}
+                        <tr>
+                            <td>Sight</td>
+                            <td class="text-end">{{ powerups['sight'] }} shots</td>
+                        </tr>
+                    {% endif %}
+                    {% if powerups.get('detector', False) %}
+                        <tr>
+                            <td>Infrared detector</td>
+                            <td class="text-end">{{ powerups['detector'] }} misses</td>
+                        </tr>
+                    {% endif %}
+                    {% if powerups.get('silencer', False) %}
+                        <tr>
+                            <td>Silencer</td>
+                            <td class="text-end">{{ show_timestamp(powerups['silencer']) }} left</td>
+                        </tr>
+                    {% endif %}
+                    {% if powerups.get('clover', False) %}
+                        <tr>
+                            <td>Clover: {{ powerups['clover_exp'] }} exp</td>
+                            <td class="text-end">{{ show_timestamp(powerups['clover']) }} left</td>
+                        </tr>
+                    {% endif %}
+                    {% if powerups.get('sunglasses', False) %}
+                        <tr>
+                            <td>Sunglasses</td>
+                            <td class="text-end">{{ show_timestamp(powerups['sunglasses']) }} left</td>
+                        </tr>
+                    {% endif %}
+                    {% if powerups.get('coat', False) %}
+                        <tr>
+                            <td>Rain coat</td>
+                            <td class="text-end">{{ show_timestamp(powerups['coat']) }} left</td>
+                        </tr>
+                    {% endif %}
+                    {% if powerups.get('licence', False) %}
+                        <tr>
+                            <td>Licence to kill</td>
+                            <td class="text-end">{{ show_timestamp(powerups['licence']) }} left</td>
+                        </tr>
+                    {% endif %}
+                    {% if powerups.get('reloader', False) %}
+                        <tr>
+                            <td>Automatic reloader</td>
+                            <td class="text-end">{{ show_timestamp(powerups['reloader']) }} left</td>
+                        </tr>
+                    {% endif %}
+                    {% if powerups.get('homing_bullets', False) %}
+                        <tr>
+                            <td>Homing bullets</td>
+                            <td class="text-end">{{ powerups['homing_bullets'] }} ✨</td>
+                        </tr>
+                    {% endif %}
+                    </tbody>
+                    <tfoot>
+                    <tr style="border-bottom: hidden;">
+                        <td class="text-end">Total:</td>
+                        <td class="text-end fw-bolder">{{ powerups|length }} items</td>
+                    </tr>
+                    <tr style="border-bottom: hidden;">
+                        <td class="text-center" colspan="2">
+                            <br/><br/>
+                            Thanks for buying in the shop.<br/>
+                            We hope to see you soon.<br/><br/>
+
+                            <svg class="barcode"
+                                 jsbarcode-format="auto"
+                                 jsbarcode-value="{{ barcode }}"
+                                 jsbarcode-textmargin="0"
+                                 jsbarcode-fontoptions="bold"
+                                 jsbarcode-displayValue="false">
+                            </svg>
+
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <h2>Shooting range</h2>
+
+    <h2>Misc</h2>
+
+    <script>
+        Highcharts.setOptions({
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
+            },
+            title: {
+                text: ''
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                    }
+                }
+            },
+        });
+        {% if player.killed|length %}
+            Highcharts.chart('chart-ducks-killed', {
+                tooltip: {
+                    pointFormat: 'Killed: {point.y} (<b>{point.percentage:.1f}%</b>)'
+                },
+                series: [{
+                    name: 'Killed',
+                    colorByPoint: true,
+                    data: {{ dict_to_highcharts(player.killed) }}
+                }]
+            });
+        {% endif %}
+
+        {% if player.hugged|length %}
+            Highcharts.chart('chart-ducks-hugged', {
+                tooltip: {
+                    pointFormat: 'Hugged: {point.y} (<b>{point.percentage:.1f}%</b>)'
+                },
+                series: [{
+                    name: 'Hugged',
+                    colorByPoint: true,
+                    data: {{ dict_to_highcharts(player.hugged) }}
+                }]
+            });
+        {% endif %}
+
+        {% if player.hurted|length %}
+            Highcharts.chart('chart-ducks-hurt', {
+                tooltip: {
+                    pointFormat: 'Hurt: {point.y} (<b>{point.percentage:.1f}%</b>)'
+                },
+                series: [{
+                    name: 'Hurt',
+                    colorByPoint: true,
+                    data: {{ dict_to_highcharts(player.hurted) }}
+                }]
+            });
+        {% endif %}
+
+        {% if player.frightened|length %}
+            Highcharts.chart('chart-ducks-frightened', {
+                tooltip: {
+                    pointFormat: 'Frightened: {point.y} (<b>{point.percentage:.1f}%</b>)'
+                },
+                series: [{
+                    name: 'Frightened',
+                    colorByPoint: true,
+                    data: {{ dict_to_highcharts(player.frightened) }}
+                }]
+            });
+        {% endif %}
+    </script>
+{% endblock %}

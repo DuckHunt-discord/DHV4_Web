@@ -4,9 +4,27 @@
     <meta charset="utf-8">
     <link rel=“canonical” href=“https://duckhunt.me{{ request.get_full_path() }}” />
 
-    <link href="{{ static('public/css/base.css') }}" rel="stylesheet">
     <link href="{{ static('public/css/bootstrap.css') }}" rel="stylesheet">
     <script src="{{ static('public/js/bootstrap.bundle.js') }}"></script>
+    <script src="{{ static('public/js/jsBarcode.all.min.js') }}"></script>
+    <script src="{{ static('public/js/highcharts.js') }}"></script>
+    <script src="{{ static('public/js/highcharts-more.js') }}"></script>
+    <script src="{{ static('public/js/themes/high-contrast-dark.js') }}"></script>
+
+    <script>
+        Highcharts.setOptions({
+            credits: false,
+            chart: {
+                backgroundColor: '#2f3136',
+                borderWidth: 0,
+                plotBackgroundColor: '#202225',
+                plotShadow: true,
+                plotBorderWidth: 1
+            }
+        });
+    </script>
+
+    <link href="{{ static('public/css/base.css') }}" rel="stylesheet">
     <title>{% block title %}DuckHunt Discord{% endblock %}</title>
 </head>
 <body class="background-light">
@@ -43,5 +61,7 @@
         {% block content %}
         {% endblock %}
     </div>
+    <script>JsBarcode(".barcode").init();</script>
+
 </body>
 </html>

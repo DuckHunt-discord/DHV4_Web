@@ -6,6 +6,7 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 import collections
+import time
 import typing
 from enum import unique
 
@@ -182,12 +183,59 @@ class Player(models.Model):
 
     weapon_sabotaged_by = models.ForeignKey('self', models.SET_NULL, blank=True, null=True)
 
-    best_times = DefaultDictJSONField(default_factory=lambda: 660)
-    killed = DefaultDictJSONField()
-    hugged = DefaultDictJSONField()
-    hurted = DefaultDictJSONField()
-    resisted = DefaultDictJSONField()
-    frightened = DefaultDictJSONField()
+    best_times = DefaultDictJSONField(default_factory=lambda: 660, blank=True)
+    killed = DefaultDictJSONField(blank=True)
+    hugged = DefaultDictJSONField(blank=True)
+    hurted = DefaultDictJSONField(blank=True)
+    resisted = DefaultDictJSONField(blank=True)
+    frightened = DefaultDictJSONField(blank=True)
+
+    @property
+    def total_ducks_killed(self):
+        return sum(self.killed.values())
+
+    @property
+    def computed_achievements(self):
+        return {
+            'murderer': self.shooting_stats.get('murders', 0) >= 1,
+            'big_spender': self.spent_experience >= 2000,
+            'first_week': self.givebacks >= 7,
+            'first_month': self.givebacks >= 30,
+            'first_year': self.givebacks >= 365,
+            'i_dont_want_bullets': self.found_items.get('left_bullet', 0) >= 1,
+            'baby_killer': self.killed.get('baby', 0) >= 5,
+            'maths': self.killed.get('prof', 0) >= 5,
+            'brains': self.shooting_stats.get('brains_eaten', 0) >= 5,
+            'sentry_gun': self.shooting_stats.get('bullets_used', 0) >= 1000,
+        }
+
+    @property
+    def achievements(self):
+        return {
+            **self.computed_achievements,
+            **self.stored_achievements,
+        }
+
+    def is_powerup_active(self, powerup):
+        if self.prestige >= 1 and powerup == "sunglasses":
+            return True
+        elif self.prestige >= 5 and powerup == "coat":
+            return True
+        elif self.prestige >= 7 and powerup == "kill_licence":
+            return True
+        elif powerup in ["sight", "detector", "wet", "sand", "mirror", "homing_bullets", "dead", "confiscated",
+                         "jammed"]:
+            return self.active_powerups[powerup] > 0
+        else:
+            now = time.time()
+            return self.active_powerups[powerup] >= now
+
+    def get_only_active_powerups(self):
+        active = {}
+        for powerup, powerup_value in self.active_powerups.items():
+            if self.is_powerup_active(powerup):
+                active[powerup] = powerup_value
+        return active
 
     def __str__(self):
         return f"{self.member} playing on {self.channel}"
