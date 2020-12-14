@@ -181,7 +181,7 @@ if not DEBUG:
     LOGGING = {
         "version": 1,
         "disable_existing_loggers": False,
-        "root": {"level": "DEBUG", "handlers": ["file"]},
+        "root": {"level": "DEBUG", "handlers": ["stream"]},
         "handlers": {
             "stream": {
                 "level": "DEBUG",
