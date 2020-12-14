@@ -15,7 +15,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
@@ -27,7 +26,6 @@ if DEBUG:
     SECRET_KEY = 'u-3sierkapz7b9fp0o82qyulnstk6c8s*8myzw&=*$u@fi4^%%'
 else:
     SECRET_KEY = os.environ["SECRET_KEY"]
-
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
@@ -103,7 +101,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'DHV4_Web.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -138,7 +135,6 @@ CACHES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
@@ -157,7 +153,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -173,7 +168,6 @@ USE_THOUSAND_SEPARATOR = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
@@ -182,3 +176,33 @@ STATIC_ROOT = BASE_DIR.parent / "static"
 
 DH_API_KEY = os.environ.get("DH_API_KEY", "")
 DH_API_URL = os.environ.get("DH_API_URL", "http://localhost:8080/api")
+
+if not DEBUG:
+    LOGGING = {
+        "version": 1,
+        "disable_existing_loggers": False,
+        "root": {"level": "DEBUG", "handlers": ["file"]},
+        "handlers": {
+            "stream": {
+                "level": "DEBUG",
+                "class": "logging.StreamHandler",
+                "formatter": "app",
+            },
+        },
+        "loggers": {
+            "django": {
+                "handlers": ["stream"],
+                "level": "DEBUG",
+                "propagate": True
+            },
+        },
+        "formatters": {
+            "app": {
+                "format": (
+                    u"%(asctime)s [%(levelname)-8s] "
+                    "(%(module)s.%(funcName)s) %(message)s"
+                ),
+                "datefmt": "%Y-%m-%d %H:%M:%S",
+            },
+        },
+    }
