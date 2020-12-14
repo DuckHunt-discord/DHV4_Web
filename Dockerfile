@@ -15,6 +15,7 @@ RUN pip install --use-deprecated=legacy-resolver -U -r requirements.txt
 
 COPY src/ /web
 
+ENV DOMAIN="v4.duckhunt.me"
 ENV SECRET_KEY=""
 ENV DEBUG="False"
 ENV DB_PORT="5432"
