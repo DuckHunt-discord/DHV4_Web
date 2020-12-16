@@ -215,9 +215,11 @@
 
     <h2>Shooting stats</h2>
 
-    <h3>Shots...</h3>
-    <table>
+    <table class="table table-dark table-borderless">
         <thead>
+        <tr>
+            <th colspan="10">Shots...</th>
+        </tr>
         <tr>
             <th>When dead</th>
             <th>When wet</th>
@@ -247,8 +249,9 @@
         </tbody>
     </table>
 
-    <p> {{ current_user.name }} used {{ player.shooting_stats.get('bullets_used', 0) }} bullets (of which
-        {{ player.shooting_stats.get('homing_kills', 0) }} were homing)
+    <p>
+        {{ current_user.name }} used {{ player.shooting_stats.get('bullets_used', 0) }} bullets {% if player.shooting_stats.get('homing_kills', 0) %}(of which
+        {{ player.shooting_stats.get('homing_kills', 0) }} were homing){% endif %}
         and {{ player.shooting_stats.get('reloads', 0) }}
         magazines. They missed their target {{ player.shooting_stats.get('missed', 0) }} times, killed someone
         {{ player.shooting_stats.get('killed', 0) }} times, and murdered {{ player.shooting_stats.get('murders', 0) }}
@@ -261,14 +264,13 @@
         </p>
     {% endif %}
 
+    {% if player.shooting_stats.get('got_killed', 0) %}
     <p>
-        They got killed {{ player.shooting_stats.get('got_killed', 0) }} times, and had to eat
-        {{ player.shooting_stats.get('brains_eaten', 0) }} brains to revive themselves (
-        {{ player.shooting_stats.get('revives', 0) }}
-        times). They were really hungry once when they
-        ate {{ player.shooting_stats.get('max_brains_eaten_at_once', 0) }}
-        brains at once.
+        They got killed {{ player.shooting_stats.get('got_killed', 0) }} times{% if player.shooting_stats.get('brains_eaten', 0) %}, and had to eat {{ player.shooting_stats.get('brains_eaten', 0) }}
+        brains to revive themselves ({{ player.shooting_stats.get('revives', 0) }} times). They were really hungry once when they
+        ate {{ player.shooting_stats.get('max_brains_eaten_at_once', 0) }} brains at once{% endif %}.
     </p>
+    {% endif %}
 
     {% if player.shooting_stats.get('useless_revives', 0) %}
     <p>
