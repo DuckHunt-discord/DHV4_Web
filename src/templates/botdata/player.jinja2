@@ -14,6 +14,16 @@
         <span class="statistic">{{ intcomma(player.experience) }}</span> experience points.
     </p>
 
+    <h2>Trophys</h2>
+
+    <ul>
+        {% for achievement, unlocked in current_user.trophys.items() %}
+            {% if unlocked %}
+                <li>{{ achievements[achievement]['name'] }}: {{ achievements[achievement]['description'] }}</li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+
     <h2>Achievements</h2>
 
     <ul>
@@ -205,8 +215,75 @@
 
     <h2>Shooting stats</h2>
 
-    {{ player.shooting_stats }}
+    <h3>Shots...</h3>
+    <table>
+        <thead>
+        <tr>
+            <th>When dead</th>
+            <th>When wet</th>
+            <th>Without a weapon</th>
+            <th>With a sabotaged weapon</th>
+            <th>With a jammed weapon</th>
+            <th>Without bullets</th>
+            <th>Jamming the gun</th>
+            <th>With ducks</th>
+            <th>Without ducks</th>
+            <th>Stopped by the detector</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th>{{ player.shooting_stats.get('shots_when_dead', 0) }}</th>
+            <th>{{ player.shooting_stats.get('shots_when_wet', 0) }}</th>
+            <th>{{ player.shooting_stats.get('shots_when_confiscated', 0) }}</th>
+            <th>{{ player.shooting_stats.get('shots_when_sabotaged', 0) }}</th>
+            <th>{{ player.shooting_stats.get('shots_when_jammed', 0) }}</th>
+            <th>{{ player.shooting_stats.get('shots_with_empty_magazine', 0) }}</th>
+            <th>{{ player.shooting_stats.get('shots_jamming_weapon', 0) }}</th>
+            <th>{{ player.shooting_stats.get('shots_with_duck', 0) }}</th>
+            <th>{{ player.shooting_stats.get('shots_without_duck', 0) }}</th>
+            <th>{{ player.shooting_stats.get('shots_stopped_by_detector', 0) }}</th>
+        </tr>
+        </tbody>
+    </table>
 
+    <p> {{ current_user.name }} used {{ player.shooting_stats.get('bullets_used', 0) }} bullets (of which
+        {{ player.shooting_stats.get('homing_kills', 0) }} were homing)
+        and {{ player.shooting_stats.get('reloads', 0) }}
+        magazines. They missed their target {{ player.shooting_stats.get('missed', 0) }} times, killed someone
+        {{ player.shooting_stats.get('killed', 0) }} times, and murdered {{ player.shooting_stats.get('murders', 0) }}
+        players.
+    </p>
+
+    {% if player.shooting_stats.get('suicides', 0) %}
+        <p>
+            They killed themselves {{ player.shooting_stats.get('suicides', 0) }} times.
+        </p>
+    {% endif %}
+
+    <p>
+        They got killed {{ player.shooting_stats.get('got_killed', 0) }} times, and had to eat
+        {{ player.shooting_stats.get('brains_eaten', 0) }} brains to revive themselves (
+        {{ player.shooting_stats.get('revives', 0) }}
+        times). They were really hungry once when they
+        ate {{ player.shooting_stats.get('max_brains_eaten_at_once', 0) }}
+        brains at once.
+    </p>
+
+    {% if player.shooting_stats.get('useless_revives', 0) %}
+    <p>
+        They also tried reviving themselves {{ player.shooting_stats.get('useless_revives', 0) }} times, but they were
+        already alive.
+    </p>
+    {% endif %}
+
+    {% if player.shooting_stats.get('autoreloads', 0) or player.shooting_stats.get('failed_autoreloads', 0) %}
+    <p>
+        {{ current_user.name }}'s gun was reloaded automatically {{ player.shooting_stats.get('autoreloads', 0) }} times
+        (and the autoreloader failed {{ player.shooting_stats.get('failed_autoreloads', 0) }} times, because they had no
+        more magazines.)
+    </p>
+    {% endif %}
 
     <h2>Misc</h2>
 
