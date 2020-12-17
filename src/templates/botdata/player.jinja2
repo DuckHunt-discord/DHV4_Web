@@ -16,13 +16,6 @@
 
     <h2>Trophys</h2>
 
-    <ul>
-        {% for achievement, unlocked in current_user.trophys.items() %}
-            {% if unlocked %}
-                <li>{{ achievements[achievement]['name'] }}: {{ achievements[achievement]['description'] }}</li>
-            {% endif %}
-        {% endfor %}
-    </ul>
 
     <h2>Achievements</h2>
 
@@ -135,7 +128,7 @@
                     {% endif %}
                     {% if powerups.get('clover', False) %}
                         <tr>
-                            <td>Clover: {{ powerups['clover_exp'] }} exp</td>
+                            <td>Clover: {{ player.active_powerups['clover_exp'] }} exp</td>
                             <td class="text-end">{{ show_timestamp(powerups['clover']) }} left</td>
                         </tr>
                     {% endif %}

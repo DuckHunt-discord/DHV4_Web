@@ -14,11 +14,31 @@
     background-color: #0c4128 !important;
 }
 
+.background-dark-purple {
+    background-color: #2a1d33 !important;
+}
+
 h2{
     padding-top: 0.7em !important;
 }
 
-nav {
-    background-color: #0d71b0;
-    color: #99AAB5 !important;
+.navbar {
+    background-color: black !important;
+    color: white !important;
+}
+
+.text-blurple {
+    color: #7187dd !important;
+}
+
+.text-light-green {
+    color: #37B97C !important;
+}
+
+.text-normal-green {
+    color: rgb(33, 186, 69) !important;
+}
+
+.text-dark-green {
+    color: rgb(24, 133, 49) !important;
 }
