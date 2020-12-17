@@ -13,23 +13,30 @@
                 <div class="card background-normal h-100">
                     <div class="card-body">
                         <a class="text-decoration-none" href="{{ url('guild', pk=guild.pk) }}">
-                            <div class="h4 card-title flex-grow-1 text-light-green">{{ guild.name }}</div>
+                            <div class="h4 card-title flex-grow-1 text-white-75">{{ guild.name }}</div>
                         </a>
                     </div>
                     <ul class="list-group list-group-flush">
                         {% for channel in guild.channels.all() %}
-                            <li class="list-group-item background-normal border-bottom-0" >
+                            <li class="list-group-item background-normal border-bottom-0">
                                 <div class="row row-cols-2">
-                                    <div class="col-8">
-                                        <a class="text-blurple" href="{{ url('channel', pk=channel.pk) }}">#{{ channel.name }}</a>
-                                    </div>
-                                    <div class="col-3">
-                                        <span class="badge bg-secondary text-dark">{{ channel.player_count }} players</span>
-                                    </div>
-                                    <div class="col-1">
-                                        <a class="text-decoration-none" title="Settings"
-                                           href="{{ url('channel_settings', pk=channel.pk) }}">⚙️</a>
-                                    </div>
+                                    <a class="text-blurple col-8" href="{{ url('channel', pk=channel.pk) }}">
+                                        <div>
+                                            #{{ channel.name }}
+                                        </div>
+                                    </a>
+
+                                    <a class="text-blurple col-3" href="{{ url('channel', pk=channel.pk) }}">
+                                        <div>
+                                            <span class="badge bg-dark text-white-75">{{ channel.player_count }} players</span>
+                                        </div>
+                                    </a>
+                                    <a class="text-decoration-none col-1" title="Settings"
+                                       href="{{ url('channel_settings', pk=channel.pk) }}">
+                                        <div>
+                                            ⚙️
+                                        </div>
+                                    </a>
                                 </div>
                             </li>
                         {% endfor %}
@@ -40,60 +47,62 @@
     </div>
 
     <div class="d-flex justify-content-center">
-    <nav aria-label="Page navigation" class="d-none d-lg-block" style="margin-top: 1em;">
-        <ul class="pagination pagination-sm">
-            {% if guilds.has_previous() %}
-                <li class="page-item"><a class="page-link" href="?page=1">First</a></li>
-            {% else %}
-                <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1"
-                                                  aria-disabled="true">First</a>
-                </li>
-            {% endif %}
+        <nav aria-label="Page navigation" class="d-none d-lg-block" style="margin-top: 1em;">
+            <ul class="pagination pagination-sm">
+                {% if guilds.has_previous() %}
+                    <li class="page-item"><a class="page-link" href="?page=1">First</a></li>
+                {% else %}
+                    <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1"
+                                                      aria-disabled="true">First</a>
+                    </li>
+                {% endif %}
 
-            {% for i in guilds.get_pages_to_show() %}
-                {% if i == guilds.number %}
-                    <li class="page-item active" aria-current="page">
-                        <span class="page-link">{{ i }}</span>
+                {% for i in guilds.get_pages_to_show() %}
+                    {% if i == guilds.number %}
+                        <li class="page-item active" aria-current="page">
+                            <span class="page-link">{{ i }}</span>
+                        </li>
+                    {% else %}
+                        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if guilds.has_next() %}
+                    <li class="page-item"><a class="page-link" href="?page={{ guilds.paginator.num_pages }}">Last</a>
                     </li>
                 {% else %}
-                    <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                    <li class="page-item disabled">Last</li>
                 {% endif %}
-            {% endfor %}
+            </ul>
+        </nav>
+        <nav aria-label="Page navigation" class="d-lg-none" style="margin-top: 1em;">
+            <ul class="pagination pagination">
+                {% if guilds.has_previous() %}
+                    <li class="page-item"><a class="page-link" href="?page=1">First</a></li>
+                    <li class="page-item"><a class="page-link"
+                                             href="?page={{ guilds.previous_page_number() }}">{{ guilds.previous_page_number() }}</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1"
+                                                      aria-disabled="true">First</a>
+                    </li>
+                {% endif %}
 
-            {% if guilds.has_next() %}
-                <li class="page-item"><a class="page-link" href="?page={{ guilds.paginator.num_pages }}">Last</a></li>
-            {% else %}
-                <li class="page-item disabled">Last</li>
-            {% endif %}
-        </ul>
-    </nav>
-    <nav aria-label="Page navigation" class="d-lg-none" style="margin-top: 1em;">
-        <ul class="pagination pagination">
-            {% if guilds.has_previous() %}
-                <li class="page-item"><a class="page-link" href="?page=1">First</a></li>
-                <li class="page-item"><a class="page-link"
-                                         href="?page={{ guilds.previous_page_number() }}">{{ guilds.previous_page_number() }}</a>
+                <li class="page-item active" aria-current="page">
+                    <span class="page-link">{{ guilds.number }}</span>
                 </li>
-            {% else %}
-                <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1"
-                                                  aria-disabled="true">First</a>
-                </li>
-            {% endif %}
 
-            <li class="page-item active" aria-current="page">
-                <span class="page-link">{{ guilds.number }}</span>
-            </li>
-
-            {% if guilds.has_next() %}
-                <li class="page-item"><a class="page-link"
-                                         href="?page={{ guilds.next_page_number() }}">{{ guilds.next_page_number() }}</a>
-                </li>
-                <li class="page-item"><a class="page-link" href="?page={{ guilds.paginator.num_pages }}">Last</a></li>
-            {% else %}
-                <li class="page-item disabled">Last</li>
-            {% endif %}
-        </ul>
-    </nav>
+                {% if guilds.has_next() %}
+                    <li class="page-item"><a class="page-link"
+                                             href="?page={{ guilds.next_page_number() }}">{{ guilds.next_page_number() }}</a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="?page={{ guilds.paginator.num_pages }}">Last</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">Last</li>
+                {% endif %}
+            </ul>
+        </nav>
     </div>
 
 {% endblock %}

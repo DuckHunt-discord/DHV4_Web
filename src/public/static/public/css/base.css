@@ -10,7 +10,11 @@
     background-color: #202225 !important;
 }
 
-.background-green {
+.background-dark-green {
+    background-color: rgb(15, 102, 34) !important;
+}
+
+.background-verydark-green {
     background-color: #0c4128 !important;
 }
 
@@ -41,4 +45,15 @@ h2{
 
 .text-dark-green {
     color: rgb(24, 133, 49) !important;
+}
+
+h1, .h1 {
+    color: rgba(255, 255, 255, 0.55) !important;
+    font-size: 2rem !important;
+    padding-bottom: 0.7em;
+    padding-top: 0.3em;
+}
+
+.text-white-75 {
+    color: rgba(255, 255, 255, 0.75) !important;
 }
