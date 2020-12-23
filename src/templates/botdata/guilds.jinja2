@@ -10,7 +10,7 @@
     <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
         {% for guild in guilds %}
             <div class="col">
-                <div class="card background-normal h-100">
+                <div class="card background-normal h-100" style="border-bottom: white solid 1px">
                     <div class="card-body">
                         <a class="text-decoration-none" href="{{ url('guild', pk=guild.pk) }}">
                             <div class="h4 card-title flex-grow-1 text-white-75">{{ guild.name }}</div>
