@@ -1,0 +1,43 @@
+{% extends "base.jinja2" %}
+
+{% block title %}
+    DuckHunt V4 - Discord Status
+{% endblock %}
+
+{% block content %}
+
+
+    <div class="card background-normal mt-4">
+        {% if shard %}
+            <div class="card-body">
+                <div class="d-flex">
+                    <div class="h5 card-title flex-grow-1">Shard n°{{ shard['shard_id'] }}
+                        {% if shard['ready'] %}
+                            (ready){% endif %}</div>
+                </div>
+                <p>Shard latency: {{ shard['latency'] }}ms</p>
+            </div>
+
+            {% if shard["guilds"] %}
+                <div class="card-footer">
+                    Guilds belonging to this shard:
+                    {% for guild in shard["guilds"] %}
+                        <a href="{{ url("guild", pk=guild['id']) }}">{{ guild['name'] }}</a> ({{ guild['members'] }} members),
+                    {% endfor %}
+                    for a total of {{ shard['guilds']|length }} guilds.
+                </div>
+            {% endif %}
+        {% else %}
+            <div class="card-header">
+                Shard disconnected
+            </div>
+            <div class="card-body">
+                <p>
+                    Either the shard does not exist, is not (yet) connected, or is unavailable.
+                    You can check the shards list <a href="{{ url("bot_status") }}">here</a> to see all connected
+                    shards.
+                </p>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

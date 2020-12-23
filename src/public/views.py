@@ -23,7 +23,6 @@ def get_from_api(url):
 def index(request):
     return render(request, "public/index.jinja2")
 
-
 def get_command(commands, name):
     direct = commands.get(name)
 
@@ -34,6 +33,27 @@ def get_command(commands, name):
             if name in command.get('aliases', []):
                 return command
 
+
+@cache_page(15*SECOND)
+def status(request):
+    status_url = settings.DH_API_URL + "/status"
+    api_status = get_from_api(status_url)
+
+    return render(request, "public/status.jinja2", {"status": api_status})
+
+
+@cache_page(15*SECOND)
+def shard_status(request, shard_id):
+    status_url = settings.DH_API_URL + "/status"
+    api_status = get_from_api(status_url)
+
+    for shard in api_status["shards_status"]:
+        if shard["shard_id"] == shard_id:
+            break
+    else:
+        shard = None
+
+    return render(request, "public/shard_status.jinja2", {"status": api_status, "shard": shard})
 
 @cache_page(MONTH)
 def bot_commands(request):
