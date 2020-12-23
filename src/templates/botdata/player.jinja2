@@ -214,20 +214,22 @@
                     <br/>
                 {% endif %}
                 {% if player.found_items|length %}
-                    <div class="h5">Found in bushes...</div>
+                    <div class="h5">Trash found in bushes</div>
                     <ul>
                         {% for item, qty in player.get_found_trash().items() %}
-                            <li>{{ qty }} {{ item.replace('_', ' ').capitalize() }}</li>
+                            <li>{{ qty }} {{ item.replace('took_', '').replace('_', ' ').capitalize() }}</li>
                         {% endfor %}
                     </ul>
+                    <div class="h5">Items took from bushes</div>
                     <ul>
                         {% for item, qty in player.get_found_useful(left=False).items() %}
-                            <li>{{ qty }} {{ item.replace('_', ' ').capitalize() }}</li>
+                            <li>{{ qty }} {{ item.replace('took_', '').replace('_', ' ').capitalize() }}</li>
                         {% endfor %}
                     </ul>
+                    <div class="h5">Items left in bushes</div>
                     <ul>
                         {% for item, qty in player.get_found_useful(left=True).items() %}
-                            <li>{{ qty }} {{ item.replace('_', ' ').capitalize() }}</li>
+                            <li>{{ qty }} {{ item.replace('left_', '').replace('_', ' ').capitalize() }}</li>
                         {% endfor %}
                     </ul>
                 {% endif %}
