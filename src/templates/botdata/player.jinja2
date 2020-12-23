@@ -342,12 +342,13 @@
                     pointFormat: 'Killed: {point.y} ducks'
                 },
                 xAxis: {
-                    categories: {{ player.sorted_killed().keys()|list|tojson }},
+                    categories: {{ titleize(player.sorted_killed().keys())|tojson }},
                 },
                 series: [{
                     name: 'Killed',
                     colorByPoint: true,
-                    data: {{ player.sorted_killed().values()|list|tojson }}
+                    data: {{ player.sorted_killed().values()|list|tojson }},
+                    colors: {{ ducks_names_to_colors(player.sorted_killed().keys())|tojson }}
                 }]
             });
         {% endif %}
@@ -360,7 +361,8 @@
                 series: [{
                     name: 'Hugged',
                     colorByPoint: true,
-                    data: {{ dict_to_highcharts(player.hugged) }}
+                    data: {{ dict_to_highcharts(player.hugged) }},
+                    colors: {{ ducks_names_to_colors(player.hugged)|tojson }}
                 }]
             });
         {% endif %}
@@ -373,7 +375,8 @@
                 series: [{
                     name: 'Hurt',
                     colorByPoint: true,
-                    data: {{ dict_to_highcharts(player.hurted) }}
+                    data: {{ dict_to_highcharts(player.hurted) }},
+                    colors: {{ ducks_names_to_colors(player.hurted)|tojson }}
                 }]
             });
         {% endif %}
@@ -386,7 +389,8 @@
                 series: [{
                     name: 'Frightened',
                     colorByPoint: true,
-                    data: {{ dict_to_highcharts(player.frightened) }}
+                    data: {{ dict_to_highcharts(player.frightened) }},
+                    colors: {{ ducks_names_to_colors(player.frightened)|tojson }}
                 }]
             });
         {% endif %}
@@ -431,7 +435,8 @@
                     dataLabels: {
                         enabled: true,
                         format: '{point.name}: {point.y:.1f}s'
-                    }
+                    },
+                    colors: {{ ducks_names_to_colors(player.best_times)|tojson }}
                 }]
             });
         {% endif %}

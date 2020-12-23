@@ -103,4 +103,4 @@ def player(request, channel_pk: int, user_pk: int):
 
     return render(request, "botdata/player.jinja2",
                   {"channel": current_channel, "current_user": current_user, "player": current_player,
-                   "achievements": achievements, "trophys":trophys, "barcode": barcode})
+                   "achievements": achievements, "trophys": trophys, "barcode": barcode})

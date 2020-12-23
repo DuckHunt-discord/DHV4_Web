@@ -1,5 +1,6 @@
 import datetime
 import json
+from typing import Union, List, Dict, Any
 
 import babel
 from babel.dates import format_timedelta
@@ -8,6 +9,8 @@ from django.utils.timesince import timeuntil
 from django_jinja import library
 from django.contrib.humanize.templatetags import humanize
 from django_jinja.utils import safe
+
+from botdata.models import DUCKS_COLORS
 
 
 @library.global_function
@@ -42,3 +45,21 @@ def dict_to_highcharts(mydict, select_first=True):
 def show_timestamp(timestamp:int):
     td = datetime.datetime.now() - datetime.datetime.fromtimestamp(timestamp)
     return format_timedelta(td, locale="en_US", threshold=1.1, format="short")
+
+
+@library.global_function
+def ducks_names_to_colors(ducks: Union[str, List[str], Dict[Any, int]]):
+    if isinstance(ducks, str):
+        return DUCKS_COLORS[ducks]
+    elif isinstance(ducks, dict):
+        sorted_items = sorted(ducks.items(), key=lambda v: -v[1])
+        return [DUCKS_COLORS[name] for name, value in sorted_items]
+    else:
+        return [DUCKS_COLORS[name] for name in ducks]
+
+@library.global_function
+def titleize(strings: List[str]):
+    return [string.title() for string in strings]
+
+
+

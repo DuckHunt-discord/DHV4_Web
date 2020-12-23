@@ -15,6 +15,22 @@ from django_enumfield.enum import EnumField, Enum
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
+DUCKS_COLORS = {
+    "normal": "#55C8CE",
+    "ghost": "#5294CE",
+    "prof": "#4460CE",
+    "baby": "#5944CE",
+    "golden": "#8D42CE",
+    "plastic": "#7344CE",
+    "kamikaze": "#CE409F",
+    "mechanical": "#CE425C",
+    "super": "#CE6548",
+    "moad": "#CEAE4E",
+    "armored": "#9FCE46",
+    "night": "#62CE44",
+    "sleeping": "#4ACE97",
+    "v3": "#7F8182"
+}
 
 SHOP_ITEMS = ["ap_ammo", "explosive_ammo", "grease", "sight", "detector", "silencer", "clover", "sunglasses", "coat", "licence", "reloader", "homing_bullets"]
 
@@ -219,7 +235,7 @@ class Player(models.Model):
         }
 
     def sorted_killed(self):
-        return dict(sorted(self.killed.items(), key=lambda e: e[0]))
+        return dict(sorted(self.killed.items(), key=lambda e: -e[1]))
 
     def is_powerup_active(self, powerup):
         if self.prestige >= 1 and powerup == "sunglasses":
