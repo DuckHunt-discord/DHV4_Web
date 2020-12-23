@@ -33,7 +33,7 @@ def dict_to_highcharts(mydict, select_first=True, reverse=False):
     for key, value in ordered_items:
         point = {
             'name': key.title(),
-            'y': value
+            'y': round(value, 3)
         }
 
         if select_first and item == 0:
@@ -63,6 +63,7 @@ def ducks_names_to_colors(ducks: Union[str, List[str], Dict[Any, int]], reverse=
         return [DUCKS_COLORS[name] for name, value in sorted_items]
     else:
         return [DUCKS_COLORS[name] for name in ducks]
+
 
 @library.global_function
 def titleize(strings: List[str]):
