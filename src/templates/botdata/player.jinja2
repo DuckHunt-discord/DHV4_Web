@@ -448,7 +448,7 @@
                         enabled: true,
                         format: '{point.name}: {point.y:.1f}s'
                     },
-                    colors: {{ ducks_names_to_colors(player.best_times)|tojson }}
+                    colors: {{ ducks_names_to_colors(player.best_times, reverse=True)|tojson }}
                 }]
             });
         {% endif %}

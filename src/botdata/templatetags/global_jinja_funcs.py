@@ -53,11 +53,13 @@ def show_timestamp(timestamp:int):
 
 
 @library.global_function
-def ducks_names_to_colors(ducks: Union[str, List[str], Dict[Any, int]]):
+def ducks_names_to_colors(ducks: Union[str, List[str], Dict[Any, int]], reverse=False):
     if isinstance(ducks, str):
         return DUCKS_COLORS[ducks]
     elif isinstance(ducks, dict):
         sorted_items = sorted(ducks.items(), key=lambda v: -v[1])
+        if reverse:
+            sorted_items.reverse()
         return [DUCKS_COLORS[name] for name, value in sorted_items]
     else:
         return [DUCKS_COLORS[name] for name in ducks]
