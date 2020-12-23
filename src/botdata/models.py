@@ -31,6 +31,7 @@ DUCKS_COLORS = {
     "sleeping": "#4ACE97",
     "v3": "#7F8182",
     "trees": "#0C5B00",
+    "nothing": "#827B7E",
 }
 
 SHOP_ITEMS = ["ap_ammo", "explosive_ammo", "grease", "sight", "detector", "silencer", "clover", "sunglasses", "coat", "licence", "reloader", "homing_bullets"]
