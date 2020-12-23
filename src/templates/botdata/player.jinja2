@@ -221,7 +221,12 @@
                         {% endfor %}
                     </ul>
                     <ul>
-                        {% for item, qty in player.get_found_useful().items() %}
+                        {% for item, qty in player.get_found_useful(left=False).items() %}
+                            <li>{{ qty }} {{ item.replace('_', ' ').capitalize() }}</li>
+                        {% endfor %}
+                    </ul>
+                    <ul>
+                        {% for item, qty in player.get_found_useful(left=True).items() %}
                             <li>{{ qty }} {{ item.replace('_', ' ').capitalize() }}</li>
                         {% endfor %}
                     </ul>

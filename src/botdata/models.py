@@ -262,11 +262,12 @@ class Player(models.Model):
                 active[powerup] = powerup_value
         return active
 
-    def get_found_useful(self):
+    def get_found_useful(self, left=False):
         dct = {}
         for item_name, item_count in self.found_items.items():
             if "trash" not in item_name:
-                dct[item_name] = item_count
+                if (left and "left" in item_name) or (not left and "took" in item_name):
+                    dct[item_name] = item_count
         return dct
 
     def get_found_trash(self):
