@@ -22,10 +22,15 @@ def intcomma(value: float):
 
 
 @library.global_function
-def dict_to_highcharts(mydict, select_first=True):
+def dict_to_highcharts(mydict, select_first=True, reverse=False):
     values = []
     item = 0
-    for key, value in sorted(mydict.items(), key=lambda v: -v[1]):
+
+    ordered_items = sorted(mydict.items(), key=lambda v: -v[1])
+    if reverse:
+        ordered_items.reverse()
+
+    for key, value in ordered_items:
         point = {
             'name': key.title(),
             'y': value
