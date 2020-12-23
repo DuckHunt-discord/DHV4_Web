@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-    <h1>{{ current_user.name }}#{{ current_user.discriminator }} statistics on #{{ channel.name }}</h1>
+    <h1>{{ current_user.name }}#{{ current_user.discriminator }} statistics on <a href="{{ url("channel", pk=channel.pk) }}">#{{ channel.name }}</a></h1>
 
     <h2>General statistics</h2>
 
