@@ -6,4 +6,37 @@
 
 {% block content %}
     <h1>More about {{ guild.name }}</h1>
+
+    <div class="card background-normal h-100">
+        <div class="card-body">
+            <a class="text-decoration-none" href="{{ url('guild', pk=guild.pk) }}">
+                <div class="h4 card-title flex-grow-1 text-white-75">{{ guild.name }}</div>
+            </a>
+        </div>
+        <ul class="list-group list-group-flush">
+            {% for channel in channels %}
+                <li class="list-group-item background-normal border-bottom-0">
+                    <div class="row row-cols-2">
+                        <a class="text-blurple col-8" href="{{ url('channel', pk=channel.pk) }}">
+                            <div>
+                                #{{ channel.name }}
+                            </div>
+                        </a>
+
+                        <a class="text-blurple col-3" href="{{ url('channel', pk=channel.pk) }}">
+                            <div>
+                                <span class="badge bg-dark text-white-75">{{ channel.player_count }} players</span>
+                            </div>
+                        </a>
+                        <a class="text-decoration-none col-1" title="Settings"
+                           href="{{ url('channel_settings', pk=channel.pk) }}">
+                            <div>
+                                ⚙️
+                            </div>
+                        </a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock %}

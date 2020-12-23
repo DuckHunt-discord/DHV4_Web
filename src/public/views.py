@@ -55,6 +55,7 @@ def shard_status(request, shard_id):
 
     return render(request, "public/shard_status.jinja2", {"status": api_status, "shard": shard})
 
+
 @cache_page(MONTH)
 def bot_commands(request):
     command_to_see: Optional[str] = request.GET.get("command", None)

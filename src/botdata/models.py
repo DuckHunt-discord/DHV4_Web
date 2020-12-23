@@ -30,6 +30,7 @@ DUCKS_COLORS = {
     "night": "#62CE44",
     "sleeping": "#4ACE97",
     "v3": "#7F8182",
+    "v3_nohug": "#7F8182",
     "trees": "#0C5B00",
     "nothing": "#827B7E",
 }
