@@ -36,6 +36,7 @@ DUCKS_COLORS = {
 
 SHOP_ITEMS = ["ap_ammo", "explosive_ammo", "grease", "sight", "detector", "silencer", "clover", "sunglasses", "coat", "licence", "reloader", "homing_bullets"]
 
+
 def default_dict_generator(default_factory):
     return collections.defaultdict(default_factory)
 

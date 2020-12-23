@@ -66,8 +66,18 @@ def guilds(request):
 
 
 def guild(request, pk: int):
-    current_guild = get_object_or_404(DiscordGuild, pk=pk)
-    return render(request, "botdata/guild.jinja2", {"guild": current_guild})
+
+    try:
+        current_guild = DiscordGuild.objects.get(pk=pk)
+    except DiscordGuild.DoesNotExist:
+        return render(request, "botdata/no_guild.jinja2", {"guild": None})
+
+    channels = current_guild.channels.filter(enabled=True).all()
+
+    if not channels.count():
+        return render(request, "botdata/no_guild.jinja2", {"guild": current_guild})
+
+    return render(request, "botdata/guild.jinja2", {"guild": current_guild, "channels": channels})
 
 
 def channel(request, pk: int):
