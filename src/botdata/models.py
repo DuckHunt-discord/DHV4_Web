@@ -16,6 +16,8 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 
+SHOP_ITEMS = ["ap_ammo", "explosive_ammo", "grease", "sight", "detector", "silencer", "clover", "sunglasses", "coat", "licence", "reloader", "homing_bullets"]
+
 def default_dict_generator(default_factory):
     return collections.defaultdict(default_factory)
 
@@ -216,6 +218,9 @@ class Player(models.Model):
             **self.stored_achievements,
         }
 
+    def sorted_killed(self):
+        return dict(sorted(self.killed.items(), key=lambda e: e[0]))
+
     def is_powerup_active(self, powerup):
         if self.prestige >= 1 and powerup == "sunglasses":
             return True
@@ -230,12 +235,26 @@ class Player(models.Model):
             now = time.time()
             return self.active_powerups[powerup] >= now
 
-    def get_only_active_powerups(self):
+    def get_only_active_powerups(self, only_shop_items=True):
         active = {}
         for powerup, powerup_value in self.active_powerups.items():
-            if self.is_powerup_active(powerup):
+            if (powerup in SHOP_ITEMS or not only_shop_items) and self.is_powerup_active(powerup):
                 active[powerup] = powerup_value
         return active
+
+    def get_found_useful(self):
+        dct = {}
+        for item_name, item_count in self.found_items.items():
+            if "trash" not in item_name:
+                dct[item_name] = item_count
+        return dct
+
+    def get_found_trash(self):
+        dct = {}
+        for item_name, item_count in self.found_items.items():
+            if "trash" in item_name:
+                dct[item_name] = item_count
+        return dct
 
     def __str__(self):
         return f"{self.member} playing on {self.channel}"

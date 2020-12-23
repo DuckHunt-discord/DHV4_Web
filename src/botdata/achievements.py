@@ -1,6 +1,13 @@
 def _(message):
     return message
 
+trophys = \
+    {
+        "v3_player": {
+            "name": _("V3 Player"),
+            "description": _("They guy even played on the previous version. What a champ!")
+        }
+    }
 
 achievements = \
     {

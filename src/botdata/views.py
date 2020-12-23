@@ -83,7 +83,7 @@ def channel_settings(request, pk: int):
 
 
 def player(request, channel_pk: int, user_pk: int):
-    from .achievements import achievements
+    from .achievements import achievements, trophys
     # TODO: Replace that by an API call
     current_channel = get_object_or_404(DiscordChannel, pk=channel_pk)
     current_user = get_object_or_404(DiscordUser, pk=user_pk)
@@ -103,4 +103,4 @@ def player(request, channel_pk: int, user_pk: int):
 
     return render(request, "botdata/player.jinja2",
                   {"channel": current_channel, "current_user": current_user, "player": current_player,
-                   "achievements": achievements, "barcode": barcode})
+                   "achievements": achievements, "trophys":trophys, "barcode": barcode})

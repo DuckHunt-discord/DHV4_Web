@@ -15,7 +15,13 @@
     </p>
 
     <h2>Trophys</h2>
-
+    <ul>
+        {% for trophy, unlocked in current_user.trophys.items() %}
+            {% if unlocked %}
+                <li>{{ trophys[trophy]['name'] }}: {{ trophys[trophy]['description'] }}</li>
+            {% endif %}
+        {% endfor %}
+    </ul>
 
     <h2>Achievements</h2>
 
@@ -38,8 +44,10 @@
         <div id="chart-ducks-killed"></div>
     {% endif %}
 
-    <h2>Shooting range</h2>
-    <div id="chart-best-times"></div>
+    {% if player.best_times|length %}
+        <h2>Shooting range</h2>
+        <div id="chart-best-times"></div>
+    {% endif %}
 
     <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 justify-content-around">
 
@@ -71,138 +79,149 @@
     <h2>Backpack</h2>
 
     <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 justify-content-around">
-        <div class="card text-dark col">
-            <div class="card-body">
-                <table class="table">
-                    <thead>
-                    <tr style="border-bottom: hidden;">
-                        <th colspan="2" class="text-center h4">DuckHunt Shop<br/><br/><br/></th>
-                    </tr>
-                    <tr>
-                        <th>
-                            <span class="text-muted fw-lighter">Invoice No.</span><br/>
-                            <span class="fw-lighter fs-6">{{ current_user.pk }}</span><br/><br/>
-                        </th>
-                        <th class="text-end">
-                            <span class="text-muted fw-lighter">Payment Date.</span><br/>
-                            <span class="fw-lighter fs-6">{{ player.last_giveback|date }}</span><br/><br/>
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% if powerups.get('ap_ammo', False) %}
-                        <tr>
-                            <td>Armor Piercing ammo</td>
-                            <td class="text-end">{{ show_timestamp(powerups['ap_ammo']) }} left</td>
+        {% if powerups|length %}
+            <div class="card text-dark col">
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                        <tr style="border-bottom: hidden;">
+                            <th colspan="2" class="text-center h4">DuckHunt Shop<br/><br/><br/></th>
                         </tr>
-                    {% endif %}
-                    {% if powerups.get('explosive_ammo', False) %}
                         <tr>
-                            <td>Explosive ammo</td>
-                            <td class="text-end">{{ show_timestamp(powerups['explosive_ammo']) }} left</td>
+                            <th>
+                                <span class="text-muted fw-lighter">Invoice No.</span><br/>
+                                <span class="fw-lighter fs-6">{{ current_user.pk }}</span><br/><br/>
+                            </th>
+                            <th class="text-end">
+                                <span class="text-muted fw-lighter">Payment Date.</span><br/>
+                                <span class="fw-lighter fs-6">{{ player.last_giveback|date }}</span><br/><br/>
+                            </th>
                         </tr>
-                    {% endif %}
-                    {% if powerups.get('grease', False) %}
-                        <tr>
-                            <td>Gun grease</td>
-                            <td class="text-end">{{ show_timestamp(powerups['grease']) }} left</td>
+                        </thead>
+                        <tbody>
+                        {% if powerups.get('ap_ammo', False) %}
+                            <tr>
+                                <td>Armor Piercing ammo</td>
+                                <td class="text-end">{{ show_timestamp(powerups['ap_ammo']) }} left</td>
+                            </tr>
+                        {% endif %}
+                        {% if powerups.get('explosive_ammo', False) %}
+                            <tr>
+                                <td>Explosive ammo</td>
+                                <td class="text-end">{{ show_timestamp(powerups['explosive_ammo']) }} left</td>
+                            </tr>
+                        {% endif %}
+                        {% if powerups.get('grease', False) %}
+                            <tr>
+                                <td>Gun grease</td>
+                                <td class="text-end">{{ show_timestamp(powerups['grease']) }} left</td>
+                            </tr>
+                        {% endif %}
+                        {% if powerups.get('sight', False) %}
+                            <tr>
+                                <td>Sight</td>
+                                <td class="text-end">{{ powerups['sight'] }} shots</td>
+                            </tr>
+                        {% endif %}
+                        {% if powerups.get('detector', False) %}
+                            <tr>
+                                <td>Infrared detector</td>
+                                <td class="text-end">{{ powerups['detector'] }} misses</td>
+                            </tr>
+                        {% endif %}
+                        {% if powerups.get('silencer', False) %}
+                            <tr>
+                                <td>Silencer</td>
+                                <td class="text-end">{{ show_timestamp(powerups['silencer']) }} left</td>
+                            </tr>
+                        {% endif %}
+                        {% if powerups.get('clover', False) %}
+                            <tr>
+                                <td>Clover: {{ player.active_powerups['clover_exp'] }} exp</td>
+                                <td class="text-end">{{ show_timestamp(powerups['clover']) }} left</td>
+                            </tr>
+                        {% endif %}
+                        {% if powerups.get('sunglasses', False) %}
+                            <tr>
+                                <td>Sunglasses</td>
+                                <td class="text-end">{{ show_timestamp(powerups['sunglasses']) }} left</td>
+                            </tr>
+                        {% endif %}
+                        {% if powerups.get('coat', False) %}
+                            <tr>
+                                <td>Rain coat</td>
+                                <td class="text-end">{{ show_timestamp(powerups['coat']) }} left</td>
+                            </tr>
+                        {% endif %}
+                        {% if powerups.get('licence', False) %}
+                            <tr>
+                                <td>Licence to kill</td>
+                                <td class="text-end">{{ show_timestamp(powerups['licence']) }} left</td>
+                            </tr>
+                        {% endif %}
+                        {% if powerups.get('reloader', False) %}
+                            <tr>
+                                <td>Automatic reloader</td>
+                                <td class="text-end">{{ show_timestamp(powerups['reloader']) }} left</td>
+                            </tr>
+                        {% endif %}
+                        {% if powerups.get('homing_bullets', False) %}
+                            <tr>
+                                <td>Homing bullets</td>
+                                <td class="text-end">{{ powerups['homing_bullets'] }} ✨</td>
+                            </tr>
+                        {% endif %}
+                        </tbody>
+                        <tfoot>
+                        <tr style="border-bottom: hidden;">
+                            <td class="text-end">Total:</td>
+                            <td class="text-end fw-bolder">{{ powerups|length }} items</td>
                         </tr>
-                    {% endif %}
-                    {% if powerups.get('sight', False) %}
-                        <tr>
-                            <td>Sight</td>
-                            <td class="text-end">{{ powerups['sight'] }} shots</td>
-                        </tr>
-                    {% endif %}
-                    {% if powerups.get('detector', False) %}
-                        <tr>
-                            <td>Infrared detector</td>
-                            <td class="text-end">{{ powerups['detector'] }} misses</td>
-                        </tr>
-                    {% endif %}
-                    {% if powerups.get('silencer', False) %}
-                        <tr>
-                            <td>Silencer</td>
-                            <td class="text-end">{{ show_timestamp(powerups['silencer']) }} left</td>
-                        </tr>
-                    {% endif %}
-                    {% if powerups.get('clover', False) %}
-                        <tr>
-                            <td>Clover: {{ player.active_powerups['clover_exp'] }} exp</td>
-                            <td class="text-end">{{ show_timestamp(powerups['clover']) }} left</td>
-                        </tr>
-                    {% endif %}
-                    {% if powerups.get('sunglasses', False) %}
-                        <tr>
-                            <td>Sunglasses</td>
-                            <td class="text-end">{{ show_timestamp(powerups['sunglasses']) }} left</td>
-                        </tr>
-                    {% endif %}
-                    {% if powerups.get('coat', False) %}
-                        <tr>
-                            <td>Rain coat</td>
-                            <td class="text-end">{{ show_timestamp(powerups['coat']) }} left</td>
-                        </tr>
-                    {% endif %}
-                    {% if powerups.get('licence', False) %}
-                        <tr>
-                            <td>Licence to kill</td>
-                            <td class="text-end">{{ show_timestamp(powerups['licence']) }} left</td>
-                        </tr>
-                    {% endif %}
-                    {% if powerups.get('reloader', False) %}
-                        <tr>
-                            <td>Automatic reloader</td>
-                            <td class="text-end">{{ show_timestamp(powerups['reloader']) }} left</td>
-                        </tr>
-                    {% endif %}
-                    {% if powerups.get('homing_bullets', False) %}
-                        <tr>
-                            <td>Homing bullets</td>
-                            <td class="text-end">{{ powerups['homing_bullets'] }} ✨</td>
-                        </tr>
-                    {% endif %}
-                    </tbody>
-                    <tfoot>
-                    <tr style="border-bottom: hidden;">
-                        <td class="text-end">Total:</td>
-                        <td class="text-end fw-bolder">{{ powerups|length }} items</td>
-                    </tr>
-                    <tr style="border-bottom: hidden;">
-                        <td class="text-center" colspan="2">
-                            <br/><br/>
-                            Thanks for buying in the shop.<br/>
-                            We hope to see you soon.<br/>
-                            Thanks for spending {{ intcomma(player.spent_experience) }} exp in there<br/><br/><br/>
+                        <tr style="border-bottom: hidden;">
+                            <td class="text-center" colspan="2">
+                                <br/><br/>
+                                Thanks for buying in the shop.<br/>
+                                We hope to see you soon.<br/>
+                                Thanks for spending {{ intcomma(player.spent_experience) }} exp in there<br/><br/><br/>
 
-                            <svg class="barcode"
-                                 jsbarcode-format="auto"
-                                 jsbarcode-value="{{ barcode }}"
-                                 jsbarcode-textmargin="0"
-                                 jsbarcode-fontoptions="bold"
-                                 jsbarcode-displayValue="false">
-                            </svg>
+                                <svg class="barcode"
+                                     jsbarcode-format="auto"
+                                     jsbarcode-value="{{ barcode }}"
+                                     jsbarcode-textmargin="0"
+                                     jsbarcode-fontoptions="bold"
+                                     jsbarcode-displayValue="false">
+                                </svg>
 
-                        </td>
-                    </tr>
-                    </tfoot>
-                </table>
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
             </div>
-        </div>
+        {% endif %}
         <div class="col align-self-center">
-            <div class="h5">Purchased and used...</div>
-            <ul>
-                {% for item, qty in player.bought_items.items() %}
-                    <li>{{ qty }} {{ item.replace('_', ' ').capitalize() }}</li>
-                {% endfor %}
-            </ul>
-            <br/>
-            <div class="h5">Found in bushes...</div>
-            <ul>
-                {% for item, qty in player.found_items.items() %}
-                    <li>{{ qty }} {{ item.replace('_', ' ').capitalize() }}</li>
-                {% endfor %}
-            </ul>
+            {% if player.bought_items|length %}
+                <div class="h5">Purchased and used...</div>
+                <ul>
+                    {% for item, qty in player.bought_items.items() %}
+                        <li>{{ qty }} {{ item.replace('_', ' ').capitalize() }}</li>
+                    {% endfor %}
+                </ul>
+                <br/>
+            {% endif %}
+            {% if player.found_items %}
+                <div class="h5">Found in bushes...</div>
+                <ul>
+                    {% for item, qty in player.get_found_trash().items() %}
+                        <li>{{ qty }} {{ item.replace('_', ' ').capitalize() }}</li>
+                    {% endfor %}
+                </ul>
+                <ul>
+                    {% for item, qty in player.get_found_useful().items() %}
+                        <li>{{ qty }} {{ item.replace('_', ' ').capitalize() }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
         </div>
     </div>
 
@@ -243,8 +262,9 @@
     </table>
 
     <p>
-        {{ current_user.name }} used {{ player.shooting_stats.get('bullets_used', 0) }} bullets {% if player.shooting_stats.get('homing_kills', 0) %}(of which
-        {{ player.shooting_stats.get('homing_kills', 0) }} were homing){% endif %}
+        {{ current_user.name }} used {{ player.shooting_stats.get('bullets_used', 0) }} bullets
+        {% if player.shooting_stats.get('homing_kills', 0) %}(of which
+            {{ player.shooting_stats.get('homing_kills', 0) }} were homing){% endif %}
         and {{ player.shooting_stats.get('reloads', 0) }}
         magazines. They missed their target {{ player.shooting_stats.get('missed', 0) }} times, killed someone
         {{ player.shooting_stats.get('killed', 0) }} times, and murdered {{ player.shooting_stats.get('murders', 0) }}
@@ -258,26 +278,32 @@
     {% endif %}
 
     {% if player.shooting_stats.get('got_killed', 0) %}
-    <p>
-        They got killed {{ player.shooting_stats.get('got_killed', 0) }} times{% if player.shooting_stats.get('brains_eaten', 0) %}, and had to eat {{ player.shooting_stats.get('brains_eaten', 0) }}
-        brains to revive themselves ({{ player.shooting_stats.get('revives', 0) }} times). They were really hungry once when they
-        ate {{ player.shooting_stats.get('max_brains_eaten_at_once', 0) }} brains at once{% endif %}.
-    </p>
+        <p>
+            They got killed {{ player.shooting_stats.get('got_killed', 0) }} times
+            {% if player.shooting_stats.get('brains_eaten', 0) %}, and had to eat
+                {{ player.shooting_stats.get('brains_eaten', 0) }}
+                brains to revive themselves ({{ player.shooting_stats.get('revives', 0) }} times). They were really
+                hungry once when they
+                ate {{ player.shooting_stats.get('max_brains_eaten_at_once', 0) }} brains at once{% endif %}.
+        </p>
     {% endif %}
 
     {% if player.shooting_stats.get('useless_revives', 0) %}
-    <p>
-        They also tried reviving themselves {{ player.shooting_stats.get('useless_revives', 0) }} times, but they were
-        already alive.
-    </p>
+        <p>
+            They also tried reviving themselves {{ player.shooting_stats.get('useless_revives', 0) }} times, but they
+            were
+            already alive.
+        </p>
     {% endif %}
 
     {% if player.shooting_stats.get('autoreloads', 0) or player.shooting_stats.get('failed_autoreloads', 0) %}
-    <p>
-        {{ current_user.name }}'s gun was reloaded automatically {{ player.shooting_stats.get('autoreloads', 0) }} times
-        (and the autoreloader failed {{ player.shooting_stats.get('failed_autoreloads', 0) }} times, because they had no
-        more magazines.)
-    </p>
+        <p>
+            {{ current_user.name }}'s gun was reloaded automatically {{ player.shooting_stats.get('autoreloads', 0) }}
+            times
+            (and the autoreloader failed {{ player.shooting_stats.get('failed_autoreloads', 0) }} times, because they
+            had no
+            more magazines.)
+        </p>
     {% endif %}
 
     <h2>Misc</h2>
@@ -309,13 +335,19 @@
         });
         {% if player.killed|length %}
             Highcharts.chart('chart-ducks-killed', {
+                chart: {
+                    type: 'column'
+                },
                 tooltip: {
-                    pointFormat: 'Killed: {point.y} (<b>{point.percentage:.1f}%</b>)'
+                    pointFormat: 'Killed: {point.y} ducks'
+                },
+                xAxis: {
+                    categories: {{ player.sorted_killed().keys()|list|tojson }},
                 },
                 series: [{
                     name: 'Killed',
                     colorByPoint: true,
-                    data: {{ dict_to_highcharts(player.killed) }}
+                    data: {{ player.sorted_killed().values()|list|tojson }}
                 }]
             });
         {% endif %}
@@ -359,46 +391,49 @@
             });
         {% endif %}
 
-        Highcharts.chart('chart-best-times', {
-            chart: {
-                type: 'bar'
-            },
-            title: {
-                text: 'Best times'
-            },
-            yAxis: {
-                title: {
-                    text: 'Time to kill (seconds)',
-                    align: 'high'
+        {% if player.best_times|length %}
+
+            Highcharts.chart('chart-best-times', {
+                chart: {
+                    type: 'bar'
                 },
-            },
-            xAxis: {
-                labels: {
-                    enabled: false,
-                }
-            },
-            tooltip: {
-                valueSuffix: ' seconds'
-            },
-            plotOptions: {
-                bar: {
-                    dataLabels: {
-                        enabled: true
+                title: {
+                    text: 'Best times'
+                },
+                yAxis: {
+                    title: {
+                        text: 'Time to kill (seconds)',
+                        align: 'high'
+                    },
+                },
+                xAxis: {
+                    labels: {
+                        enabled: false,
                     }
-                }
-            },
-            legend: {
-                enabled: false
-            },
-            series: [{
-                name: 'Best Times',
-                colorByPoint: true,
-                data: {{ dict_to_highcharts(player.best_times) }},
-                dataLabels: {
-                    enabled: true,
-                    format: '{point.name}: {point.y:.1f}s'
-                }
-            }]
-        });
+                },
+                tooltip: {
+                    valueSuffix: ' seconds'
+                },
+                plotOptions: {
+                    bar: {
+                        dataLabels: {
+                            enabled: true
+                        }
+                    }
+                },
+                legend: {
+                    enabled: false
+                },
+                series: [{
+                    name: 'Best Times',
+                    colorByPoint: true,
+                    data: {{ dict_to_highcharts(player.best_times) }},
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.name}: {point.y:.1f}s'
+                    }
+                }]
+            });
+        {% endif %}
     </script>
 {% endblock %}
