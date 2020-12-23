@@ -16,15 +16,34 @@
                             (ready){% endif %}</div>
                 </div>
                 <p>Shard latency: {{ shard['latency'] }}ms</p>
+
+                Guilds belonging to this shard:
+                <ul class="list-group list-group-flush background-normal">
+                    <li class="list-group-item background-normal">
+                        <table class="table table-sm table-dark table-striped">
+                            <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Members</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for guild in shard["guilds"] %}
+                                <tr>
+                                    <td><a href="{{ url("guild", pk=guild['id']) }}">{{ guild['name'] }}</a></td>
+                                    <td>{{ guild['members'] }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </li>
+                </ul>
+
             </div>
 
             {% if shard["guilds"] %}
                 <div class="card-footer">
-                    Guilds belonging to this shard:
-                    {% for guild in shard["guilds"] %}
-                        <a href="{{ url("guild", pk=guild['id']) }}">{{ guild['name'] }}</a> ({{ guild['members'] }} members),
-                    {% endfor %}
-                    for a total of {{ shard['guilds']|length }} guilds.
+                    This shard host a total of {{ shard['guilds']|length }} guilds.
                 </div>
             {% endif %}
         {% else %}

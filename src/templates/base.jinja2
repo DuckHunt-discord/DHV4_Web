@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel=“canonical” href=“https://duckhunt.me{{ request.get_full_path() }}” />
+    <link rel=“canonical” href=“https://duckhunt.me{{ request.get_full_path() }}”/>
 
     <link href="{{ static('public/css/bootstrap.css') }}" rel="stylesheet">
     <script src="{{ static('public/js/bootstrap.bundle.js') }}"></script>
@@ -29,43 +29,48 @@
     <title>{% block title %}DuckHunt Discord{% endblock %}</title>
 </head>
 <body class="background-light">
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/">DuckHunt Discord V4</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url('bot_commands') }}">Commands</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url('bot_settings') }}">Settings</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://discordapp.com/api/oauth2/authorize?client_id=187636051135823872&permissions=70646849&scope=bot">Invite the bot</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://discordapp.com/invite/2BksEkV">Support server</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url('bot_status') }}">Status</a>
-                    </li>
-                </ul>
-                <div class="d-flex">
-                    <!-- Other side -->
-                </div>
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">DuckHunt Discord V4</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url('bot_commands') }}">Commands</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url('bot_settings') }}">Settings</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="https://discordapp.com/api/oauth2/authorize?client_id=187636051135823872&permissions=70646849&scope=bot">Invite
+                        the bot</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://discordapp.com/invite/2BksEkV">Support server</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url('bot_status') }}">Status</a>
+                </li>
+            </ul>
+            <div class="d-flex">
+                <!-- Other side -->
             </div>
         </div>
-    </nav>
-    <div class="container text-light">
-        {% block content %}
-        {% endblock %}
     </div>
-    <script>JsBarcode(".barcode").init();</script>
+</nav>
+<div class="container text-light">
+    {% block content %}
+    {% endblock %}
+</div>
+<footer class="text-center">
+    DuckHunt Discord V4 made with ❤️ in Paris
+</footer>
+<script>JsBarcode(".barcode").init();</script>
 
 </body>
 </html>
