@@ -366,7 +366,13 @@
                     colorByPoint: true,
                     data: {{ player.sorted_killed().values()|list|tojson }},
                     colors: {{ ducks_names_to_colors(player.sorted_killed().keys())|tojson }}
-                }]
+                }{#, {
+                    name: "Best Times",
+                    colorByPoint: true,
+                    data: {{ values_from_keys(player.sorted_killed().keys(), player.best_times)|tojson }},
+                    colors: {{ ducks_names_to_colors(player.sorted_killed().keys())|tojson }}
+                } #}
+                ]
             });
         {% endif %}
 

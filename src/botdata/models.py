@@ -15,6 +15,7 @@ from django_enumfield.enum import EnumField, Enum
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
+# https://www.colorschemer.com/color-picker/
 DUCKS_COLORS = {
     "normal": "#55C8CE",
     "ghost": "#5294CE",
@@ -33,6 +34,7 @@ DUCKS_COLORS = {
     "v3_nohug": "#7F8182",
     "trees": "#0C5B00",
     "nothing": "#827B7E",
+    "players": "#B8CEB8",
 }
 
 SHOP_ITEMS = ["ap_ammo", "explosive_ammo", "grease", "sight", "detector", "silencer", "clover", "sunglasses", "coat", "licence", "reloader", "homing_bullets"]

@@ -67,7 +67,14 @@ def ducks_names_to_colors(ducks: Union[str, List[str], Dict[Any, int]], reverse=
 
 @library.global_function
 def titleize(strings: List[str]):
-    return [string.title() for string in strings]
+    return [string.title() for string in strings]\
+
+
+@library.global_function
+def values_from_keys(keys: List[str], dict_: dict):
+    return [dict_[key] for key in keys]
+
+
 
 
 
