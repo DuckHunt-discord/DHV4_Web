@@ -399,7 +399,7 @@
 
             Highcharts.chart('chart-best-times', {
                 chart: {
-                    type: 'bar'
+                    type: 'column'
                 },
                 title: {
                     text: 'Best times'
@@ -431,7 +431,7 @@
                 series: [{
                     name: 'Best Times',
                     colorByPoint: true,
-                    data: {{ dict_to_highcharts(player.best_times) }},
+                    data: {{ dict_to_highcharts(player.best_times, select_first=False) }},
                     dataLabels: {
                         enabled: true,
                         format: '{point.name}: {point.y:.1f}s'
