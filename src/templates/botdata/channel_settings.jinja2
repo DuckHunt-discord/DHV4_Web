@@ -6,4 +6,8 @@
 
 {% block content %}
     <h1>Settings of #{{ channel.name }}</h1>
+
+    <p>
+        To go back and see the hunters scores for this channel, you can click <a href="{{ url("channel", pk=channel.pk) }}">here</a>.
+    </p>
 {% endblock %}
