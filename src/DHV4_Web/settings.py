@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
+import sys
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -182,11 +183,22 @@ if not DEBUG:
         "version": 1,
         "disable_existing_loggers": False,
         "root": {"level": "DEBUG", "handlers": ["stream"]},
+        "filters": {
+            "require_debug_false": {
+                "()": 'django.utils.log.RequireDebugFalse'
+            }
+        },
         "handlers": {
             "stream": {
                 "level": "DEBUG",
                 "class": "logging.StreamHandler",
                 "formatter": "app",
+                "stream": sys.stdout,
+            },
+            "mail_admins": {
+                "level": 'ERROR',
+                "filters": ['require_debug_false'],
+                "class": 'django.utils.log.AdminEmailHandler'
             },
         },
         "loggers": {
@@ -194,6 +206,11 @@ if not DEBUG:
                 "handlers": ["stream"],
                 "level": "DEBUG",
                 "propagate": True
+            },
+            'django.request': {
+                'handlers': ['mail_admins'],
+                'level': 'ERROR',
+                'propagate': True,
             },
         },
         "formatters": {
