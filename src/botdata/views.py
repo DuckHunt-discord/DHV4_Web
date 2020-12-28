@@ -163,8 +163,8 @@ def channel(request, pk: int):
     for duck_type, best_info in global_best_times.items():
         duck_time, chart_player = best_info
         chart_best_time.append({
-            'name': f'{duck_type} (by {str(chart_player.member.user)})',
-            'y': duck_time
+            'name': f'{duck_type}<br/>{str(chart_player.member.user)}',
+            'y': round(duck_time, 2)
         })
 
     return render(request, "botdata/channel.jinja2", {"channel": current_channel, "players": current_players,
