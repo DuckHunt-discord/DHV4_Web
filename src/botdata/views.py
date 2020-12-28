@@ -5,7 +5,7 @@ from typing import List
 from django.core.paginator import Paginator, Page
 from django.db.models import Prefetch, Q, Count, Exists, OuterRef, Max
 from django.shortcuts import render, get_object_or_404
-from .models import DiscordGuild, DiscordChannel, DiscordUser, Player
+from .models import DiscordGuild, DiscordChannel, DiscordUser, Player, DUCKS_COLORS
 
 
 # Create your views here.
@@ -160,19 +160,22 @@ def channel(request, pk: int):
                 global_best_times[duck_type] = (time_, chart_player)
 
     chart_best_time = []
+    chart_best_colors = []
+
     for duck_type, best_info in global_best_times.items():
         duck_time, chart_player = best_info
         chart_best_time.append({
-            'name': f'{duck_type}<br/>{str(chart_player.member.user)}',
+            'name': f'{duck_type.title()}<br/>{str(chart_player.member.user)}',
             'y': round(duck_time, 2)
         })
+        chart_best_colors.append(DUCKS_COLORS[duck_type])
 
     return render(request, "botdata/channel.jinja2", {"channel": current_channel, "players": current_players,
                                                       "chart_best_players_data_experience": chart_best_players_data_experience,
                                                       "chart_best_players_data_ducks": chart_best_players_data_ducks,
                                                       "shots_chart_data": shots_chart_data,
                                                       "global_best_times": global_best_times,
-                                                      "chart_best_time": chart_best_time})
+                                                      "chart_best_time": chart_best_time, "chart_best_colors": chart_best_colors})
 
 
 def channel_settings(request, pk: int):

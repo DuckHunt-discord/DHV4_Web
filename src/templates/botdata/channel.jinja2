@@ -190,7 +190,8 @@
                     dataLabels: {
                         enabled: true,
                         format: '{point.name}<br/>{point.y:.1f}s'
-                    }
+                    },
+                    colors: {{ chart_best_colors|tojson }}
                 }]
             });
         {% endif %}
