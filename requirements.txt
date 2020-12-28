@@ -1,9 +1,10 @@
-django
+django~=3.1.4
 django-enumfield
 django_extensions
-django-debug-toolbar
+django-debug-toolbar~=3.2
 django-jinja
 psycopg2
 gunicorn
-requests
-babel
+requests~=2.25.0
+babel~=2.9.0
+pytz~=2020.4

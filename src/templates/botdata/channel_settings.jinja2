@@ -26,6 +26,10 @@
         </thead>
         <tbody>
         <tr>
+            <td>Ducks per day</td>
+            <td>{{ channel.ducks_per_day }}</td>
+        </tr>
+        <tr>
             <td>Use webhooks</td>
             <td>{{ format_settings_value(channel.use_webhooks) }}</td>
         </tr>
@@ -33,6 +37,178 @@
             <td>Use emojis</td>
             <td>{{ format_settings_value(channel.use_emojis) }}</td>
         </tr>
+        <tr>
+            <td>Inventory use</td>
+            <td>{{ format_settings_value(channel.allow_global_items) }}</td>
+        </tr>
+        <tr>
+            <td>Mentions on kill</td>
+            <td>{{ format_settings_value(channel.mentions_when_killed) }}</td>
+        </tr>
+        <tr>
+            <td>Ducks stay for</td>
+            <td>{{ channel.ducks_time_to_live }} seconds</td>
+        </tr>
         </tbody>
     </table>
+
+    <h2>Experience settings</h2>
+    <table class="table table-dark">
+        <thead>
+        <tr>
+            <td>Setting</td>
+            <td>Value</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Normal duck experience</td>
+            <td>{{ channel.base_duck_exp }} exp</td>
+        </tr>
+        <tr>
+            <td>Clover experience range</td>
+            <td>{{ channel.clover_min_experience }} to {{ channel.clover_max_experience }} exp</td>
+        </tr>
+        <tr>
+            <td>Additional experience for every life the duck has</td>
+            <td>{{ channel.per_life_exp }} exp</td>
+        </tr>
+        <tr>
+            <td>Super ducks lives</td>
+            <td>{{ channel.super_ducks_min_life }} to {{ channel.super_ducks_max_life }} lives</td>
+        </tr>
+        <tr>
+            <td>Ducks lives shown</td>
+            <td>{{ format_settings_value(channel.show_duck_lives) }}</td>
+        </tr>
+        <tr>
+            <td>Tax on experience transactions</td>
+            <td>
+                <div class="progress position-relative">
+                    <div class="progress-bar" role="progressbar" style="width: {{ channel.tax_on_user_send }}%"
+                         aria-valuenow="{{ channel.tax_on_user_send }}" aria-valuemin="0"
+                         aria-valuemax="100"></div>
+                    <small class="justify-content-center d-flex position-absolute w-100 text-dark">{{ channel.tax_on_user_send }}%</small>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>Chance to kill on miss</td>
+            <td>
+                <div class="progress position-relative">
+                    <div class="progress-bar" role="progressbar" style="width: {{ channel.kill_on_miss_chance }}%"
+                         aria-valuenow="{{ channel.kill_on_miss_chance }}" aria-valuemin="0"
+                         aria-valuemax="100"></div>
+                    <small class="justify-content-center d-flex position-absolute w-100 text-dark">{{ channel.kill_on_miss_chance }}%</small>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>Chance to frighten ducks</td>
+            <td>
+                <div class="progress position-relative">
+                    <div class="progress-bar" role="progressbar" style="width: {{ channel.duck_frighten_chance }}%"
+                         aria-valuenow="{{ channel.duck_frighten_chance }}%" aria-valuemin="0"
+                         aria-valuemax="100"></div>
+                    <small class="justify-content-center d-flex position-absolute w-100 text-dark">{{ channel.duck_frighten_chance }}%</small>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <h2>Ducks weights</h2>
+
+    <div class="container">
+        <div class="row row-cols-1 row-cols-md-1 g-4">
+            <div class="col">
+                <div id="chart-parliament-day"></div>
+
+                <script>
+                    Highcharts.chart('chart-parliament-day', {
+                        chart: {
+                            type: 'item'
+                        },
+
+                        title: {
+                            text: '{% if channel.night_start_at != channel.night_end_at %}During the day{% endif %}'
+                        },
+
+                        subtitle: {
+                            text: ''
+                        },
+
+                        legend: {
+                            labelFormat: '{name} <span style="opacity: 0.4">{y}</span>'
+                        },
+
+                        series: [{
+                            name: 'Representatives',
+                            keys: ['name', 'y', 'color',],
+                            data: {{ parliament_day_data|tojson }},
+                            dataLabels: {
+                                enabled: true,
+                                format: '{point.name}'
+                            },
+
+                            // Circular options
+                            center: ['50%', '88%'],
+                            size: '170%',
+                            startAngle: -100,
+                            endAngle: 100
+                        }]
+                    });
+                </script>
+            </div>
+            <div class="col">
+                {% if channel.night_start_at != channel.night_end_at %}
+                    <div id="chart-parliament-night"></div>
+
+                    <script>
+                        Highcharts.chart('chart-parliament-night', {
+                            chart: {
+                                type: 'item'
+                            },
+
+                            title: {
+                                text: 'During the night'
+                            },
+
+                            subtitle: {
+                                text: ''
+                            },
+
+                            legend: {
+                                labelFormat: '{name} <span style="opacity: 0.4">{y}</span>'
+                            },
+
+                            series: [{
+                                name: 'Representatives',
+                                keys: ['name', 'y', 'color',],
+                                data: {{ parliament_night_data|tojson }},
+                                dataLabels: {
+                                    enabled: true,
+                                    format: '{point.name}'
+                                },
+
+                                // Circular options
+                                center: ['50%', '88%'],
+                                size: '170%',
+                                startAngle: -100,
+                                endAngle: 100
+                            }]
+                        });
+                    </script>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% if channel.night_start_at != channel.night_end_at %}
+        {% set ns, ne = channel.get_night_times() %}
+        <p>Night starts at {{ ns|time }} UTC and ends at {{ ne|time }} UTC</p>
+    {% endif %}
+
+
+
+
+
 {% endblock %}

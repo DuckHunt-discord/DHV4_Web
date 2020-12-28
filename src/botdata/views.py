@@ -5,7 +5,8 @@ from typing import List
 from django.core.paginator import Paginator, Page
 from django.db.models import Prefetch, Q, Count, Exists, OuterRef, Max
 from django.shortcuts import render, get_object_or_404
-from .models import DiscordGuild, DiscordChannel, DiscordUser, Player, DUCKS_COLORS
+from .models import DiscordGuild, DiscordChannel, DiscordUser, Player, DUCKS_COLORS, DUCKS_DAY_CATEGORIES, \
+    DUCKS_NIGHT_CATEGORIES
 
 
 # Create your views here.
@@ -180,7 +181,27 @@ def channel(request, pk: int):
 
 def channel_settings(request, pk: int):
     current_channel = get_object_or_404(DiscordChannel, pk=pk)
-    return render(request, "botdata/channel_settings.jinja2", {"channel": current_channel})
+
+    parliament_day_data = []
+    parliament_night_data = []
+
+    for duck in sorted(DUCKS_DAY_CATEGORIES):
+        parliament_day_data.append(
+            [duck.title(),
+             getattr(current_channel, f"spawn_weight_{duck}_ducks"),
+             DUCKS_COLORS[duck]]
+        )
+
+    for duck in sorted(DUCKS_NIGHT_CATEGORIES):
+        parliament_night_data.append(
+            [duck.title(),
+             getattr(current_channel, f"spawn_weight_{duck}_ducks"),
+             DUCKS_COLORS[duck]]
+        )
+
+    return render(request, "botdata/channel_settings.jinja2", {"channel": current_channel,
+                                                               "parliament_day_data": parliament_day_data,
+                                                               "parliament_night_data": parliament_night_data})
 
 
 def player(request, channel_pk: int, user_pk: int):

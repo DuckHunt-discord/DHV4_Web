@@ -6,10 +6,12 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 import collections
+import datetime
 import time
 import typing
 from enum import unique
 
+import pytz
 from django_enumfield.enum import EnumField, Enum
 
 from django.core.validators import MinValueValidator, MaxValueValidator
@@ -37,7 +39,11 @@ DUCKS_COLORS = {
     "players": "#B8CEB8",
 }
 
-SHOP_ITEMS = ["ap_ammo", "explosive_ammo", "grease", "sight", "detector", "silencer", "clover", "sunglasses", "coat", "licence", "reloader", "homing_bullets"]
+SHOP_ITEMS = ["ap_ammo", "explosive_ammo", "grease", "sight", "detector", "silencer", "clover", "sunglasses", "coat",
+              "licence", "reloader", "homing_bullets"]
+DUCKS_DAY_CATEGORIES = ["normal", "ghost", "prof", "baby", "golden", "plastic", "kamikaze", "mechanical", "super",
+                        "moad", "armored"]
+DUCKS_NIGHT_CATEGORIES = ["night", "sleeping"]
 
 
 def default_dict_generator(default_factory):
@@ -124,6 +130,16 @@ class DiscordChannel(models.Model):
     ducks_time_to_live = models.SmallIntegerField(default=660)
     super_ducks_min_life = models.SmallIntegerField(default=2)
     super_ducks_max_life = models.SmallIntegerField(default=7)
+
+    def get_night_times(self):
+        now = datetime.datetime.now(tz=pytz.utc)
+        midnight = now.replace(microsecond=0, second=0, minute=0, hour=0)
+
+        start_td = datetime.timedelta(seconds=self.night_start_at)
+        end_td = datetime.timedelta(seconds=self.night_end_at)
+
+        return (midnight + start_td,
+                midnight + end_td)
 
     def __str__(self):
         return f"#{self.name}"
