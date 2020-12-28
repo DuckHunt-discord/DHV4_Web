@@ -8,7 +8,7 @@
     <h1>{{ current_user.name }}#{{ current_user.discriminator }} statistics on <a
             href="{{ url("channel", pk=channel.pk) }}">#{{ channel.name }}</a></h1>
 
-    <h2>General statistics</h2>
+    <h2>📈 General statistics</h2>
 
     <p>
         <span class="statistic">{{ player.givebacks }}</span> days played,
@@ -16,7 +16,7 @@
     </p>
 
     {% if current_user.trophys %}
-        <h2>Trophys</h2>
+        <h2>🏆️ Trophys</h2>
         <ul>
             {% for trophy, unlocked in current_user.trophys.items() %}
                 {% if unlocked %}
@@ -27,7 +27,7 @@
     {% endif %}
 
     {% if current_user.achievements %}
-        <h2>Achievements</h2>
+        <h2>✨ Achievements</h2>
 
         <ul>
             {% for achievement, unlocked in player.achievements.items() %}
@@ -39,18 +39,18 @@
     {% endif %}
 
     {% if player.prestige >= 1 %}
-        <h2>Prestige</h2>
+        <h2>💠 Prestige</h2>
         You've got to prestige level {{ player.prestige }}, and claimed {{ player.prestige_dailies }} prestige dailies
     {% endif %}
 
 
     {% if player.killed|length %}
-        <h2>Ducks killed</h2>
+        <h2>🦆 Ducks killed</h2>
         <div id="chart-ducks-killed"></div>
     {% endif %}
 
     {% if player.best_times|length %}
-        <h2>Shooting range</h2>
+        <h2>🔫 Shooting range</h2>
         <div id="chart-best-times"></div>
     {% endif %}
 
@@ -58,21 +58,21 @@
 
         {% if player.hugged|length %}
             <div class="col">
-                <h2>Ducks hugged</h2>
+                <h2>🤗 Ducks hugged</h2>
                 <div id="chart-ducks-hugged"></div>
             </div>
         {% endif %}
 
         {% if player.hurted|length %}
             <div class="col">
-                <h2>Ducks hurt</h2>
+                <h2>🚑️ Ducks hurt</h2>
                 <div id="chart-ducks-hurt"></div>
             </div>
         {% endif %}
 
         {% if player.frightened|length %}
             <div class="col">
-                <h2>Ducks frightened</h2>
+                <h2>😱 Ducks frightened</h2>
                 <div id="chart-ducks-frightened"></div>
             </div>
         {% endif %}
@@ -80,7 +80,7 @@
 
     {% set powerups = player.get_only_active_powerups() %}
     {% if powerups|length or player.bought_items|length or player.found_items|length %}
-        <h2>Backpack</h2>
+        <h2>🎒 Backpack</h2>
 
         <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 justify-content-around">
             {% if powerups|length %}
@@ -246,10 +246,10 @@
     {% endif %}
 
 
-    <h2>Shooting stats</h2>
+    <h2>🎯 Shooting stats</h2>
     <div id="chart-shots"></div>
 
-    <h2>Misc</h2>
+    <h2>🛸 Misc</h2>
     <p>
         {{ current_user.name }} used {{ player.shooting_stats.get('bullets_used', 0) }} bullets
         {% if player.shooting_stats.get('homing_kills', 0) %}(of which
