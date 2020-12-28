@@ -5,7 +5,8 @@
 {% endblock %}
 
 {% block content %}
-    <h1>{{ current_user.name }}#{{ current_user.discriminator }} statistics on <a href="{{ url("channel", pk=channel.pk) }}">#{{ channel.name }}</a></h1>
+    <h1>{{ current_user.name }}#{{ current_user.discriminator }} statistics on <a
+            href="{{ url("channel", pk=channel.pk) }}">#{{ channel.name }}</a></h1>
 
     <h2>General statistics</h2>
 
@@ -214,24 +215,30 @@
                     <br/>
                 {% endif %}
                 {% if player.found_items|length %}
-                    <div class="h5">Trash found in bushes</div>
-                    <ul>
-                        {% for item, qty in player.get_found_trash().items() %}
-                            <li>{{ qty }} {{ item.replace('took_', '').replace('_', ' ').capitalize() }}</li>
-                        {% endfor %}
-                    </ul>
-                    <div class="h5">Items took from bushes</div>
-                    <ul>
-                        {% for item, qty in player.get_found_useful(left=False).items() %}
-                            <li>{{ qty }} {{ item.replace('took_', '').replace('_', ' ').capitalize() }}</li>
-                        {% endfor %}
-                    </ul>
-                    <div class="h5">Items left in bushes</div>
-                    <ul>
-                        {% for item, qty in player.get_found_useful(left=True).items() %}
-                            <li>{{ qty }} {{ item.replace('left_', '').replace('_', ' ').capitalize() }}</li>
-                        {% endfor %}
-                    </ul>
+                    {% if player.get_found_trash()|length %}
+                        <div class="h5">Trash found in bushes</div>
+                        <ul>
+                            {% for item, qty in player.get_found_trash().items() %}
+                                <li>{{ qty }} {{ item.replace('took_trash', '').replace('_', ' ').capitalize() }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    {% if player.get_found_useful(left=False)|length %}
+                        <div class="h5">Items took from bushes</div>
+                        <ul>
+                            {% for item, qty in player.get_found_useful(left=False).items() %}
+                                <li>{{ qty }} {{ item.replace('took_', '').replace('_', ' ').capitalize() }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    {% if player.get_found_useful(left=True)|length %}
+                        <div class="h5">Items left in bushes</div>
+                        <ul>
+                            {% for item, qty in player.get_found_useful(left=True).items() %}
+                                <li>{{ qty }} {{ item.replace('left_', '').replace('_', ' ').capitalize() }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                 {% endif %}
             </div>
         </div>
@@ -240,41 +247,9 @@
 
 
     <h2>Shooting stats</h2>
+    <div id="chart-shots"></div>
 
-    <table class="table table-dark table-borderless">
-        <thead>
-        <tr>
-            <th colspan="10" class="text-center">Shots...</th>
-        </tr>
-        <tr>
-            <th>When dead</th>
-            <th>When wet</th>
-            <th>Without a weapon</th>
-            <th>With a sabotaged weapon</th>
-            <th>With a jammed weapon</th>
-            <th>Without bullets</th>
-            <th>Jamming the gun</th>
-            <th>With ducks</th>
-            <th>Without ducks</th>
-            <th>Stopped by the detector</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <th>{{ player.shooting_stats.get('shots_when_dead', 0) }}</th>
-            <th>{{ player.shooting_stats.get('shots_when_wet', 0) }}</th>
-            <th>{{ player.shooting_stats.get('shots_when_confiscated', 0) }}</th>
-            <th>{{ player.shooting_stats.get('shots_when_sabotaged', 0) }}</th>
-            <th>{{ player.shooting_stats.get('shots_when_jammed', 0) }}</th>
-            <th>{{ player.shooting_stats.get('shots_with_empty_magazine', 0) }}</th>
-            <th>{{ player.shooting_stats.get('shots_jamming_weapon', 0) }}</th>
-            <th>{{ player.shooting_stats.get('shots_with_duck', 0) }}</th>
-            <th>{{ player.shooting_stats.get('shots_without_duck', 0) }}</th>
-            <th>{{ player.shooting_stats.get('shots_stopped_by_detector', 0) }}</th>
-        </tr>
-        </tbody>
-    </table>
-
+    <h2>Misc</h2>
     <p>
         {{ current_user.name }} used {{ player.shooting_stats.get('bullets_used', 0) }} bullets
         {% if player.shooting_stats.get('homing_kills', 0) %}(of which
@@ -320,9 +295,7 @@
         </p>
     {% endif %}
 
-    <h2>Misc</h2>
-
-    {{ player.bullets }} bullets in gun, {{ player.magazines }} magazines in backpack.
+    They have {{ player.bullets }} bullets in their gun, and {{ player.magazines }} magazines in their backpack.
 
 
     <script>
@@ -472,5 +445,44 @@
                 }]
             });
         {% endif %}
+
+        Highcharts.chart('chart-shots', {
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: 'Shots...'
+            },
+            yAxis: {
+                title: {
+                    text: 'Count',
+                    align: 'high'
+                },
+            },
+            xAxis: {
+                labels: {
+                    enabled: false,
+                }
+            },
+            plotOptions: {
+                bar: {
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            series: [{
+                name: 'Best Times',
+                colorByPoint: true,
+                data: {{ shots_chart_data|tojson }},
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.name}: {point.y} shots'
+                },
+            }]
+        });
     </script>
 {% endblock %}

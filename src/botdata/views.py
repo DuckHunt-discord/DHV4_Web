@@ -112,6 +112,26 @@ def player(request, channel_pk: int, user_pk: int):
 
     # Charts
 
+    shots_chart_data = []
+
+    for attr_key, attr_name in [
+        ('shots_when_dead', 'When dead'),
+        ('shots_when_wet', 'When wet'),
+        ('shots_when_confiscated', 'Without a weapon'),
+        ('shots_when_sabotaged', 'With a sabotaged weapon'),
+        ('shots_when_jammed', 'With a jammed weapon'),
+        ('shots_with_empty_magazine', 'Without bullets'),
+        ('shots_jamming_weapon', 'Jamming the gun'),
+        ('shots_with_duck', 'With ducks'),
+        ('shots_without_duck', 'Without ducks'),
+        ('shots_stopped_by_detector', 'Stopped by the detector'),
+    ]:
+        shots_chart_data.append({
+            'name': attr_name,
+            'y': current_player.shooting_stats.get(attr_key, 0)
+        })
+    shots_chart_data.sort(key=lambda d: -d['y'])
+
     return render(request, "botdata/player.jinja2",
                   {"channel": current_channel, "current_user": current_user, "player": current_player,
-                   "achievements": achievements, "trophys": trophys, "barcode": barcode})
+                   "achievements": achievements, "trophys": trophys, "barcode": barcode, "shots_chart_data": shots_chart_data})
