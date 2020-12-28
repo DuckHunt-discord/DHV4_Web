@@ -39,7 +39,7 @@
             {% endfor %}
         </ul>
         <div class="card-footer text-muted">
-            This server uses the <code>{{ guild.prefix }}</code> prefix. Currently, the language used on all channels is {{ guild.language }}.
+            This server uses the <code>{{ guild.prefix }}</code> prefix. Currently, the language used on all channels is <a href="{{ url("guilds", language=guild.language) }}">{{ guild.language }}</a>.
         </div>
     </div>
 

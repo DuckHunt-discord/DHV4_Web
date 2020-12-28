@@ -50,7 +50,7 @@ class CustomPaginator(Paginator):
         return CustomPage(*args, **kwargs)
 
 
-def guilds(request):
+def guilds(request, language=None):
     enabled_channels_qs = DiscordChannel.objects \
         .filter(enabled=True) \
         .annotate(player_count=Count("players")) \
@@ -64,11 +64,14 @@ def guilds(request):
         .distinct() \
         .order_by('-vip')
 
+    if language:
+        guilds_list = guilds_list.filter(language=language)
+
     guilds_paginator = CustomPaginator(guilds_list, 50)
     page_number = request.GET.get('page', 1)
     page_obj = guilds_paginator.get_page(page_number)
 
-    return render(request, "botdata/guilds.jinja2", {"guilds": page_obj})
+    return render(request, "botdata/guilds.jinja2", {"guilds": page_obj, "language": language})
 
 
 def guild(request, pk: int):
