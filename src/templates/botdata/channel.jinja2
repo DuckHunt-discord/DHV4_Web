@@ -7,11 +7,27 @@
 {% block content %}
     <h1>{{ players|length }} players on #{{ channel.name }}</h1>
 
-    {# Top scores #}
-
     <p>
         To see the settings used by this channel, you can click <a href="{{ url("channel_settings", pk=channel.pk) }}">here</a>.
+        To see all the channels on the server, click <a href="{{ url("guild", pk=channel.guild_id) }}">here</a>
     </p>
+
+    {# Graphs #}
+    <h2>Best players</h2>
+
+    <div id="chart-best-players"></div>
+
+    <h2>Where do bullets go ?</h2>
+    <div id="chart-shots"></div>
+
+    {% if global_best_times %}
+        <h2>Fastest hunters in the west</h2>
+        <div id="chart-best-times"></div>
+    {% endif %}
+
+    {# Top scores #}
+
+    <h2>Top scores</h2>
 
     <table class="table table-dark table-hover">
         <thead>
@@ -26,7 +42,9 @@
         {% for player in players %}
             <tr>
                 <th scope="row">{{ loop.index }}</th>
-                <td><a href="{{ url('player', channel_pk=channel.pk, user_pk=player.member.user.pk) }}">{{ player.member.user.name }}#{{ player.member.user.discriminator }}</a></td>
+                <td>
+                    <a href="{{ url('player', channel_pk=channel.pk, user_pk=player.member.user.pk) }}">{{ player.member.user.name }}#{{ player.member.user.discriminator }}</a>
+                </td>
                 <td class="text-end">{{ intcomma(player.experience) }}</td>
                 <td class="text-end">{{ player.total_ducks_killed }}</td>
             </tr>
@@ -34,5 +52,150 @@
         </tbody>
     </table>
 
+    <script>
+        Highcharts.chart('chart-best-players', {
+            tooltip: {
+                pointFormat: 'Exp: {point.y}'
+            },
+            legend: {
+                enabled: true
+            },
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: ''
+            },
+            yAxis: {
+                type: 'logarithmic',
+                title: {
+                    text: 'Experience',
+                },
+            },
+            xAxis: {
+                labels: {
+                    enabled: true,
+                },
+                title: {
+                    text: 'Rank',
+                },
+            },
+            {# This force the graph to only show one serie at a time #}
+            plotOptions: {
+                series: {
+                    events: {
+                        show: (function () {
+                            var chart = this.chart,
+                                series = chart.series,
+                                i = series.length,
+                                otherSeries;
+                            while (i--) {
+                                otherSeries = series[i];
+                                if (otherSeries != this && otherSeries.visible) {
+                                    otherSeries.hide();
+                                }
+                            }
+                        })
+                    }
+                }
+            },
+            series: [
+                {
+                    name: 'Experience',
+                    colorByPoint: false,
+                    data: {{ chart_best_players_data_experience|tojson }},
+                },
+                {
+                    name: 'Ducks Killed',
+                    colorByPoint: false,
+                    visible: false,
+                    data: {{ chart_best_players_data_ducks|tojson }},
+                }]
+        });
+
+        Highcharts.chart('chart-shots', {
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: 'Shots...'
+            },
+            yAxis: {
+                title: {
+                    text: 'Count',
+                    align: 'high'
+                },
+            },
+            xAxis: {
+                labels: {
+                    enabled: false,
+                }
+            },
+            plotOptions: {
+                bar: {
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            series: [{
+                name: 'Shoots',
+                colorByPoint: true,
+                data: {{ shots_chart_data|tojson }},
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.name}: {point.y} shots'
+                },
+            }]
+        });
+        {% if global_best_times %}
+            Highcharts.chart('chart-best-times', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: ''
+                },
+                yAxis: {
+                    title: {
+                        text: 'Time to kill (seconds)',
+                        align: 'high'
+                    },
+                },
+                xAxis: {
+                    labels: {
+                        enabled: false,
+                    }
+                },
+                tooltip: {
+                    valueSuffix: ' seconds'
+                },
+                plotOptions: {
+                    bar: {
+                        dataLabels: {
+                            enabled: true
+                        }
+                    }
+                },
+                legend: {
+                    enabled: false
+                },
+                series: [{
+                    name: 'Best Times',
+                    colorByPoint: true,
+                    data: {{ chart_best_time|tojson }},
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.name}: {point.y:.1f}s'
+                    },
+                    colors: {{ ducks_names_to_colors(global_best_times)|tojson }}
+                }]
+            });
+        {% endif %}
+
+    </script>
 
 {% endblock %}
