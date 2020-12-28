@@ -8,6 +8,31 @@
     <h1>Settings of #{{ channel.name }}</h1>
 
     <p>
-        To go back and see the hunters scores for this channel, you can click <a href="{{ url("channel", pk=channel.pk) }}">here</a>.
+        To go back and see the hunters scores for this channel, you can click
+        <a href="{{ url("channel", pk=channel.pk) }}">here</a>.
     </p>
+
+    <p>
+        The channel is currently {% if channel.enabled %}enabled{% else %}disabled{% endif %}
+    </p>
+    <h2>General settings</h2>
+
+    <table class="table table-dark">
+        <thead>
+        <tr>
+            <td>Setting</td>
+            <td>Value</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Use webhooks</td>
+            <td>{{ format_settings_value(channel.use_webhooks) }}</td>
+        </tr>
+        <tr>
+            <td>Use emojis</td>
+            <td>{{ format_settings_value(channel.use_emojis) }}</td>
+        </tr>
+        </tbody>
+    </table>
 {% endblock %}

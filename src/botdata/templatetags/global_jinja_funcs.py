@@ -47,7 +47,7 @@ def dict_to_highcharts(mydict, select_first=True, reverse=False):
 
 
 @library.global_function
-def show_timestamp(timestamp:int):
+def show_timestamp(timestamp: int):
     td = datetime.datetime.now() - datetime.datetime.fromtimestamp(timestamp)
     return format_timedelta(td, locale="en_US", threshold=1.1, format="short")
 
@@ -67,7 +67,7 @@ def ducks_names_to_colors(ducks: Union[str, List[str], Dict[Any, int]], reverse=
 
 @library.global_function
 def titleize(strings: List[str]):
-    return [string.title() for string in strings]\
+    return [string.title() for string in strings]
 
 
 @library.global_function
@@ -75,6 +75,11 @@ def values_from_keys(keys: List[str], dict_: dict):
     return [dict_[key] for key in keys]
 
 
-
-
+@library.global_function
+def format_settings_value(value):
+    if isinstance(value, bool):
+        if value:
+            return "✅"
+        else:
+            return "❌"
 
