@@ -123,7 +123,7 @@ def player(request, channel_pk: int, user_pk: int):
         ('shots_with_empty_magazine', 'Without bullets'),
         ('shots_jamming_weapon', 'Jamming the gun'),
         ('shots_with_duck', 'With ducks'),
-        ('shots_without_duck', 'Without ducks'),
+        ('shots_without_ducks', 'Without ducks'),
         ('shots_stopped_by_detector', 'Stopped by the detector'),
     ]:
         shots_chart_data.append({
