@@ -160,7 +160,7 @@ def channel(request, pk: int):
                 global_best_times[duck_type] = (time_, chart_player)
 
     chart_best_time = []
-    for duck_type, best_info in global_best_times.values():
+    for duck_type, best_info in global_best_times.items():
         duck_time, chart_player = best_info
         chart_best_time.append({
             'name': f'{duck_type} (by {str(chart_player.member.user)})',
