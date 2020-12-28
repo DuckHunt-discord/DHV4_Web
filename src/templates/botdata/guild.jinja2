@@ -38,5 +38,12 @@
                 </li>
             {% endfor %}
         </ul>
+        <div class="card-footer text-muted">
+            This server uses the <code>{{ guild.prefix }}</code> prefix. Currently, the language used on all channels is {{ guild.language }}.
+        </div>
     </div>
+
+    <br/>
+
+    <iframe src="https://discordapp.com/widget?id={{ guild.discord_id }}&theme=dark" style="min-height: 300px" allowtransparency="true" width="100%" height="100%" frameborder="0"></iframe>
 {% endblock %}
