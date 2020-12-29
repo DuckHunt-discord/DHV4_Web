@@ -84,3 +84,10 @@ footer {
     margin: 0 10px;
     height: 125px;
 }
+
+blockquote {
+    border-left: 3px solid #199926;
+    border-bottom-left-radius: 2px;
+    border-top-left-radius: 2px;
+    padding-left: 1em;
+}
