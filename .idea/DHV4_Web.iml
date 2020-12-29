@@ -24,6 +24,8 @@
     <option name="TEMPLATE_FOLDERS">
       <list>
         <option value="$MODULE_DIR$/src/templates" />
+        <option value="$MODULE_DIR$/src/public/templates" />
+        <option value="$MODULE_DIR$/src/botdata/templates" />
       </list>
     </option>
   </component>
