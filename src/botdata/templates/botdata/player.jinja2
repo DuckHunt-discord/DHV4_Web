@@ -16,7 +16,7 @@
     </p>
 
     {% if current_user.trophys %}
-        <h2>🏆️ Trophys</h2>
+        <h2>🏆️ Trophies</h2>
         <ul>
             {% for trophy, unlocked in current_user.trophys.items() %}
                 {% if unlocked %}
