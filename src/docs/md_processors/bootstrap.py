@@ -23,7 +23,7 @@ class FakeTitlesTreeprocessor(Treeprocessor):
         for element in root.iter('*'):
             if len(element.tag) == 2 and element.tag.startswith('h'):
                 element.set('class', element.tag)
-                element.tag = 'span'
+                element.tag = 'div'
         # No return statement is same as `return None`
 
 
