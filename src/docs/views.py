@@ -13,15 +13,31 @@ MARKDOWN_FILES = pathlib.Path(__file__).parent.absolute() / "markdown_files/"
 
 # Create your views here.
 def index(request):
-    return display_page(request, category=None, page="README")
+    summary_file = MARKDOWN_FILES / "SUMMARY.md"
+
+    with open(summary_file, "r") as f:
+        parsed_summary = markdown.markdown(f.read(),
+                                           extensions=['tables',
+                                                       'fenced_code',
+                                                       HintExtension(),
+                                                       BootstrapExtension(),
+                                                       MdLinksExtension()]
+                                           )
+        parsed_summary = mark_safe(parsed_summary)
+
+    return display_page(request, category=None, page="README", ctx={"parsed_summary": parsed_summary})
 
 
 def category_index(request, category):
     return display_page(request, category=category, page="INDEX")
 
 
-def display_page(request, page, category=None):
-    if category:
+def display_page(request, page, category=None, subcategory=None, ctx=None):
+    if ctx is None:
+        ctx = {}
+    if subcategory:
+        file = f"{category}/{subcategory}/{page}.md"
+    elif category:
         file = f"{category}/{page}.md"
     else:
         file = f"{page}.md"
@@ -34,15 +50,15 @@ def display_page(request, page, category=None):
         raise Http404("This page does not exist in the documentation. Can you create it ?")
 
     with open(file, "r") as f:
-        markdown_text = f.read()
-
-    parsed = markdown.markdown(markdown_text,
-                               extensions=['tables',
-                                           'fenced_code',
-                                           HintExtension(),
-                                           BootstrapExtension(),
-                                           MdLinksExtension()]
-                               )
+        parsed = markdown.markdown(f.read(),
+                                   extensions=['tables',
+                                               'fenced_code',
+                                               HintExtension(),
+                                               BootstrapExtension(),
+                                               MdLinksExtension()]
+                                   )
+        parsed = mark_safe(parsed)
 
     return render(request, "docs/index.jinja2", {"page": page, "category": category, "file": file,
-                                                 "parsed_content": mark_safe(parsed), "gh_file": gh_file})
+                                                 "parsed_content": parsed,
+                                                 "gh_file": gh_file, **ctx})

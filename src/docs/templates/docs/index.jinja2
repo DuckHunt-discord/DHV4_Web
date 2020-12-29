@@ -7,7 +7,15 @@
 {% block content %}
     {{ parsed_content }}
 
+    {% if parsed_summary %}
+        <hr/>
+
+        {{ parsed_summary }}
+    {% endif %}
+
     <hr/>
 
-    You can <a href="{{ gh_file }}">edit the documentation on github</a>, or ask on the support server to access the WYSIWYG editor.
+    You can <a href="{{ gh_file }}">edit the documentation on github</a>, or ask on the support server to access the
+    WYSIWYG editor.
+
 {% endblock %}
