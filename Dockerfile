@@ -25,9 +25,11 @@ ENV DH_API_KEY=""
 ENV DH_API_URL=""
 
 COPY docker_run.sh /run.sh
-RUN git submodule init && git submodule update
 
 WORKDIR /web/
+RUN git submodule init && git submodule update
+
+
 ENTRYPOINT ["sh"]
 CMD ["/run.sh"]
 
