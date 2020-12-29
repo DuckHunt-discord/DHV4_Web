@@ -5,7 +5,7 @@ import markdown
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 
-from docs.md_processors.bootstrap import BootstrapExtension
+from docs.md_processors.bootstrap import BootstrapExtension, BootstrapFakeTitlesExtension
 from docs.md_processors.hints import HintExtension
 from docs.md_processors.remove_md_links_extension import get_extension
 
@@ -21,6 +21,7 @@ def parse_summary(request):
                                                        'fenced_code',
                                                        HintExtension(),
                                                        BootstrapExtension(),
+                                                       BootstrapFakeTitlesExtension(),
                                                        get_extension(absolute_path=absolute_path)()],
                                            )
     parsed_summary = mark_safe(parsed_summary)
