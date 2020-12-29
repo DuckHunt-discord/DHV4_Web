@@ -1,12 +1,11 @@
-from django.urls import path
+from django.urls import path, re_path
 
 from . import views
 
 app_name = "docs"
 urlpatterns = [
-    path('', views.index, name="index"),
-    path('<slug:category>', views.category_index, name="category_index"),
-    path('<slug:page>', views.display_page, name="page"),
-    path('<slug:category>/<slug:page>', views.display_page, name="page"),
-    path('<slug:category>/<slug:subcategory>/<slug:page>', views.display_page, name="page"),
+    path('', views.display_page, name="index", kwargs={"path": "README"}),
+    path('summary', views.summary, name="summary"),
+    path('.gitbook/assets/<str:file>', views.assets, name="assets"),
+    re_path(r'(?P<path>(?:[A-z0-9\-]*/?)*)', views.display_page, name="page"),
 ]
