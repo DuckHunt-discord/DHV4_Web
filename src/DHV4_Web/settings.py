@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'debug_toolbar',
     'public.apps.PublicConfig',
+    'docs.apps.DocsConfig',
     'botdata.apps.BotdataConfig',
     'django_jinja',
     'django_extensions'
