@@ -71,10 +71,12 @@
         </div>
     </div>
 </nav>
-<div class="container text-light">
-    {% block content %}
-    {% endblock %}
-</div>
+{% block container %}
+    <div class="container text-light">
+        {% block content %}
+        {% endblock %}
+    </div>
+{% endblock %}
 <br/>
 <br/>
 <footer class="text-center">

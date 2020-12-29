@@ -12,8 +12,7 @@ from docs.md_processors.remove_md_links_extension import get_extension
 MARKDOWN_FILES = pathlib.Path(__file__).parent.absolute() / "markdown_files/"
 
 
-# Create your views here.
-def summary(request):
+def parse_summary(request):
     summary_file = MARKDOWN_FILES / "SUMMARY.md"
     absolute_path = request.build_absolute_uri(reverse('docs:index'))
     with open(summary_file, "r") as f:
@@ -24,15 +23,19 @@ def summary(request):
                                                        BootstrapExtension(),
                                                        get_extension(absolute_path=absolute_path)()],
                                            )
-        parsed_summary = mark_safe(parsed_summary)
+    parsed_summary = mark_safe(parsed_summary)
+    return parsed_summary
+
+
+# Create your views here.
+def summary(request):
+    summary_file = MARKDOWN_FILES / "SUMMARY.md"
 
     gh_file = "https://github.com/DuckHunt-discord/duckhunt.me-docs/blob/master/SUMMARY.md"
 
-
     return render(request, "docs/summary.jinja2", {"file": summary_file,
-                                                 "parsed_content": parsed_summary,
-                                                 "gh_file": gh_file,})
-
+                                                   "parsed_content": parse_summary(request),
+                                                   "gh_file": gh_file, })
 
 
 def display_page(request, path, ctx=None):
@@ -65,7 +68,7 @@ def display_page(request, path, ctx=None):
         parsed = mark_safe(parsed)
 
     return render(request, "docs/index.jinja2", {"page": page, "category": category, "file": file,
-                                                 "parsed_content": parsed,
+                                                 "parsed_content": parsed, "parsed_summary": parse_summary(request),
                                                  "gh_file": gh_file, **ctx})
 
 

@@ -4,13 +4,26 @@
     DuckHunt V4 docs - {{ page }}
 {% endblock %}
 
-{% block content %}
-    {{ parsed_content }}
+{% block container %}
+    <div class="container-fluid text-light">
+        <div class="row justify-content-md-center">
+            <div class="col col-12 col-md-8 col-lg-8">
+                {{ parsed_content }}
+            </div>
+            <div class="col col-12 col-md-4 col-lg-3 background-dark">
+                {{ parsed_summary }}
+            </div>
+        </div>
+    </div>
 
-    <hr/>
 
-    You can <a href="{{ gh_file }}">edit the documentation on github</a>, or ask on the support server to access the
-    WYSIWYG editor.<br/>
+    <div class="container text-light">
+        <hr/>
 
-    You've reached the bottom. Would you like to <a href="{{ url('docs:index') }}">go back to the docs homepage</a>, or <a href="{{ url('docs:summary') }}"> view the summary</a> ?
+        You can <a href="{{ gh_file }}">edit the documentation on github</a>, or ask on the support server to access the
+        WYSIWYG editor.<br/>
+
+        You've reached the bottom. Would you like to <a href="{{ url('docs:index') }}">go back to the docs homepage</a>,
+        or <a href="{{ url('docs:summary') }}"> view the summary</a> ?
+    </div>
 {% endblock %}
