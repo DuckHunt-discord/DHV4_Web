@@ -1,0 +1,13 @@
+{% extends "base.jinja2" %}
+
+{% block title %}
+    DuckHunt V4 docs - {{ page }}
+{% endblock %}
+
+{% block content %}
+    {{ parsed_content }}
+
+    <hr/>
+
+    You can <a href="{{ gh_file }}">edit the documentation on github</a>, or ask on the support server to access the WYSIWYG editor.
+{% endblock %}

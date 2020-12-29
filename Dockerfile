@@ -7,7 +7,6 @@ RUN apt-get update; \
        ; \
     rm -rf /var/lib/apt/lists/*;
 
-
 WORKDIR /
 COPY requirements.txt /
 
@@ -26,6 +25,7 @@ ENV DH_API_KEY=""
 ENV DH_API_URL=""
 
 COPY docker_run.sh /run.sh
+RUN git submodule init && git submodule update
 
 WORKDIR /web/
 ENTRYPOINT ["sh"]

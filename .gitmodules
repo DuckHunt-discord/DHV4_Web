@@ -1,0 +1,3 @@
+[submodule "src/docs/markdown_files"]
+	path = src/docs/markdown_files
+	url = https://github.com/DuckHunt-discord/duckhunt.me-docs

@@ -5,6 +5,7 @@ django-debug-toolbar~=3.2
 django-jinja
 psycopg2
 gunicorn
-requests~=2.25.0
+requests~=2.25.1
 babel~=2.9.0
-pytz~=2020.4
+pytz~=2020.5
+markdown~=3.3.3
