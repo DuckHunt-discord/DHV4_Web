@@ -6,8 +6,8 @@ from markdown.blockprocessors import BlockProcessor
 
 
 class HintBlockProcessor(BlockProcessor):
-    RE_FENCE_START = r'^{% hint style="(?P<style>[a-z]{3,})" %}\n'  # start line, e.g., `   !!!! `
-    RE_FENCE_END = r'\n{% endhint %}$'  # last non-blank line, e.g, '!!!\n  \n\n'
+    RE_FENCE_START = r'^{% hint style="(?P<style>[a-z]{3,})" %}'  # start line, e.g., `   !!!! `
+    RE_FENCE_END = r'{% endhint %}$'  # last non-blank line, e.g, '!!!\n  \n\n'
 
     def test(self, parent, block):
         return re.match(self.RE_FENCE_START, block)
