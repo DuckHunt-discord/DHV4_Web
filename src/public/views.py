@@ -1,5 +1,6 @@
 from typing import Optional
 
+from django.http import Http404
 from django.shortcuts import render
 from django.conf import settings
 
@@ -22,6 +23,7 @@ def get_from_api(url):
 
 def index(request):
     return render(request, "public/index.jinja2")
+
 
 def get_command(commands, name):
     direct = commands.get(name)
@@ -73,6 +75,9 @@ def bot_commands(request):
             for sc in scs[1:]:
                 parent = commands
                 commands = get_command(commands['subcommands'], sc)
+
+        if commands is None:
+            raise Http404("No such command")
 
         ctx = {"command_to_see": command_to_see, "parent_name": parent_name, "command": commands, "prefix": "d!", "parent": parent}
         return render(request, "public/command.jinja2", ctx)
