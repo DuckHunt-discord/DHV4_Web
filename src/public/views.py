@@ -22,7 +22,12 @@ def get_from_api(url):
 
 
 def index(request):
-    return render(request, "public/index.jinja2")
+    stats_url = settings.DH_API_URL + "/stats"
+    api_stats = get_from_api(stats_url)
+
+    return render(request, "public/index.jinja2", {
+        "api_stats": api_stats,
+    })
 
 
 def get_command(commands, name):
