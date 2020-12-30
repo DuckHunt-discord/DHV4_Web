@@ -43,8 +43,21 @@ p {
     margin-bottom: 0 !important;
 }
 
+.alert p:first-of-type:before {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    font-size: large;
+    margin-right: 1em;
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    line-height: 1;
+    content: "\f06a"; /*https://fontawesome.com/icons/exclamation-circle?style=solid*/
+}
+
 hr {
-  border-bottom: 4px solid green;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
+    border-bottom: 4px solid green;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
 }
