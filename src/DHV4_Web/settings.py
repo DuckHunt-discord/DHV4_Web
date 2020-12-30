@@ -177,7 +177,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR.parent / "static"
 
 DH_API_KEY = os.environ.get("DH_API_KEY", "")
-DH_API_URL = os.environ.get("DH_API_URL", "http://v4.duckhunt.me/api")
+DH_API_URL = os.environ.get("DH_API_URL", "http://duckhunt.me/api")
 
 if not DEBUG:
     LOGGING = {
