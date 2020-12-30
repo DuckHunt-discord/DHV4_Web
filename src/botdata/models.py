@@ -69,6 +69,8 @@ class DefaultDictJSONField(models.JSONField):
 
 class DiscordGuild(models.Model):
     discord_id = models.BigAutoField(primary_key=True)
+    first_seen = models.DateTimeField(auto_now_add=True)
+
     name = models.TextField()
     prefix = models.CharField(max_length=20, blank=True, null=True)
     vip = models.BooleanField(default=False)
@@ -83,6 +85,7 @@ class DiscordGuild(models.Model):
 
 class DiscordChannel(models.Model):
     discord_id = models.BigAutoField(primary_key=True)
+    first_seen = models.DateTimeField(auto_now_add=True)
 
     guild = models.ForeignKey(DiscordGuild, models.CASCADE, related_name="channels")
     name = models.TextField()
@@ -161,6 +164,9 @@ class AccessLevel(Enum):
 
 class DiscordUser(models.Model):
     discord_id = models.BigAutoField(primary_key=True)
+    first_seen = models.DateTimeField(auto_now_add=True)
+
+
     name = models.TextField()
     discriminator = models.CharField(max_length=4)
     times_ran_example_command = models.IntegerField(default=0)
@@ -198,6 +204,8 @@ class DiscordMember(models.Model):
 class Player(models.Model):
     channel = models.ForeignKey(DiscordChannel, models.CASCADE, related_name="players")
     member = models.ForeignKey(DiscordMember, models.CASCADE)
+
+    first_seen = models.DateTimeField(auto_now_add=True)
 
     prestige = models.SmallIntegerField(default=8)
     prestige_last_daily = models.DateTimeField(auto_now_add=True)
