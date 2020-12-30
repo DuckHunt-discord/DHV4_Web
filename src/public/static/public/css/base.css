@@ -99,3 +99,38 @@ blockquote {
 .background-blurple {
     background-color: #7187dd !important;
 }
+
+.bg-blurple-gradient {
+    background: linear-gradient(60deg, #7187dd, #5a71c8);
+}
+
+.bg-primary-gradient {
+    background: linear-gradient(60deg, #ab47bc, #8e24aa);
+}
+
+.bg-rose-gradient {
+    background: linear-gradient(60deg, #ec407a, #d81b60);
+}
+
+.bg-warning-gradient {
+    background: linear-gradient(60deg, #ffa726, #fb8c00);
+}
+
+.bg-success-gradient {
+    background: linear-gradient(60deg, #66bb6a, #43a047);
+}
+
+.bg-danger-gradient {
+    background: linear-gradient(60deg, #ef5350, #e53935);
+}
+
+.bg-info-gradient {
+    background: linear-gradient(60deg, #26c6da, #00acc1);
+}
+
+.hero-button {
+    padding-top: 1em;
+    padding-bottom: 1em;
+    text-align: center;
+    vertical-align: sub !important;
+}

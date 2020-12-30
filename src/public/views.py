@@ -8,6 +8,8 @@ from django.conf import settings
 import requests
 from django.views.decorators.cache import cache_page
 
+from botdata.templatetags.global_jinja_funcs import show_timestamp, intcomma
+
 SECOND = 1
 MINUTE = 60 * SECOND
 HOUR = 60 * MINUTE
@@ -25,8 +27,56 @@ def index(request):
     stats_url = settings.DH_API_URL + "/stats"
     api_stats = get_from_api(stats_url)
 
+    parsed_stats = [
+        {
+            "name": "Guilds",
+            "value": intcomma(api_stats['guilds_count']),
+            "color": "success",
+            "icon": "fas fa-server",
+        },
+        {
+            "name": "Channels",
+            "value": intcomma(api_stats['channels_count']),
+            "color": "success",
+            "icon": "fab fa-slack-hash",
+        },
+        {
+            "name": "Players",
+            "value": intcomma(api_stats['players_count']),
+            "color": "success",
+            "icon": "fas fa-hat-cowboy-side",
+        },
+        {
+            "name": "Members",
+            "value": intcomma(api_stats['members_count']),
+            "color": "success",
+            "icon": "fas fa-users",
+        },
+        {
+            "name": "Ducks",
+            "value": intcomma(api_stats['alive_ducks_count']),
+            "color": "success",
+            "icon": "fas fa-feather",
+        },
+        {
+            "name": "Uptime",
+            "value": show_timestamp(api_stats['uptime']),
+            "color": "success" if api_stats['global_ready'] else "danger",
+            "icon": "fas fa-stopwatch",
+        },
+        {
+            "name": api_stats['current_event_value'][0],
+            "value": api_stats['current_event_value'][1],
+            "color": "blurple" if api_stats['current_event_name'] == "CALM" else "warning",
+            "icon": "fas fa-bullhorn",
+            "scale": 2,
+        },
+
+    ]
+
     return render(request, "public/index.jinja2", {
         "api_stats": api_stats,
+        "parsed_stats": parsed_stats,
     })
 
 

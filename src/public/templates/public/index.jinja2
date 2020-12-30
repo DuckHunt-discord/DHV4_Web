@@ -8,21 +8,21 @@
     <div class="container-fluid text-light background-dark">
         <div class="row justify-content-center" style="padding-top: 10vh; padding-bottom: 10vh;">
             <div class="col-xxl-6 col-xl-7 col-md-8 col-sm-9 col-xs-12">
-                <div class="text-center" style="font-size:4rem !important;line-height:1.4;">DuckHunt, a discord bot
+                <div class="text-center" style="font-size:4rem !important;line-height:1.4;">DuckHunt
                 </div>
-                <p class="text-center text-muted lead">Center aligned text on all viewport sizes.</p>
+                <p class="text-center text-muted lead">Entertain your members with the best game on discord.</p>
 
                 <br/>
 
                 <div class="row justify-content-around">
                     <a href="https://discordapp.com/api/oauth2/authorize?client_id=187636051135823872&permissions=70646849&scope=bot"
-                       class="col-5 col-lg-4 col-xxl-3 btn background-blurple btn-large align-content-center align-middle">
+                       class="col-5 col-lg-4 col-xxl-3 btn background-blurple btn-large align-content-center align-middle hero-button">
                         <img src="{{ static("public/img/Discord-Logo-White.svg") }}" height="30px" alt="Discord logo">
-                        Invite DuckHunt
+                        Invite DuckHunt now
                     </a>
 
                     <a href="{{ url("docs:index") }}"
-                       class="col-5 col-lg-4 col-xxl-3 btn btn-secondary btn-large align-content-center align-middle">Learn
+                       class="col-5 col-lg-4 col-xxl-3 btn btn-secondary btn-large align-content-center align-middle hero-button">Learn
                         more »</a>
 
                 </div>
@@ -36,28 +36,30 @@
     </svg>
 
     <div class="container text-light">
-        <div class="row">
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="card">
-                    <div class="card-content">
-                        <div class="card-body">
-                            <div class="media d-flex">
-                                <div class="media-body text-left">
-                                    <h3 class="text-success">156</h3>
-                                    <span class="text-dark">New Clients</span>
-                                </div>
-                                <div class="align-self-center">
-                                    <i class="fas fa-users"></i>
-                                    <i class="fas fa-users text-success font-large-2 float-right"></i>
+        <div class="row align-items-top">
+            {% for stat in parsed_stats %}
+                <div class="col-lg-{{ 3 * stat.get('scale', 1) }} col-md-{{ 6 * stat.get('scale', 1) }} col-sm-{{ 6 * stat.get('scale', 1) }}"
+                     style="padding-top: 40px;">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="card-body">
+                                <div class="d-flex flex-row justify-content-between">
+                                    <div class="media-body text-left">
+                                        <h3 class="text-{{ stat['color'] }}">{{ stat['value'] }}</h3>
+                                        <span class="text-dark">{{ stat['name'] }}</span>
+                                    </div>
+                                    <div class="align-self-center float-end bg-{{ stat['color'] }}-gradient"
+                                         style="margin-top: -90px; padding-bottom: 10px; border-radius: 10px;">
+                                        <div style="margin: 10px;">
+                                            <i class=" fa-fw {{ stat['icon'] }} text-white display-6 float-end"></i>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
-    <pre>
-    {{ api_stats }}
-    </pre>
 {% endblock %}
