@@ -6,6 +6,7 @@ from django.conf import settings
 
 # Create your views here.
 import requests
+from django.utils.safestring import mark_safe
 from django.views.decorators.cache import cache_page
 
 from botdata.templatetags.global_jinja_funcs import show_timestamp, intcomma
@@ -59,7 +60,7 @@ def index(request):
             "icon": "fas fa-feather",
         },
         {
-            "name": "Uptime",
+            "name": "Uptime" if api_stats['global_ready'] else mark_safe("Uptime (<a href=\"https://discordstatus.com/\">discord issues</a>)"),
             "value": show_timestamp(api_stats['uptime']),
             "color": "success" if api_stats['global_ready'] else "danger",
             "icon": "fas fa-stopwatch",

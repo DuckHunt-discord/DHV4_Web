@@ -12,6 +12,7 @@
     <script src="{{ static('public/js/highcharts.js') }}"></script>
     <script src="{{ static('public/js/highcharts-more.js') }}"></script>
     <script src="{{ static('public/js/modules/item-series.js') }}"></script>
+    <script src="{{ static('public/js/modules/exporting.js') }}"></script>
     <script src="{{ static('public/js/themes/high-contrast-dark.js') }}"></script>
     <script src="{{ static('public/js/sorttable.js') }}"></script>
 
@@ -24,6 +25,10 @@
                 plotBackgroundColor: '#202225',
                 plotShadow: true,
                 plotBorderWidth: 1
+            },
+            exporting: {
+                sourceWidth: 2500,
+                sourceHeight: 1200
             }
         });
     </script>
