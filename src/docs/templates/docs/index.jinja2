@@ -1,32 +1,39 @@
 {% extends "base.jinja2" %}
 
+{% block head %}
+    <link href="{{ static('docs/docs.css') }}" rel="stylesheet">
+{% endblock %}
+
+
 {% block title %}
     DuckHunt V4 docs - {{ page }}
 {% endblock %}
 
 {% block container %}
     <div class="container-fluid text-light">
-        <div class="row justify-content-md-center">
-            <div class="col col-12 col-md-4 col-lg-4 col-xl-3 background-dark order-4 order-md-1 rounded">
-                {{ parsed_summary }}
+        <div class="row">
+            <div class="col col-12 col-md-4 col-xl-3 order-3 order-md-1 rounded" id="toc">
+                <div id="toc_inside">
+                    {{ parsed_summary }}
+                </div>
             </div>
-            <div class="d-none d-lg-block order-2 col-lg-1" style="max-width: 2em"></div>
-            <div class="col col-12 col-md order-3">
-                <div class="pe-0 pe-lg-3">
-                    {{ parsed_content }}
+            <div class="col col-12 offset-xl-1 col-md-8 col-xl-7 order-2">
+                <div class="pe-0 pe-lg-3" id="content">
+                    <div id="content_inside">
+                        {{ parsed_content }}
+                    </div>
+
+                    <hr/>
+
+                    You can <a href="{{ gh_file }}">edit the documentation on github</a>, or ask on the support server
+                    to access the
+                    WYSIWYG editor.<br/>
+
+                    You've reached the bottom. Would you like to <a href="{{ url('docs:index') }}">go back to the docs
+                    homepage</a>,
+                    or <a href="{{ url('docs:summary') }}"> view the summary</a> ?
                 </div>
             </div>
         </div>
-    </div>
-
-
-    <div class="container text-light">
-        <hr/>
-
-        You can <a href="{{ gh_file }}">edit the documentation on github</a>, or ask on the support server to access the
-        WYSIWYG editor.<br/>
-
-        You've reached the bottom. Would you like to <a href="{{ url('docs:index') }}">go back to the docs homepage</a>,
-        or <a href="{{ url('docs:summary') }}"> view the summary</a> ?
     </div>
 {% endblock %}

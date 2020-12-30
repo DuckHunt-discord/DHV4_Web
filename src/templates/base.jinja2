@@ -1,16 +1,19 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="canonical" href="https://duckhunt.me{{ request.get_full_path() }}"/>
 
-    <meta property="og:title" content="DuckHunt"/>
-    <meta property="og:type" content="website"/>
-    <meta property="og:url" content="https://duckhunt.me{{ request.get_full_path() }}"/>
-    <meta property="og:image" content="https://duckhunt.me{{ static("public/img/dh.svg") }}"/>
-    <meta property="og:description" content="All the information you'll ever need abbout DuckHunt, the discord bot."/>
-    <meta property="og:site_name" content="DuckHunt Discord V4"/>
+    {% block ogp %}
+        <meta property="og:title" content="DuckHunt"/>
+        <meta property="og:type" content="website"/>
+        <meta property="og:url" content="https://duckhunt.me{{ request.get_full_path() }}"/>
+        <meta property="og:image" content="https://duckhunt.me{{ static("public/img/dh.svg") }}"/>
+        <meta property="og:description"
+              content="All the information you'll ever need abbout DuckHunt, the discord bot."/>
+        <meta property="og:site_name" content="DuckHunt Discord V4"/>
+    {% endblock %}
 
     <link href="{{ static('public/css/bootstrap.css') }}" rel="stylesheet">
     <link href="{{ static('public/css/all.css') }}" rel="stylesheet">
@@ -42,12 +45,14 @@
 
     <link href="{{ static('public/css/base.css') }}" rel="stylesheet">
     <title>{% block title %}DuckHunt Discord{% endblock %}</title>
+    {% block head %}{% endblock %}
 </head>
 <body class="background-light">
 <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
     <div class="container-fluid">
         <a class="navbar-brand" href="/">
-            DuckHunt Discord V4 <img src="{{ static("public/img/armored_duck_Calgeka_logo.png") }}" alt="logo" width="30"
+            DuckHunt Discord V4 <img src="{{ static("public/img/armored_duck_Calgeka_logo.png") }}" alt="logo"
+                                     width="30"
                                      height="30">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
