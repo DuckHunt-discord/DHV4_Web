@@ -7,11 +7,14 @@
 {% block container %}
     <div class="container-fluid text-light">
         <div class="row justify-content-md-center">
-            <div class="col col-12 col-md-4 col-lg-3 background-dark order-md-1 order-3 rounded">
+            <div class="col col-12 col-md-4 col-lg-4 col-xl-3 background-dark order-4 order-md-1 rounded">
                 {{ parsed_summary }}
             </div>
-            <div class="col col-12 col-md-8 col-lg-8 order-2">
-                {{ parsed_content }}
+            <div class="d-none d-lg-block order-2 col-lg-1" style="max-width: 2em"></div>
+            <div class="col col-12 col-md order-3">
+                <div class="pe-0 pe-lg-3">
+                    {{ parsed_content }}
+                </div>
             </div>
         </div>
     </div>
