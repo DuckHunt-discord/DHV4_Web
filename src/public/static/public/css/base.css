@@ -10,6 +10,10 @@
     background-color: #202225 !important;
 }
 
+.background-black {
+    background-color: black !important;
+}
+
 .background-dark-green {
     background-color: rgb(15, 102, 34) !important;
 }
@@ -90,4 +94,8 @@ blockquote {
     border-bottom-left-radius: 2px;
     border-top-left-radius: 2px;
     padding-left: 1em;
+}
+
+.background-blurple {
+    background-color: #7187dd !important;
 }

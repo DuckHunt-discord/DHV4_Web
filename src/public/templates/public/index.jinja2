@@ -4,8 +4,60 @@
     DuckHunt V4
 {% endblock %}
 
-{% block content %}
-    <h1>Welcome</h1>
-    <a href="{{ url('guilds') }}">Guilds</a>
+{% block container %}
+    <div class="container-fluid text-light background-dark">
+        <div class="row justify-content-center" style="padding-top: 10vh; padding-bottom: 10vh;">
+            <div class="col-xxl-6 col-xl-7 col-md-8 col-sm-9 col-xs-12">
+                <div class="text-center" style="font-size:4rem !important;line-height:1.4;">DuckHunt, a discord bot
+                </div>
+                <p class="text-center text-muted lead">Center aligned text on all viewport sizes.</p>
+
+                <br/>
+
+                <div class="row justify-content-around">
+                    <a href="https://discordapp.com/api/oauth2/authorize?client_id=187636051135823872&permissions=70646849&scope=bot"
+                       class="col-5 col-lg-4 col-xxl-3 btn background-blurple btn-large align-content-center align-middle">
+                        <img src="{{ static("public/img/Discord-Logo-White.svg") }}" height="30px" alt="Discord logo">
+                        Invite DuckHunt
+                    </a>
+
+                    <a href="{{ url("docs:index") }}"
+                       class="col-5 col-lg-4 col-xxl-3 btn btn-secondary btn-large align-content-center align-middle">Learn
+                        more »</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <svg viewBox="0 0 1921 152" xmlns="http://www.w3.org/2000/svg">
+        <path d="m826.337463 26.5396311c-155.367209 33.1163339-222.641282 43.2473956-378.534982 9.6047072-154.459703-33.33322416-310.468711-33.33322416-447.802481-33.33322416v148.18888586h1920v-148.18888586c-180.46477-18.49651244-240.13596 71.34967266-530.2174 35.67483636-290.08143-35.67483636-408.077928-45.06265331-563.445137-11.9463194z"
+              transform="matrix(-1 0 0 -1 1920 151)" fill="#202225"></path>
+    </svg>
+
+    <div class="container text-light">
+        <div class="row">
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-body">
+                            <div class="media d-flex">
+                                <div class="media-body text-left">
+                                    <h3 class="text-success">156</h3>
+                                    <span class="text-dark">New Clients</span>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-users"></i>
+                                    <i class="fas fa-users text-success font-large-2 float-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <pre>
     {{ api_stats }}
+    </pre>
 {% endblock %}
