@@ -65,7 +65,8 @@ def index(request):
             "odometer": True,
         },
         {
-            "name": "Uptime" if api_stats['global_ready'] else mark_safe("Uptime (<a href=\"https://discordstatus.com/\">discord issues</a>)"),
+            "name": "Uptime" if api_stats['global_ready'] else mark_safe(
+                "Uptime (<a href=\"https://discordstatus.com/\">discord issues</a>)"),
             "value": show_timestamp(api_stats['uptime']),
             "color": "success" if api_stats['global_ready'] else "danger",
             "icon": "fas fa-stopwatch",
@@ -99,7 +100,7 @@ def get_command(commands, name):
                 return command
 
 
-@cache_page(15*SECOND)
+@cache_page(15 * SECOND)
 def status(request):
     status_url = settings.DH_API_URL + "/status"
     api_status = get_from_api(status_url)
@@ -107,7 +108,7 @@ def status(request):
     return render(request, "public/status.jinja2", {"status": api_status})
 
 
-@cache_page(15*SECOND)
+@cache_page(15 * SECOND)
 def shard_status(request, shard_id):
     status_url = settings.DH_API_URL + "/status"
     api_status = get_from_api(status_url)
@@ -122,8 +123,12 @@ def shard_status(request, shard_id):
 
 
 @cache_page(MONTH)
-def bot_commands(request):
-    command_to_see: Optional[str] = request.GET.get("command", None)
+def bot_commands(request, command: str = None):
+    if not command:
+        command_to_see: Optional[str] = request.GET.get("command", None)
+    else:
+        command_to_see = ' '.join(command.strip('/').split('/'))
+
     commands_url = settings.DH_API_URL + "/help/commands"
     commands = get_from_api(commands_url)
 
@@ -136,13 +141,17 @@ def bot_commands(request):
         if len(scs) != 1:
             parent_name = ' '.join(scs[:-1])
             for sc in scs[1:]:
+                if commands is None:
+                    raise Http404("No such command")
+
                 parent = commands
                 commands = get_command(commands['subcommands'], sc)
 
         if commands is None:
-            raise Http404("No such command")
+            raise Http404("No such subcommand")
 
-        ctx = {"command_to_see": command_to_see, "parent_name": parent_name, "command": commands, "prefix": "d!", "parent": parent}
+        ctx = {"command_to_see": command_to_see, "parent_name": parent_name, "command": commands, "prefix": "d!",
+               "parent": parent}
         return render(request, "public/command.jinja2", ctx)
     else:
         commands = dict(sorted(commands.items(), key=lambda d: d[1].get('access_value', 50)))

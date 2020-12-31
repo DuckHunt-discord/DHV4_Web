@@ -1,7 +1,11 @@
 {% extends "base.jinja2" %}
 
 {% block metadesc %}
-   <meta name="description" content="How to use the {{ command_to_see }} command on the DuckHunt Discord Bot.">
+    <meta name="description" content="How to use the {{ command_to_see }} command on the DuckHunt Discord Bot.">
+{% endblock %}
+
+{% block canonical %}
+    <link rel="canonical" href="https://duckhunt.me{{ url("bot_commands", command=command_to_see.replace(' ', '/')) }}"/>
 {% endblock %}
 
 {% block title %}
@@ -12,12 +16,19 @@
     <h1><code>{{ command_to_see }}</code>{% if command['name'] != command_to_see %} (<code>{{ command['name'] }}</code>){% endif %}</h1>
     <div class="card background-normal h-100">
         <div class="card-body">
-            <h5 class="card-title flex-grow-1">{{ command['name'] }} {% if command.get('access_name') %} <span class="badge bg-danger">{{ command.get('access_name') }}</span>{% endif %}</h5>
+            <h5 class="card-title flex-grow-1">{{ command['name'] }} {% if command.get('access_name') %}
+                <span class="badge bg-danger">{{ command.get('access_name') }}</span>{% endif %}</h5>
             {% if command['aliases'] %}
                 <h6 class="card-subtitle mb-2 text-muted">Aliases:
 
                     {% for alias in command['aliases'] %}
-                        <a class="text-decoration-none" href="{{ url("bot_commands") }}?command={% if parent_name %}{{ parent_name }} {% endif %}{{ alias }}">
+                        {% if parent_name %}
+                            {% set subcommand_url = parent_name.replace(' ', '/') + '/' + alias %}
+                        {% else %}
+                            {% set subcommand_url = alias %}
+                        {% endif %}
+
+                        <a class="text-decoration-none" href="{{ url("bot_commands", command=subcommand_url) }}">
                             <span class="badge bg-secondary">{{ alias }}</span>
                         </a>
                     {% endfor %}
@@ -35,8 +46,10 @@
                 <div class="row row-cols-2">
                     {% for subcommand_name, subcommand in command['subcommands'].items() %}
                         <div class="col-3">
-                            <a href="{{ url("bot_commands") }}?command={{ command_to_see }} {{ subcommand_name }}" class="card-link"><span
-                                class="badge rounded-pill bg-dark">{{ subcommand_name }}</span></a>
+                            {% set subcommand_url = command_to_see.replace(' ', '/') + '/' + subcommand_name %}
+                            <a href="{{ url("bot_commands", command=subcommand_url) }}" class="card-link">
+                                <span class="badge rounded-pill bg-dark">{{ subcommand_name }}</span>
+                            </a>
                         </div>
                         <div class="col-9">{{ subcommand['short_doc'] }}</div>
                     {% endfor %}
@@ -45,7 +58,9 @@
         {% endif %}
     </div>
     {% if parent %}
-        You can got back to the <a href="{{ url("bot_commands") }}?command={{ parent_name }}">{{ parent_name }} help page</a>, or <a href="{{ url("bot_commands") }}">see all the commands</a>.
+        You can got back to the
+        <a href="{{ url("bot_commands", command=parent_name.replace(' ', '/')) }}">{{ parent_name }} help page</a>, or
+        <a href="{{ url("bot_commands") }}">see all the commands</a>.
     {% else %}
         You can also <a href="{{ url("bot_commands") }}">see all the commands</a>.
     {% endif %}

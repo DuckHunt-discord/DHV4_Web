@@ -18,12 +18,12 @@
                         <div class="d-flex">
                             <h5 class="card-title flex-grow-1">{{ command['name'] }} {% if command.get('access_name') %}
                                 <span class="badge bg-danger">{{ command.get('access_name') }}</span>{% endif %}</h5>
-                            <span><a class="text-decoration-none" href="{{ url("bot_commands") }}?command={{ command['name'] }}">🔗</a></span>
+                            <span><a class="text-decoration-none" href="{{ url("bot_commands", command=command['name']) }}">🔗</a></span>
                         </div>
                         {% if command['aliases'] %}
                             <h6 class="card-subtitle mb-2 text-muted">Aliases:
                                 {% for alias in command['aliases'] %}
-                                    <a class="text-decoration-none" href="{{ url("bot_commands") }}?command={{ alias }}">
+                                    <a class="text-decoration-none" href="{{ url("bot_commands", command=alias) }}">
                                         <span class="badge bg-secondary">{{ alias }}</span>
                                     </a>
                                 {% endfor %}
@@ -37,10 +37,10 @@
 
                     {% if command.get('subcommands', []) %}
                         <div class="card-footer">
-                            This command has some <a href="{{ url("bot_commands") }}?command={{ command['name'] }}"
+                            This command has some <a href="{{ url("bot_commands", command=command['name']) }}"
                                                      class="card-link">subcommands</a>:<br/>
                             {% for subcommand_name in command['subcommands'] %}
-                                <a href="{{ url("bot_commands") }}?command={{ command['name'] }} {{ subcommand_name }}" class="card-link"><span
+                                <a href="{{ url("bot_commands", command=command['name'] + '/' + subcommand_name) }}" class="card-link"><span
                                         class="badge rounded-pill bg-dark">{{ subcommand_name }}</span></a>
                             {% endfor %}
 
