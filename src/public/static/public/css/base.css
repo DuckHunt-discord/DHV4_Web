@@ -141,3 +141,10 @@ blockquote {
     line-height: 1.1em;
     display: block !important;
 }
+
+.main-title {
+    font-size:4rem !important;
+    line-height:1.4;
+    color: white !important;
+    padding-bottom: 0;
+}
