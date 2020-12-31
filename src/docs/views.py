@@ -5,7 +5,7 @@ import markdown
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 
-from docs.md_processors.bootstrap import BootstrapExtension, BootstrapFakeTitlesExtension
+from docs.md_processors.bootstrap import BootstrapExtension, get_fake_title_extension
 from docs.md_processors.hints import HintExtension
 from docs.md_processors.remove_md_links_extension import get_extension
 from django.shortcuts import redirect
@@ -22,7 +22,7 @@ def parse_summary(request):
                                                        'fenced_code',
                                                        HintExtension(),
                                                        BootstrapExtension(),
-                                                       BootstrapFakeTitlesExtension(),
+                                                       get_fake_title_extension(level_from=0)(),
                                                        get_extension(absolute_path=absolute_path)()],
                                            )
     parsed_summary = mark_safe(parsed_summary)
@@ -65,6 +65,7 @@ def display_page(request, path, ctx=None):
                                                'fenced_code',
                                                HintExtension(),
                                                BootstrapExtension(),
+                                               get_fake_title_extension(level_from=3)(),
                                                get_extension()()]
                                    )
         parsed = mark_safe(parsed)

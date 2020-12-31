@@ -19,18 +19,26 @@ class BootstrapExtension(Extension):
 
 
 class FakeTitlesTreeprocessor(Treeprocessor):
+    def __init__(self, md):
+        super().__init__(md)
+        self.level_from = 0
+
     def run(self, root):
         for element in root.iter('*'):
-            if len(element.tag) == 2 and element.tag.startswith('h'):
+            if len(element.tag) == 2 and element.tag.startswith('h') and element.tag[1].isdigit() and int(element.tag[1]) >= self.level_from:
                 element.set('class', element.tag)
                 element.tag = 'div'
         # No return statement is same as `return None`
 
 
-class BootstrapFakeTitlesExtension(Extension):
-    """ Bootstrap extension for Python-Markdown to add bootstrap specific title classes. """
+def get_fake_title_extension(level_from=3):
+    class BootstrapFakeTitlesExtension(Extension):
+        """ Bootstrap extension for Python-Markdown to add bootstrap specific title classes. """
 
-    def extendMarkdown(self, md):
-        md.registerExtension(self)
+        def extendMarkdown(self, md):
+            md.registerExtension(self)
+            ftp = FakeTitlesTreeprocessor(md.parser)
+            ftp.level_from = level_from
+            md.treeprocessors.register(ftp, 'bootstrapfaketitles', 0)
 
-        md.treeprocessors.register(FakeTitlesTreeprocessor(md.parser), 'bootstrapfaketitles', 0)
+    return BootstrapFakeTitlesExtension
