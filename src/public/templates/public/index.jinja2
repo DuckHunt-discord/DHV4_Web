@@ -45,7 +45,19 @@
                             <div class="card-body">
                                 <div class="d-flex flex-row justify-content-between">
                                     <div class="media-body text-left">
-                                        <h3 class="text-{{ stat['color'] }}">{{ stat['value'] }}</h3>
+                                        <div id="odometer-{{ loop.index }}"
+                                             class="card-value text-{{ stat['color'] }}{% if stat.odometer %} odometer{% endif %}">
+                                            {{ stat['value'] }}
+                                            {% if not stat.odometer %}<span class="odometer" style="visibility: hidden"></span> {% endif %}
+                                        </div>
+                                        {% if stat.odometer %}
+                                            <script>
+                                                document.getElementById("odometer-{{ loop.index }}").innerHTML = "0";
+                                                document.addEventListener("DOMContentLoaded", function (event) {
+                                                     document.getElementById("odometer-{{ loop.index }}").innerHTML = "{{ stat['value'] }}";
+                                                });
+                                            </script>
+                                        {% endif %}
                                         <span class="text-dark">{{ stat['name'] }}</span>
                                     </div>
                                     <div class="align-self-center float-end bg-{{ stat['color'] }}-gradient"
@@ -97,7 +109,8 @@
                 <p>Best times, shots count, bullets, experience used and more are all logged by the bot and displayed in
                     Discord and on the web interface.</p>
                 <p>Players can see exactly how they did so far, and get a <strong>personal webpage</strong> with all
-                    their statistics. They also get to see how far they got with an interactive <strong>channel leaderboard</strong>.
+                    their statistics. They also get to see how far they got with an interactive <strong>channel
+                        leaderboard</strong>.
                 </p>
             </div>
             <div class="col-8">
@@ -110,7 +123,8 @@
         <div class="row pt-3">
             <div class="col-12 align-middle align-self-center">
                 <div class="h2 text-center">The big bang theory</div>
-                <p>After polling 2 hunters from my server, I can say for sure at least 635 of them loved the bot so much they
+                <p>After polling 2 hunters from my server, I can say for sure at least 635 of them loved the bot so much
+                    they
                     wanted to have it too.</p>
             </div>
         </div>

@@ -41,8 +41,8 @@
         {% endif %}
     </div>
     {% if parent %}
-        You can got back to the <a href="?command={{ parent_name }}">{{ parent_name }} help page</a>, or <a href="?">see all the commands</a>.
+        You can got back to the <a href="?command={{ parent_name }}">{{ parent_name }} help page</a>, or <a href="{{ url("bot_commands") }}">see all the commands</a>.
     {% else %}
-        You can also <a href="?">see all the commands</a>.
+        You can also <a href="{{ url("bot_commands") }}">see all the commands</a>.
     {% endif %}
 {% endblock %}

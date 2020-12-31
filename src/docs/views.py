@@ -8,6 +8,7 @@ from django.utils.safestring import mark_safe
 from docs.md_processors.bootstrap import BootstrapExtension, BootstrapFakeTitlesExtension
 from docs.md_processors.hints import HintExtension
 from docs.md_processors.remove_md_links_extension import get_extension
+from django.shortcuts import redirect
 
 MARKDOWN_FILES = pathlib.Path(__file__).parent.absolute() / "markdown_files/"
 
@@ -75,3 +76,7 @@ def display_page(request, path, ctx=None):
 
 def assets(request, file):
     return FileResponse(open(MARKDOWN_FILES / '.gitbook/assets' / file, "rb"))
+
+
+def index_redirect(request):
+    return redirect(reverse('docs:index'), permanent=True)

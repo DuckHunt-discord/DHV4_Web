@@ -9,9 +9,9 @@
 
     <div class="card background-normal h-100">
         <div class="card-body">
-            <a class="text-decoration-none" href="{{ url('guild', pk=guild.pk) }}">
-                <div class="h4 card-title flex-grow-1 text-white-75">{{ guild.name }}</div>
-            </a>
+            <div class="h4 card-title flex-grow-1 text-white-75"><span class="guild-name">{{ guild.name }}</span>
+                <span class="widget-info d-none"> (<span class="online-member-count"></span> members online)</span>
+            </div>
         </div>
         <ul class="list-group list-group-flush">
             {% for channel in channels %}
@@ -39,11 +39,42 @@
             {% endfor %}
         </ul>
         <div class="card-footer text-muted">
-            This server uses the <code>{{ guild.prefix }}</code> prefix. Currently, the language used on all channels is <a href="{{ url("guilds", language=guild.language) }}">{{ guild.language }}</a>.
+            This server uses the <code>{{ guild.prefix }}</code> prefix. Currently, the language used on all channels is
+            <a href="{{ url("guilds", language=guild.language) }}">{{ guild.language }}</a>.
+            <span class="widget-info d-none">
+                <a class="btn btn-sm btn-success invite-link float-end" href="">Join this server</a>
+            </span>
         </div>
     </div>
 
     <br/>
 
-    <iframe src="https://discordapp.com/widget?id={{ guild.discord_id }}&theme=dark" style="min-height: 300px" allowtransparency="true" width="100%" height="100%" frameborder="0"></iframe>
+    <script>
+        $.ajax({
+            dataType: "json",
+            url: "https://discord.com/api/servers/{{ guild.discord_id }}/widget.json",
+            success: function (data) {
+                // If there is an error, fetching the json will give back a 403.
+                if (data['message'] || false) {
+                    console.log("No widget/Unknown guild")
+                } else {
+                    console.log('We have all the data we need.')
+                    var guild_name = data['name'];
+                    var invite = data['instant_invite'];
+                    var presence_count = data['presence_count'];
+
+                    $('.guild-name').text(guild_name);
+                    $('.invite-link').attr('href', invite);
+                    $('.online-member-count').text(presence_count);
+
+                    $('.widget-info').removeClass("d-none");
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(`No widget/Unknown guild : ${textStatus} (${errorThrown})`)
+            }
+        });
+
+    </script>
+
 {% endblock %}

@@ -16,23 +16,21 @@
                 <div id="toc_inside">
                     {{ parsed_summary }}
                 </div>
+                <br/>
+                <hr/>
+
+                <div class="text-center"><a href="{{ gh_file }}"><i class="fab fa-github"></i> Edit this page on github</a>
+                </div>
+                <br/>
+
             </div>
             <div class="col col-12 offset-xl-1 col-md-8 col-xl-7 order-2">
                 <div class="pe-0 pe-lg-3" id="content">
                     <div id="content_inside">
                         {{ parsed_content }}
                     </div>
-
-                    <hr/>
-
-                    You can <a href="{{ gh_file }}">edit the documentation on github</a>, or ask on the support server
-                    to access the
-                    WYSIWYG editor.<br/>
-
-                    You've reached the bottom. Would you like to <a href="{{ url('docs:index') }}">go back to the docs
-                    homepage</a>,
-                    or <a href="{{ url('docs:summary') }}"> view the summary</a> ?
                 </div>
+                <br/>
             </div>
         </div>
     </div>

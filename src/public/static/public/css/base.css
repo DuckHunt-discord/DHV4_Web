@@ -134,3 +134,10 @@ blockquote {
     text-align: center;
     vertical-align: sub !important;
 }
+
+.card-value {
+    font-family: "Helvetica Neue", sans-serif;
+    font-size: xx-large;
+    line-height: 1.1em;
+    display: block !important;
+}

@@ -34,36 +34,42 @@ def index(request):
             "value": intcomma(api_stats['guilds_count']),
             "color": "success",
             "icon": "fas fa-server",
+            "odometer": True,
         },
         {
             "name": "Channels",
             "value": intcomma(api_stats['channels_count']),
             "color": "success",
             "icon": "fab fa-slack-hash",
+            "odometer": True,
         },
         {
             "name": "Players",
             "value": intcomma(api_stats['players_count']),
             "color": "success",
             "icon": "fas fa-hat-cowboy-side",
+            "odometer": True,
         },
         {
             "name": "Members",
             "value": intcomma(api_stats['members_count']),
             "color": "success",
             "icon": "fas fa-users",
+            "odometer": True,
         },
         {
             "name": "Ducks",
             "value": intcomma(api_stats['alive_ducks_count']),
             "color": "success",
             "icon": "fas fa-feather",
+            "odometer": True,
         },
         {
             "name": "Uptime" if api_stats['global_ready'] else mark_safe("Uptime (<a href=\"https://discordstatus.com/\">discord issues</a>)"),
             "value": show_timestamp(api_stats['uptime']),
             "color": "success" if api_stats['global_ready'] else "danger",
             "icon": "fas fa-stopwatch",
+            "odometer": False,
         },
         {
             "name": api_stats['current_event_value'][0],
@@ -71,6 +77,7 @@ def index(request):
             "color": "blurple" if api_stats['current_event_name'] == "CALM" else "warning",
             "icon": "fas fa-bullhorn",
             "scale": 2,
+            "odometer": False,
         },
 
     ]

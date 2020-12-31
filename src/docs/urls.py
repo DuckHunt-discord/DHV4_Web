@@ -4,6 +4,7 @@ from . import views
 
 app_name = "docs"
 urlpatterns = [
+    path('README', views.index_redirect,),
     path('', views.display_page, name="index", kwargs={"path": "README"}),
     path('summary', views.summary, name="summary"),
     path('.gitbook/assets/<str:file>', views.assets, name="assets"),

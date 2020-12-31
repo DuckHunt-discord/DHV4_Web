@@ -10,8 +10,12 @@ class MdLinksTreeprocessor(Treeprocessor):
     def run(self, root):
         for element in root.iter('a'):
             href = element.get('href')
-            if href.endswith('.md'):
+
+            if href.endswith('README.md'):
+                element.set('href', self.absolute_path + href[:-len('README.md')])
+            elif href.endswith('.md'):
                 element.set('href', self.absolute_path + href[:-3])
+
 
         # No return statement is same as `return None`
 

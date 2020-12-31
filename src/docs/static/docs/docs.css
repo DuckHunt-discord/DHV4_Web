@@ -23,6 +23,25 @@
     color: rgb(38, 203, 124);
 }
 
+#content h1, #content .h1 {
+    text-align: center !important;
+    color: #e7cc1a !important;
+}
+
+#content a:link, #content a {
+    text-decoration: none;
+    color: rgb(38, 203, 124);
+}
+
+#content a:link:hover, #content a:hover {
+    text-decoration: underline;
+}
+
+#content code {
+    color: darkgray;
+}
+
+
 h2 {
     line-height: 1.3;
     border-bottom: 1px solid darkgray;
