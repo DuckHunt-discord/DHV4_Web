@@ -13,7 +13,7 @@
                 <h6 class="card-subtitle mb-2 text-muted">Aliases:
 
                     {% for alias in command['aliases'] %}
-                        <a class="text-decoration-none" href="?command={% if parent_name %}{{ parent_name }} {% endif %}{{ alias }}">
+                        <a class="text-decoration-none" href="{{ url("bot_commands") }}?command={% if parent_name %}{{ parent_name }} {% endif %}{{ alias }}">
                             <span class="badge bg-secondary">{{ alias }}</span>
                         </a>
                     {% endfor %}
@@ -31,7 +31,7 @@
                 <div class="row row-cols-2">
                     {% for subcommand_name, subcommand in command['subcommands'].items() %}
                         <div class="col-3">
-                            <a href="?command={{ command_to_see }} {{ subcommand_name }}" class="card-link"><span
+                            <a href="{{ url("bot_commands") }}?command={{ command_to_see }} {{ subcommand_name }}" class="card-link"><span
                                 class="badge rounded-pill bg-dark">{{ subcommand_name }}</span></a>
                         </div>
                         <div class="col-9">{{ subcommand['short_doc'] }}</div>
@@ -41,7 +41,7 @@
         {% endif %}
     </div>
     {% if parent %}
-        You can got back to the <a href="?command={{ parent_name }}">{{ parent_name }} help page</a>, or <a href="{{ url("bot_commands") }}">see all the commands</a>.
+        You can got back to the <a href="{{ url("bot_commands") }}?command={{ parent_name }}">{{ parent_name }} help page</a>, or <a href="{{ url("bot_commands") }}">see all the commands</a>.
     {% else %}
         You can also <a href="{{ url("bot_commands") }}">see all the commands</a>.
     {% endif %}
