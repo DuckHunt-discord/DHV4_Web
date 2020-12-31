@@ -148,3 +148,8 @@ blockquote {
     color: white !important;
     padding-bottom: 0;
 }
+
+.nice-card-borders {
+    border-bottom: gray solid 1px;
+    border-right: gray solid 1px;
+}
