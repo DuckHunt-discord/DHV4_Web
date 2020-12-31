@@ -1,11 +1,15 @@
 {% extends "base.jinja2" %}
 
+{% block metadesc %}
+    <meta name="description" content="All the DuckHunt servers{% if language %} in {{ language }}{% endif %}.">
+{% endblock %}
+
 {% block title %}
-    DuckHunt V4 - Guilds
+    DuckHunt V4 - Servers{% if language %} in {{ language }}{% endif %}
 {% endblock %}
 
 {% block content %}
-    <h1>DuckHunt guilds{% if language %} in {{ language }}{% endif %}</h1>
+    <h1>DuckHunt servers{% if language %} in {{ language }}{% endif %}</h1>
 
     <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
         {% for guild in guilds %}

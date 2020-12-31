@@ -1,11 +1,15 @@
 {% extends "base.jinja2" %}
 
+{% block metadesc %}
+    <meta name="description" content="DuckHunt settings for #{{ channel.name }}.">
+{% endblock %}
+
 {% block title %}
-    DuckHunt V4 - Channel
+    DuckHunt V4 - Settings for #{{ channel.name }}
 {% endblock %}
 
 {% block content %}
-    <h1>Settings of #{{ channel.name }}</h1>
+    <h1>Settings for #{{ channel.name }}</h1>
 
     <p>
         To go back and see the hunters scores for this channel, you can click

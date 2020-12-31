@@ -1,11 +1,15 @@
 {% extends "base.jinja2" %}
 
+{% block metadesc %}
+   <meta name="description" content="DuckHunt live status.">
+{% endblock %}
+
 {% block title %}
-    DuckHunt V4 - Discord Status
+    DuckHunt V4 - Status
 {% endblock %}
 
 {% block content %}
-    <h1>DuckHunt status</h1>
+    <h1>DuckHunt live status</h1>
     <p>
         This page shows the bot shards status. If some shards show errors, you might want to check the
         <a href="https://discordstatus.com/">discord status page</a> to make sure discord isn't having hiccups.

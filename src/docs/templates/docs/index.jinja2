@@ -1,5 +1,15 @@
 {% extends "base.jinja2" %}
 
+{% block metadesc %}
+    {% if category %}
+        <meta name="description" content="DuckHunt documentation about {{ page }} on {{ category }}.">
+    {% elif page == "README" %}
+        <meta name="description" content="The DuckHunt bot documentation.">
+    {% else %}
+        <meta name="description" content="DuckHunt documentation about {{ page }}.">
+    {% endif %}
+{% endblock %}
+
 {% block head %}
     <link href="{{ static('docs/docs.css') }}" rel="stylesheet">
 {% endblock %}

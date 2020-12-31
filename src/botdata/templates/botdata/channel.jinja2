@@ -1,7 +1,11 @@
 {% extends "base.jinja2" %}
 
+{% block metadesc %}
+    <meta name="description" content="DuckHunt top scores for {{ players|length }} players on #{{ channel.name }}.">
+{% endblock %}
+
 {% block title %}
-    DuckHunt V4 - Channel
+    DuckHunt V4 - Top Scores for #{{ channel.name }}
 {% endblock %}
 
 {% block content %}
@@ -13,15 +17,15 @@
     </p>
 
     {# Graphs #}
-    <h2>Best players</h2>
+    <div class="h2">Best players</div>
 
     <div id="chart-best-players"></div>
 
-    <h2>Where do bullets go ?</h2>
+    <div class="h2">Where do bullets go ?</div>
     <div id="chart-shots"></div>
 
     {% if global_best_times %}
-        <h2>Fastest hunters in the west</h2>
+        <div class="h2">Fastest hunters in the west</div>
         <div id="chart-best-times"></div>
     {% endif %}
 

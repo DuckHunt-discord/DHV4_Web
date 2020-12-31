@@ -1,11 +1,15 @@
 {% extends "base.jinja2" %}
 
+{% block metadesc %}
+    <meta name="description" content="Join the {{ guild.name }} server on Discord and play with DuckHunt.">
+{% endblock %}
+
 {% block title %}
-    DuckHunt V4 - Guild
+    DuckHunt V4 - {{ guild.name }}
 {% endblock %}
 
 {% block content %}
-    <h1>More about {{ guild.name }}</h1>
+    <h1>{{ guild.name }} on Discord</h1>
 
     <div class="card background-normal h-100">
         <div class="card-body">
@@ -42,7 +46,7 @@
             This server uses the <code>{{ guild.prefix }}</code> prefix. Currently, the language used on all channels is
             <a href="{{ url("guilds", language=guild.language) }}">{{ guild.language }}</a>.
             <span class="widget-info d-none">
-                <a class="btn btn-sm btn-success invite-link float-end" href="">Join this server</a>
+                <a class="btn btn-sm btn-success invite-link float-end" href="">Invitation to join this server</a>
             </span>
         </div>
     </div>

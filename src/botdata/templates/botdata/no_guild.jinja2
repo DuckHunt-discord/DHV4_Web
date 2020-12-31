@@ -1,5 +1,14 @@
 {% extends "base.jinja2" %}
 
+{% block canonical %}
+    <link rel="canonical" href="https://duckhunt.me{{ url("guild", pk=0) }}"/>
+{% endblock %}
+
+{% block metadesc %}
+    <meta name="robots" content="noindex">
+    <meta name="googlebot" content="noindex">
+{% endblock %}
+
 {% block title %}
     DuckHunt V4 - Configure that server
 {% endblock %}
