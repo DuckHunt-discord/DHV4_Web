@@ -73,8 +73,8 @@ def index(request):
             "odometer": False,
         },
         {
-            "name": api_stats['current_event_value'][0],
-            "value": api_stats['current_event_value'][1],
+            "name": api_stats['current_event_value'][1],
+            "value": api_stats['current_event_value'][0],
             "color": "blurple" if api_stats['current_event_name'] == "CALM" else "warning",
             "icon": "fas fa-bullhorn",
             "scale": 2,
