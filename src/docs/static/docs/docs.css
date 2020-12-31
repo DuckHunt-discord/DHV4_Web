@@ -20,7 +20,8 @@
 #toc a:link:hover, #toc a:hover {
     text-decoration: underline;
     /*background-color: #332a39;*/
-    color: rgb(38, 203, 124);
+    /*color: rgb(38, 203, 124);*/
+    color: #7187dd !important;
 }
 
 #content h1, #content .h1 {
@@ -30,7 +31,7 @@
 
 #content a:link, #content a {
     text-decoration: none;
-    color: rgb(38, 203, 124);
+    color: #7187dd !important;
 }
 
 #content a:link:hover, #content a:hover {
@@ -47,10 +48,10 @@ h2 {
     border-bottom: 1px solid darkgray;
 }
 
-h3, .h3 {
+#content h3, #content .h3 {
     line-height: 1.8;
     font-size: 150%;
-    color: #7187dd;
+    color: #cdcdcd;
 }
 
 p {
@@ -79,4 +80,8 @@ hr {
     border-bottom: 4px solid green;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
+}
+
+#content .table > :not(caption) > * > * {
+    color: #cdcdcd;
 }
