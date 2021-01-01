@@ -80,7 +80,10 @@ def display_page(request, path, ctx=None):
 
 
 def assets(request, file):
-    return FileResponse(open(MARKDOWN_FILES / '.gitbook/assets' / file, "rb"))
+    try:
+        return FileResponse(open(MARKDOWN_FILES / '.gitbook/assets' / file, "rb"))
+    except FileNotFoundError:
+        raise Http404("Unknown asset")
 
 
 def index_redirect(request):
