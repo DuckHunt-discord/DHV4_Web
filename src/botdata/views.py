@@ -1,6 +1,8 @@
 import random
+from collections import namedtuple, defaultdict
 from math import inf
 from typing import List
+from django.db import connection
 
 from django.core.paginator import Paginator, Page
 from django.db.models import Prefetch, Q, Count, Exists, OuterRef, Max
@@ -50,22 +52,61 @@ class CustomPaginator(Paginator):
         return CustomPage(*args, **kwargs)
 
 
+def get_guilds_list():
+    sql = """
+    SELECT
+        guilds.vip AS guild_vip_status,
+        guilds.name AS guild_name,
+        guilds.discord_id AS guild_id,
+        chasqy.name AS channel_name,
+        channel_id AS channel_id,
+        players_count
+    FROM
+        guilds
+        INNER JOIN (
+            SELECT
+                channels.guild_id,
+                channels.name,
+                channel_id,
+                players_count
+            FROM
+                channels
+                INNER JOIN (
+                    SELECT
+                        channel_id,
+                        players_count
+                    FROM (
+                        SELECT
+                            COUNT(id) AS players_count,
+                            channel_id
+                        FROM
+                            players
+                        GROUP BY
+                            channel_id) AS pla
+                    WHERE
+                        pla.players_count > 0) AS sqy ON channels.discord_id = sqy.channel_id) 
+                        AS chasqy 
+                        ON chasqy.guild_id = guilds.discord_id
+    ORDER BY
+        guild_vip_status DESC,
+        guild_id ASC;
+    """
+    with connection.cursor() as cursor:
+        cursor.execute(sql)
+        desc = cursor.description
+        Result = namedtuple('Result', [col[0] for col in desc])
+
+        result = defaultdict(list)
+        for channel_data in cursor.fetchall():
+            channel_result = Result(*channel_data)
+            result[channel_result.guild_id].append(channel_result)
+
+        return list(result.items())
+
+
 def guilds(request, language=None):
-    enabled_channels_qs = DiscordChannel.objects \
-        .filter(enabled=True) \
-        .annotate(player_count=Count("players")) \
-        .filter(player_count__gt=0)
-
-    guilds_list = DiscordGuild.objects \
-        .filter(Q(channels__in=enabled_channels_qs) & Q(channels__isnull=False)) \
-        .prefetch_related(
-        Prefetch("channels", queryset=enabled_channels_qs)
-    ) \
-        .distinct() \
-        .order_by('-vip')
-
-    if language:
-        guilds_list = guilds_list.filter(language=language)
+    # I couldn't find a good way to do this using django ORM without it taking a ton of time.
+    guilds_list = get_guilds_list()
 
     guilds_paginator = CustomPaginator(guilds_list, 50)
     page_number = request.GET.get('page', 1)

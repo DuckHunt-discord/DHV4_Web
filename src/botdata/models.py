@@ -87,7 +87,7 @@ class DiscordChannel(models.Model):
     discord_id = models.BigAutoField(primary_key=True)
     first_seen = models.DateTimeField(auto_now_add=True)
 
-    guild = models.ForeignKey(DiscordGuild, models.CASCADE, related_name="channels")
+    guild = models.ForeignKey(DiscordGuild, models.CASCADE, related_name="channels", db_index=True)
     name = models.TextField()
 
     webhook_urls = models.JSONField(default=list, blank=True)
@@ -95,7 +95,7 @@ class DiscordChannel(models.Model):
 
     use_webhooks = models.BooleanField(default=True)
     use_emojis = models.BooleanField(default=True)
-    enabled = models.BooleanField(default=False)
+    enabled = models.BooleanField(default=False, db_index=True)
 
     allow_global_items = models.BooleanField(default=True)
 
