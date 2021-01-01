@@ -32,6 +32,8 @@ class FakeTitlesTreeprocessor(Treeprocessor):
 
                 if element.text:
                     element.set('id', element.text.replace('?', '').strip().replace(' ', '-').lower())
+            if element.tag == "img":
+                element.set('class', 'img-fluid rounded')
 
         # No return statement is same as `return None`
 
