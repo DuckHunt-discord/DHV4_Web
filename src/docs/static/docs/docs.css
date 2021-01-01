@@ -85,3 +85,10 @@ hr {
 #content .table > :not(caption) > * > * {
     color: #cdcdcd;
 }
+
+@media (min-width: 992px) {
+    /* Large devices (desktops, 992px and up) */
+    #content .img-fluid {
+        width: 40%;
+    }
+}
