@@ -206,9 +206,12 @@ def generate_shots_chart_data(shooting_stats):
 
 def channel(request, pk: int):
     current_channel = get_object_or_404(DiscordChannel, pk=pk)
-    current_players: List[Player] = Player.objects.filter(channel=current_channel).select_related(
+    # We cast to a list because we slice first then later use the whole thing.
+    # If we didn't, we would have 2 queries : one with a limit and one without
+
+    current_players: List[Player] = list(Player.objects.filter(channel=current_channel).select_related(
         "member__user").order_by(
-        '-experience')
+        '-experience'))
 
     chart_best_players_data_experience = []
     for chart_player in current_players[:100]:
