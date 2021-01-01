@@ -5,11 +5,12 @@
 {% endblock %}
 
 {% block title %}
-    DuckHunt V4 - Discord Status
+    DuckHunt V4 - Discord Status of shard n°{{ shard['shard_id'] }}
 {% endblock %}
 
 {% block content %}
 
+    <h1>Status of shard n°{{ shard['shard_id'] }}</h1>
 
     <div class="card background-normal mt-4">
         {% if shard %}
