@@ -17,10 +17,16 @@ import debug_toolbar
 from django.contrib import admin
 from django.urls import path, include
 
+from django.contrib.sitemaps import views as sitemap_views
+from .sitemaps import sitemaps
+
 urlpatterns = [
     path('', include('public.urls')),
-    path('docs/', include('docs.urls'),),
+    path('docs/', include('docs.urls'), ),
     path('data/', include('botdata.urls')),
     path('admin/', admin.site.urls),
     path('__debug__/', include(debug_toolbar.urls)),
+    path('sitemap.xml', sitemap_views.index, {'sitemaps': sitemaps}),
+    path('sitemap-<section>.xml', sitemap_views.sitemap, {'sitemaps': sitemaps},
+         name='django.contrib.sitemaps.views.sitemap'),
 ]

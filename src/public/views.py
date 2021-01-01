@@ -104,7 +104,6 @@ def get_command(commands, name):
                 return command
 
 
-@cache_page(15 * SECOND)
 def status(request):
     status_url = settings.DH_API_URL + "/status"
     api_status = get_from_api(status_url)
@@ -112,7 +111,6 @@ def status(request):
     return render(request, "public/status.jinja2", {"status": api_status})
 
 
-@cache_page(15 * SECOND)
 def shard_status(request, shard_id):
     status_url = settings.DH_API_URL + "/status"
     api_status = get_from_api(status_url)

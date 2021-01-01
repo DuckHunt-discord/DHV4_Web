@@ -32,6 +32,7 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     os.environ.get("DOMAIN", "localhost")
 ]
+SITE_ID = 1
 
 if not DEBUG:
     CSRF_COOKIE_SECURE = True
@@ -51,11 +52,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'debug_toolbar',
+    'django.contrib.sites',
+    'django.contrib.sitemaps',
     'public.apps.PublicConfig',
     'docs.apps.DocsConfig',
     'botdata.apps.BotdataConfig',
     'django_jinja',
-    'django_extensions'
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
