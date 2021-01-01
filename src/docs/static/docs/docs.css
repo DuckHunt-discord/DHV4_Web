@@ -92,3 +92,9 @@ hr {
         width: 40%;
     }
 }
+
+#content .alert {
+    color: inherit;
+    background-color: inherit;
+    border-left-width: 5px;
+}
