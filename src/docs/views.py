@@ -16,6 +16,10 @@ MARKDOWN_FILES = pathlib.Path(__file__).parent.absolute() / "markdown_files/"
 def parse_summary(request):
     summary_file = MARKDOWN_FILES / "SUMMARY.md"
     absolute_path = request.build_absolute_uri(reverse('docs:index'))
+
+    if "localhost" not in absolute_path and "127.0.0.1" not in absolute_path:
+        absolute_path = absolute_path.replace('http://', 'https://')
+
     with open(summary_file, "r") as f:
         parsed_summary = markdown.markdown(f.read(),
                                            extensions=['tables',
