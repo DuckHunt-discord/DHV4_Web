@@ -14,8 +14,19 @@
     <div class="container d-none d-lg-block pb-3">
         <div class="col text-center">
             {% for filter in filters %}
-                <a class="btn btn-sm {% if filter == sw %}btn-outline-info disabled{% else %}btn-outline-secondary{% endif %}" href="{{ request.path }}?sw={{ filter.lower() }}">{{ filter.upper() }}</a>
-                <span class="d-none d-xxl-inline"> - </span>{% endfor %}<a class="btn btn-sm {% if sw == "others" %}btn-outline-info disabled{% else %}btn-outline-secondary{% endif %}" href="{{ request.path }}?sw=others">🦆</a>
+                <a class="btn btn-sm
+                          {% if filter == sw %}btn-outline-info disabled{% else %}btn-outline-secondary{% endif %}"
+                   href="{{ request.path }}?sw={{ filter.lower() }}">{{ filter.upper() }}</a>
+                {% if not loop.last %}
+                <span class="d-none d-xxl-inline"> - </span>
+                {% endif %}
+            {% endfor %}
+
+            {% if has_others %}
+                <span class="d-none d-xxl-inline"> - </span>
+            <a class="btn btn-sm {% if sw == "others" %}btn-outline-info disabled{% else %}btn-outline-secondary{% endif %}"
+               href="{{ request.path }}?sw=others">🦆</a>
+            {% endif %}
         </div>
     </div>
 
@@ -63,7 +74,8 @@
             <ul class="pagination pagination-sm">
                 {% if guilds.has_previous() %}
                     <li class="page-item"><a class="page-link"
-                                             href="{{ request.path }}?page=1{% if sw %}&sw={{ sw }}{% endif %}">First</a></li>
+                                             href="{{ request.path }}?page=1{% if sw %}&sw={{ sw }}{% endif %}">First</a>
+                    </li>
                 {% else %}
                     <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1"
                                                       aria-disabled="true">First</a>
@@ -77,7 +89,8 @@
                         </li>
                     {% else %}
                         <li class="page-item"><a class="page-link"
-                                                 href="{{ request.path }}?page={{ i }}{% if sw %}&sw={{ sw }}{% endif %}">{{ i }}</a></li>
+                                                 href="{{ request.path }}?page=
+                                                         {{ i }}{% if sw %}&sw={{ sw }}{% endif %}">{{ i }}</a></li>
                     {% endif %}
                 {% endfor %}
 
@@ -95,9 +108,11 @@
             <ul class="pagination pagination">
                 {% if guilds.has_previous() %}
                     <li class="page-item"><a class="page-link"
-                                             href="{{ request.path }}?page=1{% if sw %}&sw={{ sw }}{% endif %}">First</a></li>
+                                             href="{{ request.path }}?page=1{% if sw %}&sw={{ sw }}{% endif %}">First</a>
+                    </li>
                     <li class="page-item"><a class="page-link"
                                              href="{{ request.path }}?page=
+
                                                      {{ guilds.previous_page_number() }}{% if sw %}&sw={{ sw }}{% endif %}">{{ guilds.previous_page_number() }}</a>
                     </li>
                 {% else %}
@@ -113,6 +128,7 @@
                 {% if guilds.has_next() %}
                     <li class="page-item"><a class="page-link"
                                              href="{{ request.path }}?page=
+
                                                      {{ guilds.next_page_number() }}{% if sw %}&sw={{ sw }}{% endif %}">{{ guilds.next_page_number() }}</a>
                     </li>
                     <li class="page-item"><a class="page-link" href="{{ request.path }}?page=

@@ -122,23 +122,31 @@ def get_guilds_list(language=None):
 
 def guilds(request, language=None):
     # I couldn't find a good way to do this using django ORM without it taking a ton of time.
-    guilds_list = get_guilds_list(language=language)
+    guilds_list_unfiltered = get_guilds_list(language=language)
 
     page_number = request.GET.get('page', 1)
-
-    filters = {channels[0].guild_name.lower()[0] for gid, channels in guilds_list if channels[0].guild_name.lower()[0] in string.ascii_lowercase}
-
     name_start_with = request.GET.get('sw', None)
-    if name_start_with == "others":
-        guilds_list = list([
-            (gid, channels) for gid, channels in guilds_list
-            if channels[0].guild_name.lower()[0] not in list(string.ascii_lowercase)
-        ])
-    elif name_start_with:
-        guilds_list = list([
-            (gid, channels) for gid, channels in guilds_list
-            if channels[0].guild_name.lower().startswith(name_start_with)
-        ])
+
+    filters = set()
+    guilds_list = []
+    has_others = False
+
+    for gid, channels in guilds_list_unfiltered:
+        first_channel = channels[0]
+        guild_name = first_channel.guild_name
+
+        first_letter = guild_name[0].lower()
+        if first_letter in string.ascii_lowercase:
+            filters.add(first_letter)
+        else:
+            has_others = True
+
+        if name_start_with == "others" and first_letter not in string.ascii_lowercase:
+            guilds_list.append((gid, channels))
+        elif name_start_with and guild_name.lower().startswith(name_start_with):
+            guilds_list.append((gid, channels))
+        elif not name_start_with:
+            guilds_list.append((gid, channels))
 
     if len(guilds_list) == 0:
         raise Http404("Nothing matching provided filters")
@@ -148,7 +156,8 @@ def guilds(request, language=None):
     page_obj = guilds_paginator.get_page(page_number)
 
     return render(request, "botdata/guilds.jinja2",
-                  {"guilds": page_obj, "language": language, "sw": name_start_with, "filters": sorted(list(filters))})
+                  {"guilds": page_obj, "language": language, "sw": name_start_with, "filters": sorted(list(filters)),
+                   "has_others": has_others})
 
 
 def guild(request, pk: int):
