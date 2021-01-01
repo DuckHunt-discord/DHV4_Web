@@ -1,5 +1,6 @@
 import random
 import string
+from django.core.cache import cache
 from collections import namedtuple, defaultdict
 from math import inf
 from typing import List
@@ -93,17 +94,25 @@ def get_guilds_list():
         guild_vip_status DESC,
         guild_id ASC;
     """
-    with connection.cursor() as cursor:
-        cursor.execute(sql)
-        desc = cursor.description
-        Result = namedtuple('Result', [col[0] for col in desc])
+    desc = cache.get('guilds_list_custom_sql_desc')
+    all_data = cache.get('guilds_list_custom_sql_all_data')
 
-        result = defaultdict(list)
-        for channel_data in cursor.fetchall():
-            channel_result = Result(*channel_data)
-            result[channel_result.guild_id].append(channel_result)
+    if not desc or not all_data:
+        with connection.cursor() as cursor:
+            cursor.execute(sql)
+            desc = cursor.description
+            all_data = cursor.fetchall()
+        cache.set('guilds_list_custom_sql_desc', cursor.description, 15 * 60)
+        cache.set('guilds_list_custom_sql_all_data', all_data, 15 * 60)
 
-        return list(result.items())
+    Result = namedtuple('Result', [col[0] for col in desc])
+
+    result = defaultdict(list)
+    for channel_data in all_data:
+        channel_result = Result(*channel_data)
+        result[channel_result.guild_id].append(channel_result)
+
+    return list(result.items())
 
 
 def guilds(request, language=None):

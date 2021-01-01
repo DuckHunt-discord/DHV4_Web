@@ -1,5 +1,6 @@
 from typing import Optional
 
+from django.core.cache import cache
 from django.http import Http404
 from django.shortcuts import render
 from django.conf import settings
@@ -19,9 +20,12 @@ MONTH = 30 * DAY
 YEAR = 365 * DAY
 
 
-def get_from_api(url):
-    r = requests.get(url)
-    return r.json()
+def get_from_api(url, cache_for=60):
+    r = cache.get('duckhunt_api_'+url)
+    if not r:
+        r = requests.get(url).json()
+        cache.set('duckhunt_api_'+url, r, cache_for)
+    return r
 
 
 def index(request):
@@ -122,7 +126,6 @@ def shard_status(request, shard_id):
     return render(request, "public/shard_status.jinja2", {"status": api_status, "shard": shard})
 
 
-@cache_page(MONTH)
 def bot_commands(request, command: str = None):
     if not command:
         command_to_see: Optional[str] = request.GET.get("command", None)
@@ -130,7 +133,7 @@ def bot_commands(request, command: str = None):
         command_to_see = ' '.join(command.strip('/').split('/'))
 
     commands_url = settings.DH_API_URL + "/help/commands"
-    commands = get_from_api(commands_url)
+    commands = get_from_api(commands_url, cache_for=24 * 60 * 60)
 
     if command_to_see:
         scs = command_to_see.split()
