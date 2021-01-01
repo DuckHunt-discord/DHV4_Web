@@ -153,10 +153,10 @@ def bot_commands(request, command: str = None):
         if commands is None:
             raise Http404("No such subcommand")
 
-        ctx = {"command_to_see": command_to_see, "parent_name": parent_name, "command": commands, "prefix": "d!",
+        ctx = {"command_to_see": command_to_see, "parent_name": parent_name, "command": commands, "prefix": "dh!",
                "parent": parent}
         return render(request, "public/command.jinja2", ctx)
     else:
         commands = dict(sorted(commands.items(), key=lambda d: d[1].get('access_value', 50)))
-        ctx = {"commands": commands, "prefix": "d!"}
+        ctx = {"commands": commands, "prefix": "dh!"}
         return render(request, "public/bot_commands.jinja2", ctx)

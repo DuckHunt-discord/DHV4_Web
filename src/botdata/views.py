@@ -55,9 +55,10 @@ class CustomPaginator(Paginator):
         return CustomPage(*args, **kwargs)
 
 
-def get_guilds_list():
+def get_guilds_list(language=None):
     sql = """
     SELECT
+        guilds.language AS guild_language,
         guilds.vip AS guild_vip_status,
         guilds.name AS guild_name,
         guilds.discord_id AS guild_id,
@@ -110,6 +111,10 @@ def get_guilds_list():
     result = defaultdict(list)
     for channel_data in all_data:
         channel_result = Result(*channel_data)
+
+        if language and not channel_result.guild_language.startswith(language):
+            continue
+
         result[channel_result.guild_id].append(channel_result)
 
     return list(result.items())
@@ -117,16 +122,15 @@ def get_guilds_list():
 
 def guilds(request, language=None):
     # I couldn't find a good way to do this using django ORM without it taking a ton of time.
-    guilds_list = get_guilds_list()
+    guilds_list = get_guilds_list(language=language)
 
     page_number = request.GET.get('page', 1)
-    filters = list(string.ascii_lowercase)
 
     name_start_with = request.GET.get('sw', None)
     if name_start_with == "others":
         guilds_list = list([
             (gid, channels) for gid, channels in guilds_list
-            if channels[0].guild_name.lower()[0] not in filters
+            if channels[0].guild_name.lower()[0] not in list(string.ascii_lowercase)
         ])
     elif name_start_with:
         guilds_list = list([
