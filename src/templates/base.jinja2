@@ -3,7 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% block canonical %}<link rel="canonical" href="https://duckhunt.me{{ request.get_full_path() }}"/>{% endblock %}
+    {% block canonical %}
+        <link rel="canonical" href="https://duckhunt.me{{ request.get_full_path() }}"/>{% endblock %}
 
     {% block ogp %}
         <meta property="og:title" content="DuckHunt"/>
@@ -55,9 +56,17 @@
 <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
     <div class="container-fluid">
         <a class="navbar-brand" href="/">
-            DuckHunt Discord V4 <img src="{{ static("public/img/armored_duck_Calgeka_logo.png") }}" alt="logo"
-                                     width="30"
-                                     height="30">
+            DuckHunt Discord V<span class="odometer" id="navbar-odo">4</span>
+            <script>
+                document.getElementById("navbar-odo").innerHTML = "0";
+                document.addEventListener("DOMContentLoaded", function (event) {
+                    document.getElementById("navbar-odo").innerHTML = "4";
+                });
+            </script>
+
+            <img src="{{ static("public/img/armored_duck_Calgeka_logo.png") }}" alt="logo"
+                 width="30"
+                 height="30">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -94,7 +103,6 @@
                 <!-- Other side -->
             </div>
         </div>
-    </div>
 </nav>
 {% block container %}
     <div class="container text-light">
