@@ -143,8 +143,8 @@ blockquote {
 }
 
 .main-title {
-    font-size:4rem !important;
-    line-height:1.4;
+    font-size: 4rem !important;
+    line-height: 1.4;
     color: white !important;
     padding-bottom: 0;
 }
@@ -152,4 +152,35 @@ blockquote {
 .nice-card-borders {
     border-bottom: gray solid 1px;
     border-right: gray solid 1px;
+}
+
+
+.btn-outline-blurple {
+    color: #7187dd;
+    border-color: #7187dd;
+}
+
+.btn-outline-blurple:hover {
+    color: white;
+    background-color: #7187dd;
+    border-color: #7187dd;
+}
+
+.btn-check:focus + .btn-outline-blurple, .btn-outline-blurple:focus {
+    box-shadow: 0 0 0 0.25rem rgba(113, 135, 221, 0.5);
+}
+
+.btn-check:checked + .btn-outline-blurple, .btn-check:active + .btn-outline-blurple, .btn-outline-blurple:active, .btn-outline-blurple.active, .btn-outline-blurple.dropdown-toggle.show {
+    color: white;
+    background-color: #7187dd;
+    border-color: #7187dd;
+}
+
+.btn-check:checked + .btn-outline-blurple:focus, .btn-check:active + .btn-outline-blurple:focus, .btn-outline-blurple:active:focus, .btn-outline-blurple.active:focus, .btn-outline-blurple.dropdown-toggle.show:focus {
+    box-shadow: 0 0 0 0.25rem rgba(113, 135, 221, 0.5);
+}
+
+.btn-outline-blurple:disabled, .btn-outline-blurple.disabled {
+    color: #7187dd;
+    background-color: transparent;
 }

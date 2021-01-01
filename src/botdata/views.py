@@ -1,4 +1,5 @@
 import random
+import string
 from collections import namedtuple, defaultdict
 from math import inf
 from typing import List
@@ -6,6 +7,7 @@ from django.db import connection
 
 from django.core.paginator import Paginator, Page
 from django.db.models import Prefetch, Q, Count, Exists, OuterRef, Max
+from django.http import Http404
 from django.shortcuts import render, get_object_or_404
 from .models import DiscordGuild, DiscordChannel, DiscordUser, Player, DUCKS_COLORS, DUCKS_DAY_CATEGORIES, \
     DUCKS_NIGHT_CATEGORIES
@@ -25,11 +27,11 @@ class CustomPage(Page):
         round_offset = current_page % 10
 
         shown_numbers.extend(
-            self.included_range(current_page - (5 + round_offset), current_page + (10 - round_offset))[:10])
+            self.included_range(current_page - (10 + round_offset), current_page + (10 - round_offset))[:20])
         shown_numbers.extend(
-            self.included_range(current_page - (50 + round_offset), current_page + (100 - round_offset), 10)[:10])
+            self.included_range(current_page - (100 + round_offset), current_page + (100 - round_offset), 10)[:20])
         shown_numbers.extend(
-            self.included_range(current_page - (500 + round_offset), current_page + (1000 - round_offset), 100)[:10])
+            self.included_range(current_page - (1000 + round_offset), current_page + (1000 - round_offset), 100)[:20])
 
         shown_numbers = list(set(shown_numbers))
 
@@ -108,11 +110,31 @@ def guilds(request, language=None):
     # I couldn't find a good way to do this using django ORM without it taking a ton of time.
     guilds_list = get_guilds_list()
 
-    guilds_paginator = CustomPaginator(guilds_list, 50)
     page_number = request.GET.get('page', 1)
+    filters = list(string.ascii_lowercase)
+
+    name_start_with = request.GET.get('sw', None)
+    if name_start_with == "others":
+        guilds_list = list([
+            (gid, channels) for gid, channels in guilds_list
+            if channels[0].guild_name.lower()[0] not in filters
+        ])
+    elif name_start_with:
+        guilds_list = list([
+            (gid, channels) for gid, channels in guilds_list
+            if channels[0].guild_name.lower().startswith(name_start_with)
+        ])
+
+    if len(guilds_list) == 0:
+        raise Http404("Nothing matching provided filters")
+
+    guilds_paginator = CustomPaginator(guilds_list, 100)
+
     page_obj = guilds_paginator.get_page(page_number)
 
-    return render(request, "botdata/guilds.jinja2", {"guilds": page_obj, "language": language})
+
+    return render(request, "botdata/guilds.jinja2",
+                  {"guilds": page_obj, "language": language, "sw": name_start_with, "filters": filters})
 
 
 def guild(request, pk: int):
@@ -175,7 +197,8 @@ def generate_shots_chart_data(shooting_stats):
 
 def channel(request, pk: int):
     current_channel = get_object_or_404(DiscordChannel, pk=pk)
-    current_players: List[Player] = Player.objects.filter(channel=current_channel).select_related("member__user").order_by(
+    current_players: List[Player] = Player.objects.filter(channel=current_channel).select_related(
+        "member__user").order_by(
         '-experience')
 
     chart_best_players_data_experience = []
@@ -220,7 +243,8 @@ def channel(request, pk: int):
                                                       "chart_best_players_data_ducks": chart_best_players_data_ducks,
                                                       "shots_chart_data": shots_chart_data,
                                                       "global_best_times": global_best_times,
-                                                      "chart_best_time": chart_best_time, "chart_best_colors": chart_best_colors})
+                                                      "chart_best_time": chart_best_time,
+                                                      "chart_best_colors": chart_best_colors})
 
 
 def channel_settings(request, pk: int):
