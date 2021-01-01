@@ -126,6 +126,8 @@ def guilds(request, language=None):
 
     page_number = request.GET.get('page', 1)
 
+    filters = {channels[0].guild_name.lower()[0] for gid, channels in guilds_list}
+
     name_start_with = request.GET.get('sw', None)
     if name_start_with == "others":
         guilds_list = list([
@@ -147,7 +149,7 @@ def guilds(request, language=None):
 
 
     return render(request, "botdata/guilds.jinja2",
-                  {"guilds": page_obj, "language": language, "sw": name_start_with, "filters": filters})
+                  {"guilds": page_obj, "language": language, "sw": name_start_with, "filters": sorted(list(filters))})
 
 
 def guild(request, pk: int):
