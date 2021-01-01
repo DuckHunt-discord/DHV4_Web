@@ -1,12 +1,13 @@
 from typing import Optional
 
 from django.core.cache import cache
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.shortcuts import render
 from django.conf import settings
 
 # Create your views here.
 import requests
+from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.views.decorators.cache import cache_page
 
@@ -21,10 +22,10 @@ YEAR = 365 * DAY
 
 
 def get_from_api(url, cache_for=60):
-    r = cache.get('duckhunt_api_'+url)
+    r = cache.get('duckhunt_api_' + url)
     if not r:
         r = requests.get(url).json()
-        cache.set('duckhunt_api_'+url, r, cache_for)
+        cache.set('duckhunt_api_' + url, r, cache_for)
     return r
 
 
@@ -158,3 +159,13 @@ def bot_commands(request, command: str = None):
         commands = dict(sorted(commands.items(), key=lambda d: d[1].get('access_value', 50)))
         ctx = {"commands": commands, "prefix": "dh!"}
         return render(request, "public/bot_commands.jinja2", ctx)
+
+
+def robots_txt(request):
+    lines = [
+        "User-Agent: *",
+        f"Disallow: {reverse('guild', kwargs={'pk': 0})}",
+        "",
+        "Sitemap: https://duckhunt.me/sitemap.xml",
+    ]
+    return HttpResponse("\n".join(lines), content_type="text/plain")
