@@ -25,9 +25,14 @@ class FakeTitlesTreeprocessor(Treeprocessor):
 
     def run(self, root):
         for element in root.iter('*'):
-            if len(element.tag) == 2 and element.tag.startswith('h') and element.tag[1].isdigit() and int(element.tag[1]) >= self.level_from:
-                element.set('class', element.tag)
-                element.tag = 'div'
+            if len(element.tag) == 2 and element.tag.startswith('h') and element.tag[1].isdigit():
+                if int(element.tag[1]) >= self.level_from:
+                    element.set('class', element.tag)
+                    element.tag = 'div'
+
+                if element.text:
+                    element.set('id', element.text.replace('?', '').strip().replace(' ', '-').lower())
+
         # No return statement is same as `return None`
 
 
