@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-site-verification" content="KlSQKyZeTCwrcPnW3RY3O2dBuh7jl0z4rkd388sPYhk"/>
     {% block canonical %}
-        <link rel="canonical" href="https://duckhunt.me{{ request.get_full_path() }}"/>{% endblock %}
+        <link rel="canonical" href="https://duckhunt.me{{ request.get_full_path() }}"/>
+    {% endblock %}
     {% block ogp %}
         <meta property="og:title" content="DuckHunt"/>
         <meta property="og:type" content="website"/>
