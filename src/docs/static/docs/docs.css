@@ -58,12 +58,18 @@ p {
     line-height: 1.4;
 }
 
-.alert p {
+#content .alert {
+    color: inherit;
+    background-color: inherit;
+    border-left-width: 5px;
+}
+
+#content .alert p {
     margin-top: 0 !important;
     margin-bottom: 0 !important;
 }
 
-.alert p:first-of-type:before {
+#content .alert p:first-of-type:before {
     font-family: 'Font Awesome 5 Free';
     font-weight: 900;
     font-size: large;
@@ -91,10 +97,4 @@ hr {
     #content .img-fluid {
         width: 40%;
     }
-}
-
-#content .alert {
-    color: inherit;
-    background-color: inherit;
-    border-left-width: 5px;
 }
