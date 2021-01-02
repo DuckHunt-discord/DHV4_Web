@@ -1,11 +1,26 @@
 {% extends "base.jinja2" %}
 
+
+{% block ogp %}
+    <meta property="og:title" content="DuckHunt"/>
+    <meta property="og:type" content="profile"/>
+    <meta property="og:url" content="https://duckhunt.me{{ request.get_full_path() }}"/>
+    <meta property="og:image" content="https://duckhunt.me{{ static("botdata/Pixel_Ducc_Globloxmen.png.png") }}"/>
+    <meta property="og:site_name" content="DuckHunt Discord V4"/>
+    <meta property="profile:username" content="{{ current_user.name }}#{{ current_user.discriminator }}"/>
+    <meta property="profile:first_name" content="{{ current_user.name }}"/>
+    <meta property="profile:last_name" content="{{ current_user.discriminator }}"/>
+    <meta property="og:description"
+          content="Player {{ current_user.name }}#{{ current_user.discriminator }} statistics on #{{ channel.name }}."/>
+{% endblock %}
+
 {% block title %}
     DuckHunt V4 - {{ current_user.name }}#{{ current_user.discriminator }} : #{{ channel.name }}
 {% endblock %}
 
 {% block metadesc %}
-    <meta name="description" content="Player {{ current_user.name }}#{{ current_user.discriminator }} statistics on #{{ channel.name }}.">
+    <meta name="description"
+          content="Player {{ current_user.name }}#{{ current_user.discriminator }} statistics on #{{ channel.name }}.">
 {% endblock %}
 
 {% block content %}
@@ -93,7 +108,7 @@
                         <table class="table">
                             <thead>
                             <tr style="border-bottom: hidden;">
-                                <th colspan="2" ><h2 class="text-center">DuckHunt Shop</h2><br/><br/></th>
+                                <th colspan="2"><h2 class="text-center">DuckHunt Shop</h2><br/><br/></th>
                             </tr>
                             <tr>
                                 <th>
