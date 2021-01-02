@@ -40,7 +40,7 @@ class FakeTitlesTreeprocessor(Treeprocessor):
                 alt = element.get('alt', None)
 
                 element.tag = "figure"
-                element.set('class', 'figure')
+                element.set('class', 'figure mx-auto d-block')
 
                 img = Element("img", attrib={"src": src, "alt": alt, "class": "img-fluid rounded mx-auto d-block"})
                 element.append(img)
