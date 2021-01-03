@@ -89,8 +89,7 @@
                         </li>
                     {% else %}
                         <li class="page-item"><a class="page-link"
-                                                 href="{{ request.path }}?page=
-                                                         {{ i }}{% if sw %}&sw={{ sw }}{% endif %}">{{ i }}</a></li>
+                                                 href="{{ request.path }}?page={{ i }}{% if sw %}&sw={{ sw }}{% endif %}">{{ i }}</a></li>
                     {% endif %}
                 {% endfor %}
 
@@ -111,9 +110,7 @@
                                              href="{{ request.path }}?page=1{% if sw %}&sw={{ sw }}{% endif %}">First</a>
                     </li>
                     <li class="page-item"><a class="page-link"
-                                             href="{{ request.path }}?page=
-
-                                                     {{ guilds.previous_page_number() }}{% if sw %}&sw={{ sw }}{% endif %}">{{ guilds.previous_page_number() }}</a>
+                                             href="{{ request.path }}?page={{ guilds.previous_page_number() }}{% if sw %}&sw={{ sw }}{% endif %}">{{ guilds.previous_page_number() }}</a>
                     </li>
                 {% else %}
                     <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1"
@@ -127,12 +124,9 @@
 
                 {% if guilds.has_next() %}
                     <li class="page-item"><a class="page-link"
-                                             href="{{ request.path }}?page=
-
-                                                     {{ guilds.next_page_number() }}{% if sw %}&sw={{ sw }}{% endif %}">{{ guilds.next_page_number() }}</a>
+                                             href="{{ request.path }}?page={{ guilds.next_page_number() }}{% if sw %}&sw={{ sw }}{% endif %}">{{ guilds.next_page_number() }}</a>
                     </li>
-                    <li class="page-item"><a class="page-link" href="{{ request.path }}?page=
-                            {{ guilds.paginator.num_pages }}{% if sw %}&sw={{ sw }}{% endif %}">Last</a>
+                    <li class="page-item"><a class="page-link" href="{{ request.path }}?page={{ guilds.paginator.num_pages }}{% if sw %}&sw={{ sw }}{% endif %}">Last</a>
                     </li>
                 {% else %}
                     <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1"
