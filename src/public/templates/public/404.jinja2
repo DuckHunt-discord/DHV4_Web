@@ -1,0 +1,80 @@
+{% extends "base.jinja2" %}
+
+{% block title %}
+    DuckHunt V4 - Not Found
+{% endblock %}
+
+{% block head %}
+    <link
+            rel="stylesheet"
+            href="{{ static('public/css/animate.min.css') }}"
+    />
+{% endblock %}
+
+{% block container %}
+    <div id="duckdiv" class="position-relative">
+        <img id="duckimg" src="{{ static('public/img/404duck.png') }}"
+             class="figure-img img-fluid rounded mx-auto d-block"
+             alt="The 404 duck">
+        <div id="bangdiv" class="position-absolute top-50 start-50 d-none">
+            <style>
+                @font-face { font-family: 'Indie Flower'; src: url('{{ static('public/font/IndieFlower-Regular.ttf') }}'); }
+
+                #bangdiv p {
+                    font-family: 'Indie Flower', cursive;
+                    color: red;
+                    font-size: 15vw;
+                }
+
+                @media screen and (min-width: 1600px) {
+                    #bangdiv p {
+                        color: red;
+                        font-size: 12em;
+                    }
+                }
+            </style>
+            <p>
+                !BANG
+            </p>
+        </div>
+    </div>
+    <div id="explanation" class="container text-light">
+        <h1 id="title">Page not found (404)</h1>
+        <p>You found an unknown page... If you list all of them, maybe we could take some time to publish an article
+            ?</p>
+
+        <h2>What is DuckHunt</h2>
+        ⠨⠚⠥⠎⠞ ⠊⠝ ⠉⠁⠎⠑ ⠽⠕⠥ ⠉⠁⠍⠑ ⠓⠑⠗⠑ ⠋⠗⠕⠍ ⠝⠕⠺⠓⠑⠗⠑⠇⠁⠝⠙⠂ ⠨⠙⠥⠉⠅⠨⠓⠥⠝⠞ ⠊⠎ ⠁⠝ ⠁⠍⠁⠵⠊⠝⠛ ⠙⠊⠎⠉⠕⠗⠙ ⠃⠕⠞ ⠺⠓⠑⠗⠑ ⠽⠕⠥ ⠓⠥⠝⠞ ⠙⠥⠉⠅⠎ ⠋⠕⠗ ⠁
+        ⠇⠊⠧⠊⠝⠛⠲. <a href="{{ url('docs:index') }}">Learn more</a>.
+    </div>
+
+    <script>
+        const explanation = document.querySelector('#explanation');
+
+        explanation.classList.add('d-none');
+
+        const duckdiv = document.querySelector('#duckdiv');
+        const duckimg = document.querySelector('#duckimg');
+        const bangdiv = document.querySelector('#bangdiv');
+
+        setTimeout(function () {
+            bangdiv.classList.remove('d-none');
+        }, 1000)
+
+        setTimeout(function () {
+            bangdiv.classList.add('animate__animated', 'animate__hinge');
+        }, 2000)
+
+        bangdiv.addEventListener('animationend', () => {
+            setTimeout(function () {
+                duckimg.classList.add('animate__animated', 'animate__fadeOut');
+            }, 1000)
+        });
+
+        duckimg.addEventListener('animationend', () => {
+            duckdiv.remove();
+            explanation.classList.remove('d-none');
+        })
+
+    </script>
+{% endblock %}

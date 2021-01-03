@@ -169,3 +169,7 @@ def robots_txt(request):
         "Sitemap: https://duckhunt.me/sitemap.xml",
     ]
     return HttpResponse("\n".join(lines), content_type="text/plain")
+
+
+def handler404(request, exception=None):
+    return render(request, 'public/404.jinja2')

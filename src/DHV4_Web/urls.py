@@ -30,3 +30,5 @@ urlpatterns = [
     path('sitemap-<section>.xml', sitemap_views.sitemap, {'sitemaps': sitemaps},
          name='django.contrib.sitemaps.views.sitemap'),
 ]
+
+handler404 = 'public.views.handler404'
