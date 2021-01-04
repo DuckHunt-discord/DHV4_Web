@@ -265,6 +265,14 @@ class Player(models.Model):
             **self.stored_achievements,
         }
 
+    @property
+    def unlocked_achievements(self):
+        l = []
+        for achievement, unlocked in self.achievements.items():
+            if unlocked:
+                l.append(achievement)
+        return l
+
     def sorted_killed(self):
         return dict(sorted(self.killed.items(), key=lambda e: -e[1]))
 

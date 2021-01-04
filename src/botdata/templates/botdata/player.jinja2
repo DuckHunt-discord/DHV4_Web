@@ -45,11 +45,11 @@
         </ul>
     {% endif %}
 
-    {% if player.achievements|length %}
+    {% if player.unlocked_achievements|length %}
         <div class="h2">✨ Achievements</div>
 
         <ul>
-            {% for achievement, unlocked in player.achievements.items() %}
+            {% for achievement in player.unlocked_achievements %}
                 {% if unlocked %}
                     <li>{{ achievements[achievement]['name'] }}: {{ achievements[achievement]['description'] }}</li>
                 {% endif %}
