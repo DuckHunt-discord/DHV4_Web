@@ -88,9 +88,8 @@ def get_guilds_list(language=None):
                         GROUP BY
                             channel_id) AS pla
                     WHERE
-                        pla.players_count > 0) AS sqy ON channels.discord_id = sqy.channel_id) 
-                        AS chasqy 
-                        ON chasqy.guild_id = guilds.discord_id
+                        pla.players_count > 0) AS sqy ON channels.discord_id = sqy.channel_id AND channels.enabled = True)
+                         AS chasqy ON chasqy.guild_id = guilds.discord_id
     ORDER BY
         guild_vip_status DESC,
         guild_id ASC;
