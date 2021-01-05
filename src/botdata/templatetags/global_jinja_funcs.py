@@ -4,6 +4,7 @@ from typing import Union, List, Dict, Any
 
 import babel
 from babel.dates import format_timedelta
+from babel.lists import format_list
 from django.utils.safestring import mark_safe
 from django.utils.timesince import timeuntil
 from django_jinja import library
@@ -19,6 +20,14 @@ def intcomma(value: float):
     Usage: {{ intcomma(35555) }}
     """
     return humanize.intcomma(value)
+
+
+@library.global_function
+def humanize_list(value: list):
+    """
+    Usage: {{ humanize_list(list) }}
+    """
+    return format_list(value, locale='en_US')
 
 
 @library.global_function

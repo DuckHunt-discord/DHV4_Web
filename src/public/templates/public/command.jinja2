@@ -5,7 +5,8 @@
 {% endblock %}
 
 {% block canonical %}
-    <link rel="canonical" href="https://duckhunt.me{{ url("bot_commands", command=command_to_see.replace(' ', '/')) }}"/>
+    <link rel="canonical"
+          href="https://duckhunt.me{{ url("bot_commands", command=command_to_see.replace(' ', '/')) }}"/>
 {% endblock %}
 
 {% block title %}
@@ -13,7 +14,8 @@
 {% endblock %}
 
 {% block content %}
-    <h1><code>{{ command_to_see }}</code>{% if command['name'] != command_to_see %} (<code>{{ command['name'] }}</code>){% endif %}</h1>
+    <h1><code>{{ command_to_see }}</code>{% if command['name'] != command_to_see %} (<code>{{ command['name'] }}</code>
+        ){% endif %}</h1>
     <div class="card background-normal h-100">
         <div class="card-body">
             <h5 class="card-title flex-grow-1">{{ command['name'] }} {% if command.get('access_name') %}
@@ -42,26 +44,37 @@
 
         {% if command.get('subcommands', []) %}
             <div class="card-footer">
-                This command has some subcommands: <br/>
-                <div class="row row-cols-2">
-                    {% for subcommand_name, subcommand in command['subcommands'].items() %}
-                        <div class="col-3">
-                            {% set subcommand_url = command_to_see.replace(' ', '/') + '/' + subcommand_name %}
-                            <a href="{{ url("bot_commands", command=subcommand_url) }}" class="card-link">
-                                <span class="badge rounded-pill bg-dark">{{ subcommand_name }}</span>
-                            </a>
+            This command has some subcommands: <br/>
+            <div class="row row-cols-2">
+                {% for subcommand_name, subcommand in command['subcommands'].items() %}
+
+                    {% if command['name'] == "shop" and subcommand['aliases'] and subcommand['aliases'][0].isdigit() %}
+                        <div class="col-1 text-center">
+                            <span class="badge pill bg-secondary">{{ subcommand['aliases'][0] }}</span>
                         </div>
-                        <div class="col-9">{{ subcommand['short_doc'] }}</div>
-                    {% endfor %}
+                        <div class="col-3 col-md-2">
+                    {% else %}
+                        <div class="col-4 col-md-3">
+                    {% endif %}
+
+                {% set subcommand_url = command_to_see.replace(' ', '/') + '/' + subcommand_name %}
+                <a href="{{ url("bot_commands", command=subcommand_url) }}"
+                   class="card-link text-decoration-none">
+                    <span class="badge rounded-pill bg-dark">{{ subcommand_name }}</span>
+                </a>
+                </div>
+                    <div class="col-8 col-md-9">{{ subcommand['short_doc'] }}</div>
+                {% endfor %}
                 </div>
             </div>
         {% endif %}
-    </div>
-    {% if parent %}
-        You can got back to the
-        <a href="{{ url("bot_commands", command=parent_name.replace(' ', '/')) }}">{{ parent_name }} help page</a>, or
-        <a href="{{ url("bot_commands") }}">see all the commands</a>.
-    {% else %}
-        You can also <a href="{{ url("bot_commands") }}">see all the commands</a>.
-    {% endif %}
+        </div>
+        {% if parent %}
+            You can got back to the
+            <a href="{{ url("bot_commands", command=parent_name.replace(' ', '/')) }}">{{ parent_name }} help page</a>,
+            or
+            <a href="{{ url("bot_commands") }}">see all the commands</a>.
+        {% else %}
+            You can also <a href="{{ url("bot_commands") }}">see all the commands</a>.
+        {% endif %}
 {% endblock %}
