@@ -192,8 +192,8 @@ class DiscordUser(models.Model):
 class DiscordMember(models.Model):
     access_level = EnumField(AccessLevel, default=AccessLevel.DEFAULT)
 
-    guild = models.ForeignKey(DiscordGuild, models.CASCADE, related_name="members")
-    user = models.ForeignKey(DiscordUser, models.CASCADE, related_name="members")
+    guild = models.ForeignKey(DiscordGuild, models.CASCADE, related_name="members", db_index=True)
+    user = models.ForeignKey(DiscordUser, models.CASCADE, related_name="members", db_index=True)
 
     def __str__(self):
         return f"{self.user} (access={self.access_level})"
@@ -203,8 +203,8 @@ class DiscordMember(models.Model):
 
 
 class Player(models.Model):
-    channel = models.ForeignKey(DiscordChannel, models.CASCADE, related_name="players")
-    member = models.ForeignKey(DiscordMember, models.CASCADE)
+    channel = models.ForeignKey(DiscordChannel, models.CASCADE, related_name="players", db_index=True)
+    member = models.ForeignKey(DiscordMember, models.CASCADE, db_index=True)
 
     first_seen = models.DateTimeField(auto_now_add=True)
 
@@ -217,7 +217,7 @@ class Player(models.Model):
 
     stored_achievements = DefaultDictJSONField(default_factory=bool, blank=True)
 
-    experience = models.BigIntegerField(default=0)
+    experience = models.BigIntegerField(default=0, db_index=True)
     spent_experience = models.BigIntegerField(default=0)
 
     givebacks = models.IntegerField(default=0)
@@ -230,7 +230,7 @@ class Player(models.Model):
 
     last_giveback = models.DateTimeField(auto_now_add=True)
 
-    weapon_sabotaged_by = models.ForeignKey('self', models.SET_NULL, blank=True, null=True)
+    weapon_sabotaged_by = models.ForeignKey('self', models.SET_NULL, blank=True, null=True, db_index=False)
 
     best_times = DefaultDictJSONField(default_factory=lambda: 660, blank=True)
     killed = DefaultDictJSONField(blank=True)

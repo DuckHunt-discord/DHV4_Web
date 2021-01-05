@@ -39,7 +39,7 @@
             <th class="background-green" scope="col">#</th>
             <th class="background-green" scope="col">Name</th>
             <th class="text-end background-green" scope="col">Experience</th>
-            <th class="text-end background-green" scope="col">Ducks killed</th>
+            {# <th class="text-end background-green" scope="col">Ducks killed</th> #}
         </tr>
         </thead>
         <tbody>
@@ -50,7 +50,7 @@
                     <a href="{{ url('player', channel_pk=channel.pk, user_pk=player.member.user.pk) }}">{{ player.member.user.name }}#{{ player.member.user.discriminator }}</a>
                 </td>
                 <td class="text-end">{{ intcomma(player.experience) }}</td>
-                <td class="text-end">{{ player.total_ducks_killed }}</td>
+                {# <td class="text-end">{{ player.total_ducks_killed }}</td> #}
             </tr>
         {% endfor %}
         </tbody>
@@ -109,12 +109,12 @@
                     colorByPoint: false,
                     data: {{ chart_best_players_data_experience|tojson }},
                 },
-                {
+                {#  {
                     name: 'Ducks Killed',
                     colorByPoint: false,
                     visible: false,
                     data: {{ chart_best_players_data_ducks|tojson }},
-                }]
+                }  #}]
         });
 
         Highcharts.chart('chart-shots', {

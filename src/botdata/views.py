@@ -222,9 +222,13 @@ def channel(request, pk: int):
     # We cast to a list because we slice first then later use the whole thing.
     # If we didn't, we would have 2 queries : one with a limit and one without
 
-    current_players: List[Player] = list(Player.objects.filter(channel=current_channel).select_related(
-        "member__user").order_by(
-        '-experience'))
+    current_players: List[Player] = list(
+        Player.objects.filter(channel=current_channel)
+            .select_related("member__user")
+            .order_by('-experience')
+            .only("experience", "member__user__name", "member__user__discord_id", "member__user__discriminator",
+                  "member__user__name", "shooting_stats", "best_times")
+        [:100])
 
     chart_best_players_data_experience = []
     for chart_player in current_players[:100]:
@@ -235,12 +239,13 @@ def channel(request, pk: int):
             })
 
     chart_best_players_data_ducks = []
-    for chart_player in sorted(current_players[:100], key=lambda p: -p.total_ducks_killed):
-        if chart_player.experience > 1:
-            chart_best_players_data_ducks.append({
-                'name': str(chart_player.member.user),
-                'y': chart_player.total_ducks_killed
-            })
+    #
+    # for chart_player in sorted(current_players[:100], key=lambda p: -p.total_ducks_killed):
+    #    if chart_player.experience > 1:
+    #        chart_best_players_data_ducks.append({
+    #            'name': str(chart_player.member.user),
+    #            'y': chart_player.total_ducks_killed
+    #        })
 
     global_shooting_stats = sum_dicts((p.shooting_stats for p in current_players))
 
