@@ -35,22 +35,6 @@
     <script src="{{ static('public/js/bootstrap.bundle.min.js') }}"></script>
     {# <script src="{{ static('public/js/modules/exporting.js') }}"></script> #}
 
-    <script>
-        Highcharts.setOptions({
-            credits: false,
-            chart: {
-                backgroundColor: '#2f3136',
-                borderWidth: 0,
-                plotBackgroundColor: '#202225',
-                plotShadow: true,
-                plotBorderWidth: 1
-            },
-            exporting: {
-                sourceWidth: 2500,
-                sourceHeight: 1200
-            }
-        });
-    </script>
     <title>{% block title %}DuckHunt Discord{% endblock %}</title>
     {% block head %}{% endblock %}
 </head>
@@ -115,7 +99,5 @@
 <footer class="text-center">
     DuckHunt Discord V4 made with <a href="https://github.com/sponsors/paris-ci">❤️</a>️ in Paris
 </footer>
-<script>JsBarcode(".barcode").init();</script>
-
 </body>
 </html>

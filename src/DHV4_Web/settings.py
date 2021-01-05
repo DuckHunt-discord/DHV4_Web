@@ -262,6 +262,7 @@ PIPELINE = {
               'public/js/highcharts-more.js',
               'public/js/modules/item-series.js',
               'public/js/themes/high-contrast-dark.js',
+              'public/js/hcinit.js',
             ),
             'output_filename': 'js/highcharts_pip.js',
         },
