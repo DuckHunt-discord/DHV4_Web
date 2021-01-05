@@ -30,11 +30,13 @@
     <meta name="msapplication-config" content="/static/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
 
-    <link href="{{ static('public/css/bootstrap.css') }}" rel="stylesheet">
-    <link href="{{ static('public/css/all.css') }}" rel="stylesheet">
+    <link href="{{ static('public/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ static('public/css/all.min.css') }}" rel="stylesheet">
     <link href="{{ static('public/css/odometer.css') }}" rel="stylesheet">
+    <link href="{{ static('public/css/base.css') }}" rel="stylesheet">
+
     <script src="{{ static('public/js/jquery.min.js') }}"></script>
-    <script src="{{ static('public/js/bootstrap.bundle.js') }}"></script>
+    <script src="{{ static('public/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ static('public/js/JsBarcode.all.min.js') }}"></script>
     <script src="{{ static('public/js/highcharts.js') }}"></script>
     <script src="{{ static('public/js/highcharts-more.js') }}"></script>
@@ -60,8 +62,6 @@
             }
         });
     </script>
-
-    <link href="{{ static('public/css/base.css') }}" rel="stylesheet">
     <title>{% block title %}DuckHunt Discord{% endblock %}</title>
     {% block head %}{% endblock %}
 </head>
