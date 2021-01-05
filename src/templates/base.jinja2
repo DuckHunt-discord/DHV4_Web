@@ -68,7 +68,7 @@
 <body class="background-light">
 <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/">
+        <a href="/" class="navbar-brand">
             DuckHunt Discord V<span class="odometer" id="navbar-odo">4</span>
             <script>
                 document.getElementById("navbar-odo").innerHTML = "0";
@@ -89,30 +89,31 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url('docs:index') }}">Documentation</a>
+                    <a href="{{ url('docs:index') }}" class="nav-link">Documentation</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url('guilds') }}">Servers</a>
+                    <a href="{{ url('guilds') }}" class="nav-link">Servers</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url('bot_commands') }}">Commands</a>
+                    <a href="{{ url('bot_commands') }}" class="nav-link">Commands</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link"
-                       href="https://discord.com/oauth2/authorize?client_id=187636051135823872&scope=bot&permissions=741735489">Invite
+                    <a href="https://discord.com/oauth2/authorize?client_id=187636051135823872&scope=bot&permissions=741735489"
+                       class="nav-link">Invite
                         the bot</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="https://discordapp.com/invite/2BksEkV">Support server</a>
+                    <a href="https://discordapp.com/invite/2BksEkV" class="nav-link">Support server</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url('bot_status') }}">Status</a>
+                    <a href="{{ url('bot_status') }}" class="nav-link">Status</a>
                 </li>
             </ul>
             <div class="d-flex">
                 <!-- Other side -->
             </div>
         </div>
+    </div>
 </nav>
 {% block container %}
     <div class="container text-light">

@@ -28,7 +28,7 @@
                             {% set subcommand_url = alias %}
                         {% endif %}
 
-                        <a class="text-decoration-none" href="{{ url("bot_commands", command=subcommand_url) }}">
+                        <a href="{{ url("bot_commands", command=subcommand_url) }}" class="text-decoration-none">
                             <span class="badge bg-secondary">{{ alias }}</span>
                         </a>
                     {% endfor %}

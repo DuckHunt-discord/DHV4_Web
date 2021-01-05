@@ -21,19 +21,19 @@
             {% for channel in channels %}
                 <li class="list-group-item background-normal border-bottom-0">
                     <div class="row row-cols-2">
-                        <a class="text-blurple col-8" href="{{ url('channel', pk=channel.pk) }}">
+                        <a href="{{ url('channel', pk=channel.pk) }}" class="text-blurple col-8">
                             <div>
                                 #{{ channel.name }}
                             </div>
                         </a>
 
-                        <a class="text-blurple col-3" href="{{ url('channel', pk=channel.pk) }}">
+                        <a href="{{ url('channel', pk=channel.pk) }}" class="text-blurple col-3">
                             <div>
                                 <span class="badge bg-dark text-white-75">{{ channel.player_count }} players</span>
                             </div>
                         </a>
-                        <a class="text-decoration-none col-1" title="Settings"
-                           href="{{ url('channel_settings', pk=channel.pk) }}">
+                        <a href="{{ url('channel_settings', pk=channel.pk) }}"
+                           class="text-decoration-none col-1" title="Settings">
                             <div>
                                 ⚙️
                             </div>
@@ -46,7 +46,7 @@
             This server uses the <code>{{ guild.prefix }}</code> prefix. Currently, the language used on all channels is
             <a href="{{ url("guilds", language=guild.language) }}">{{ guild.language }}</a>.
             <span class="widget-info d-none">
-                <a class="btn btn-sm btn-success invite-link float-end" href="">Invitation to join this server</a>
+                <a href="" class="btn btn-sm btn-success invite-link float-end">Invitation to join this server</a>
             </span>
         </div>
     </div>

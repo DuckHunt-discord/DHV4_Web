@@ -24,8 +24,9 @@
 
             {% if has_others %}
                 <span class="d-none d-xxl-inline"> - </span>
-            <a class="btn btn-sm {% if sw == "others" %}btn-outline-info disabled{% else %}btn-outline-secondary{% endif %}"
-               href="{{ request.path }}?sw=others">🦆</a>
+            <a href="{{ request.path }}?sw=others"
+               class="btn btn-sm {% if sw == "others" %}btn-outline-info disabled{% else %}btn-outline-secondary{% endif %}">
+                🦆</a>
             {% endif %}
         </div>
     </div>
@@ -35,7 +36,7 @@
             <div class="col">
                 <div class="card background-normal h-100 nice-card-borders">
                     <div class="card-body">
-                        <a class="text-decoration-none" href="{{ url('guild', pk=guild) }}">
+                        <a href="{{ url('guild', pk=guild) }}" class="text-decoration-none">
                             <div class="h4 card-title flex-grow-1 text-white-75">{{ channels[0].guild_name }}</div>
                         </a>
                     </div>
@@ -43,19 +44,18 @@
                         {% for channel in channels %}
                             <li class="list-group-item background-normal border-bottom-0">
                                 <div class="row row-cols-2">
-                                    <a class="text-blurple col-8" href="{{ url('channel', pk=channel.channel_id) }}">
+                                    <a href="{{ url('channel', pk=channel.channel_id) }}" class="text-blurple col-8">
                                         <div>
                                             #{{ channel.channel_name }}
                                         </div>
                                     </a>
 
-                                    <a class="text-blurple col-3" href="{{ url('channel', pk=channel.channel_id) }}">
+                                    <a href="{{ url('channel', pk=channel.channel_id) }}" class="text-blurple col-3">
                                         <div>
                                             <span class="badge bg-dark text-white-75">{{ channel.players_count }} players</span>
                                         </div>
                                     </a>
-                                    <a class="text-decoration-none col-1" title="Settings"
-                                       href="{{ url('channel_settings', pk=channel.channel_id) }}">
+                                    <a href="{{ url('channel_settings', pk=channel.channel_id) }}" class="text-decoration-none col-1" title="Settings">
                                         <div>
                                             ⚙️
                                         </div>
@@ -73,11 +73,10 @@
         <nav aria-label="Page navigation" class="d-none d-lg-block" style="margin-top: 1em;">
             <ul class="pagination pagination-sm">
                 {% if guilds.has_previous() %}
-                    <li class="page-item"><a class="page-link"
-                                             href="{{ request.path }}?page=1{% if sw %}&sw={{ sw }}{% endif %}">First</a>
+                    <li class="page-item"><a href="{{ request.path }}?page=1{% if sw %}&sw={{ sw }}{% endif %}" class="page-link">First</a>
                     </li>
                 {% else %}
-                    <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1"
+                    <li class="page-item disabled"><a href="#" class="page-link" tabindex="-1"
                                                       aria-disabled="true">First</a>
                     </li>
                 {% endif %}
@@ -88,16 +87,16 @@
                             <span class="page-link">{{ i }}</span>
                         </li>
                     {% else %}
-                        <li class="page-item"><a class="page-link"
-                                                 href="{{ request.path }}?page={{ i }}{% if sw %}&sw={{ sw }}{% endif %}">{{ i }}</a></li>
+                        <li class="page-item"><a href="{{ request.path }}?page={{ i }}{% if sw %}&sw={{ sw }}{% endif %}"
+                                                 class="page-link">{{ i }}</a></li>
                     {% endif %}
                 {% endfor %}
 
                 {% if guilds.has_next() %}
-                    <li class="page-item"><a class="page-link" href="{{ request.path }}?page={{ guilds.paginator.num_pages }}{% if sw %}&sw={{ sw }}{% endif %}">Last</a>
+                    <li class="page-item"><a href="{{ request.path }}?page={{ guilds.paginator.num_pages }}{% if sw %}&sw={{ sw }}{% endif %}" class="page-link">Last</a>
                     </li>
                 {% else %}
-                    <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1"
+                    <li class="page-item disabled"><a href="#" class="page-link" tabindex="-1"
                                                       aria-disabled="true">Last</a></li>
                 {% endif %}
             </ul>
@@ -105,14 +104,14 @@
         <nav aria-label="Page navigation" class="d-lg-none" style="margin-top: 1em;">
             <ul class="pagination pagination">
                 {% if guilds.has_previous() %}
-                    <li class="page-item"><a class="page-link"
-                                             href="{{ request.path }}?page=1{% if sw %}&sw={{ sw }}{% endif %}">First</a>
+                    <li class="page-item"><a href="{{ request.path }}?page=1{% if sw %}&sw={{ sw }}{% endif %}"
+                                             class="page-link">First</a>
                     </li>
-                    <li class="page-item"><a class="page-link"
-                                             href="{{ request.path }}?page={{ guilds.previous_page_number() }}{% if sw %}&sw={{ sw }}{% endif %}">{{ guilds.previous_page_number() }}</a>
+                    <li class="page-item"><a href="{{ request.path }}?page={{ guilds.previous_page_number() }}{% if sw %}&sw={{ sw }}{% endif %}"
+                                             class="page-link">{{ guilds.previous_page_number() }}</a>
                     </li>
                 {% else %}
-                    <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1"
+                    <li class="page-item disabled"><a href="#" class="page-link" tabindex="-1"
                                                       aria-disabled="true">First</a>
                     </li>
                 {% endif %}
@@ -122,13 +121,13 @@
                 </li>
 
                 {% if guilds.has_next() %}
-                    <li class="page-item"><a class="page-link"
-                                             href="{{ request.path }}?page={{ guilds.next_page_number() }}{% if sw %}&sw={{ sw }}{% endif %}">{{ guilds.next_page_number() }}</a>
+                    <li class="page-item"><a href="{{ request.path }}?page={{ guilds.next_page_number() }}{% if sw %}&sw={{ sw }}{% endif %}"
+                                             class="page-link">{{ guilds.next_page_number() }}</a>
                     </li>
-                    <li class="page-item"><a class="page-link" href="{{ request.path }}?page={{ guilds.paginator.num_pages }}{% if sw %}&sw={{ sw }}{% endif %}">Last</a>
+                    <li class="page-item"><a href="{{ request.path }}?page={{ guilds.paginator.num_pages }}{% if sw %}&sw={{ sw }}{% endif %}" class="page-link">Last</a>
                     </li>
                 {% else %}
-                    <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1"
+                    <li class="page-item disabled"><a href="#" class="page-link" tabindex="-1"
                                                       aria-disabled="true">Last</a></li>
                 {% endif %}
             </ul>
