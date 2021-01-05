@@ -143,7 +143,7 @@ if DEBUG:
 else:
     CACHES = {
         'default': {
-            'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+            'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
             'LOCATION': os.environ.get("MEMCACHED_LOC", "localhost:11211"),
         }
     }

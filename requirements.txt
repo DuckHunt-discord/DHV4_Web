@@ -9,4 +9,4 @@ requests~=2.25.1
 babel~=2.9.0
 pytz~=2020.5
 markdown~=3.3.3
-python-memcached~=1.59
+pylibmc~=1.6.1
