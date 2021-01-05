@@ -144,7 +144,7 @@ def guilds(request, language=None):
     if language:
         current_guilds_list = [
             (k, v) for k, v in guilds_list
-            if v[0]["language"].startswith(language)
+            if v[0]["guild_language"].startswith(language)
                and startswith(v[0]["guild_name"].lower(), name_start_with)
         ]
         filters = []
