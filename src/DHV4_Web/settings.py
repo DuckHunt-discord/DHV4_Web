@@ -39,7 +39,6 @@ if not DEBUG:
     SESSION_COOKIE_SECURE = True
     CONN_MAX_AGE = None
 else:
-    ALLOWED_HOSTS.append("12e6064752a9.ngrok.io")
     INTERNAL_IPS = ALLOWED_HOSTS
 
 # Application definition
