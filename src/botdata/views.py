@@ -1,5 +1,7 @@
 import random
 import string
+import time
+
 from django.core.cache import cache
 from collections import namedtuple, defaultdict
 from math import inf
@@ -14,7 +16,13 @@ from .models import DiscordGuild, DiscordChannel, DiscordUser, Player, DUCKS_COL
     DUCKS_NIGHT_CATEGORIES
 
 
+SECOND = 1
+MINUTE = 60 * SECOND
+HOUR = 60 * MINUTE
+DAY = 24 * HOUR
+
 # Create your views here.
+
 
 class CustomPage(Page):
     def included_range(self, start, stop, step=1):
@@ -102,9 +110,10 @@ def get_guilds_list(language=None):
             cursor.execute(sql)
             desc = cursor.description
             all_data = cursor.fetchall()
-        cache.set('guilds_list_custom_sql_desc', cursor.description, 15 * 60)
-        cache.set('guilds_list_custom_sql_all_data', all_data, 15 * 60)
+        cache.set('guilds_list_custom_sql_desc', desc, 12 * HOUR)
+        cache.set('guilds_list_custom_sql_all_data', all_data, 12 * HOUR)
 
+    now = time.time()
     Result = namedtuple('Result', [col[0] for col in desc])
 
     result = defaultdict(list)
@@ -115,6 +124,9 @@ def get_guilds_list(language=None):
             continue
 
         result[channel_result.guild_id].append(channel_result)
+    end = time.time()
+
+    print(end-now)
 
     return list(result.items())
 
@@ -126,31 +138,17 @@ def guilds(request, language=None):
     page_number = request.GET.get('page', 1)
     name_start_with = request.GET.get('sw', None)
 
-    filters = set()
-    guilds_list = []
     has_others = False
 
-    for gid, channels in guilds_list_unfiltered:
-        first_channel = channels[0]
-        guild_name = first_channel.guild_name
+    if language:
+        filters = []
+    else:
+        filters = list(string.ascii_lowercase)
 
-        first_letter = guild_name[0].lower()
-        if first_letter in string.ascii_lowercase:
-            filters.add(first_letter)
-        else:
-            has_others = True
-
-        if name_start_with == "others" and first_letter not in string.ascii_lowercase:
-            guilds_list.append((gid, channels))
-        elif name_start_with and guild_name.lower().startswith(name_start_with):
-            guilds_list.append((gid, channels))
-        elif not name_start_with:
-            guilds_list.append((gid, channels))
-
-    if len(guilds_list) == 0:
+    if len(guilds_list_unfiltered) == 0:
         raise Http404("Nothing matching provided filters")
 
-    guilds_paginator = CustomPaginator(guilds_list, 100)
+    guilds_paginator = CustomPaginator(guilds_list_unfiltered, 100)
 
     page_obj = guilds_paginator.get_page(page_number)
 

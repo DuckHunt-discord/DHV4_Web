@@ -11,25 +11,21 @@
 {% block content %}
     <h1>DuckHunt servers{% if language %} in {{ language }}{% endif %}</h1>
 
+    {% if filters %}
     <div class="container d-none d-lg-block pb-3">
         <div class="col text-center">
             {% for filter in filters %}
                 <a class="btn btn-sm
                           {% if filter == sw %}btn-outline-info disabled{% else %}btn-outline-secondary{% endif %}"
                    href="{{ request.path }}?sw={{ filter.lower() }}">{{ filter.upper() }}</a>
-                {% if not loop.last %}
                 <span class="d-none d-xxl-inline"> - </span>
-                {% endif %}
             {% endfor %}
-
-            {% if has_others %}
-                <span class="d-none d-xxl-inline"> - </span>
             <a href="{{ request.path }}?sw=others"
                class="btn btn-sm {% if sw == "others" %}btn-outline-info disabled{% else %}btn-outline-secondary{% endif %}">
                 🦆</a>
-            {% endif %}
         </div>
     </div>
+    {% endif %}
 
     <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
         {% for guild, channels in guilds.object_list %}
