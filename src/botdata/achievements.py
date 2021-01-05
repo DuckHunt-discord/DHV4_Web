@@ -6,7 +6,23 @@ trophys = \
         "v3_player": {
             "name": _("V3 Player"),
             "description": _("They even played on the previous version. What a champ!")
-        }
+        },
+        "translator": {
+            "name": _("Translator"),
+            "description": _("That person is helping translate the bot.")
+        },
+        "bug_hunter": {
+            "name": _("Bug hunter"),
+            "description": _("That person found a bug in the bot.")
+        },
+        "moderator": {
+            "name": _("Moderator"),
+            "description": _("That person helps moderating everything related to the bot.")
+        },
+        "maker": {
+            "name": _("Moderator"),
+            "description": _("That person made the bot.")
+        },
     }
 
 achievements = \
