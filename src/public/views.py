@@ -24,7 +24,15 @@ YEAR = 365 * DAY
 def get_from_api(url, cache_for=60):
     r = cache.get('duckhunt_api_' + url)
     if not r:
-        r = requests.get(url).json()
+        try:
+            r = requests.get(url).json()
+        except:
+            if "api/status" in url:
+                return {
+                    "bot_latency": 0,
+                    "shards_status": [],
+                    "unsharded_guilds": []
+                }
         cache.set('duckhunt_api_' + url, r, cache_for)
     return r
 
