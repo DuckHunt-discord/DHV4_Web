@@ -221,13 +221,16 @@ def channel(request, pk: int):
     current_channel = get_object_or_404(DiscordChannel, pk=pk)
     # We cast to a list because we slice first then later use the whole thing.
     # If we didn't, we would have 2 queries : one with a limit and one without
+    page_number = request.GET.get("page", 1)
 
-    current_players: List[Player] = list(
+    paginator = Paginator(
         Player.objects.filter(channel=current_channel)
             .select_related("member__user")
             .order_by('-experience')
             .only("experience", "member__user__name", "member__user__discord_id", "member__user__discriminator",
-                  "member__user__name", "shooting_stats", "best_times"))
+                  "member__user__name", "shooting_stats", "best_times"), 100)
+
+    current_players = paginator.get_page(page_number)
 
     chart_best_players_data_experience = []
     for chart_player in current_players[:100]:
@@ -267,7 +270,7 @@ def channel(request, pk: int):
         })
         chart_best_colors.append(DUCKS_COLORS[duck_type])
 
-    return render(request, "botdata/channel.jinja2", {"channel": current_channel, "players": current_players,
+    return render(request, "botdata/channel.jinja2", {"paginator": paginator, "channel": current_channel, "players": current_players,
                                                       "chart_best_players_data_experience": chart_best_players_data_experience,
                                                       "chart_best_players_data_ducks": chart_best_players_data_ducks,
                                                       "shots_chart_data": shots_chart_data,

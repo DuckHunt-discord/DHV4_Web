@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block content %}
-    <h1>{{ players|length }} players on #{{ channel.name }}</h1>
+    <h1>{{ paginator.count }} players on #{{ channel.name }}</h1>
 
     <p>
         To see the settings used by this channel, you can click <a href="{{ url("channel_settings", pk=channel.pk) }}">here</a>.
@@ -55,6 +55,25 @@
         {% endfor %}
         </tbody>
     </table>
+
+    {% if paginator.num_pages != 1 %}
+    <div class="d-flex justify-content-center">
+        <nav aria-label="Page navigation" style="margin-top: 1em;">
+            <ul class="pagination pagination-sm flex-wrap">
+                {% for i in range(paginator.num_pages) %}
+                    {% if i + 1 == players.number %}
+                        <li class="page-item active" aria-current="page">
+                            <span class="page-link">{{ i + 1 }}</span>
+                        </li>
+                    {% else %}
+                        <li class="page-item"><a href="{{ request.path }}?page={{ i + 1 }}"
+                                                 class="page-link">{{ i + 1 }}</a></li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </nav>
+    </div>
+    {% endif %}
 
     <script>
         Highcharts.chart('chart-best-players', {
@@ -201,5 +220,6 @@
         {% endif %}
 
     </script>
+
 
 {% endblock %}
