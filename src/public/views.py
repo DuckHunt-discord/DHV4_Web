@@ -4,6 +4,7 @@ from django.core.cache import cache
 from django.http import Http404, HttpResponse
 from django.shortcuts import render
 from django.conf import settings
+from django.template import loader
 
 # Create your views here.
 import requests
@@ -201,4 +202,5 @@ def robots_txt(request):
 
 
 def handler404(request, exception=None):
-    return render(request, 'public/404.jinja2')
+    content = loader.render_to_string('public/404.jinja2', None, request)
+    return HttpResponse(content, None, 404)
