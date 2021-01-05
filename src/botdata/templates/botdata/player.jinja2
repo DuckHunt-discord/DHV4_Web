@@ -37,6 +37,7 @@
     <p>
         <span class="statistic">{{ player.givebacks }}</span> days played,
         <span class="statistic">{{ intcomma(player.experience) }}</span> experience points.
+        {{ intcomma(player.total_ducks_killed) }} ducks killed.
     </p>
 
     {% if current_user.trophys|length %}
