@@ -59,18 +59,19 @@ class GuildListSitemap(PaginatedSitemap):
         guilds = get_guilds_list()
 
         by_first_letter = collections.Counter()
+        guilds_reverse = reverse('guilds')
 
         for gid, channels in guilds:
-            guild_letter = channels[0].guild_name[0].lower()
+            guild_letter = channels[0]["guild_name"][0].lower()
             if guild_letter in string.ascii_lowercase:
                 by_first_letter[guild_letter] += 1
             else:
                 by_first_letter["others"] += 1
 
-        urls = [reverse('guilds') + "?page=" + str(p) for p in range(int(len(guilds)/100) + 1)]
+        urls = [guilds_reverse + "?page=" + str(p) for p in range(int(len(guilds)/100) + 1)]
 
         for first_letter, count in by_first_letter.most_common():
-            urls.extend([reverse('guilds') + "?page=" + str(p) + "&sw=" + first_letter for p in range(int(count/100) + 1)])
+            urls.extend([guilds_reverse + "?page=" + str(p) + "&sw=" + first_letter for p in range(int(count/100) + 1)])
 
         return urls
 
