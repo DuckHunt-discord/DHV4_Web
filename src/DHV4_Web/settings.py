@@ -144,12 +144,6 @@ else:
         'default': {
             'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
             'LOCATION': os.environ.get("MEMCACHED_LOC", "localhost:11211"),
-            'TIMEOUT': 3600,
-            'OPTIONS': {
-                'MAX_ENTRIES': 1000,
-                'CULL_FREQUENCY': 5,
-                'binary': True,
-            }
         }
     }
 
