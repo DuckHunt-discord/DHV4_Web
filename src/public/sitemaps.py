@@ -9,6 +9,7 @@ from public.views import get_from_api
 
 class BasePagesSitemap(sitemaps.Sitemap):
     changefreq = 'daily'
+    protocol = 'https'
 
     def items(self):
         return ['index', 'bot_commands', 'bot_status']
@@ -19,6 +20,7 @@ class BasePagesSitemap(sitemaps.Sitemap):
 
 class CommandsSitemap(sitemaps.Sitemap):
     changefreq = 'weekly'
+    protocol = 'https'
 
     def recurse_subcommand(self, command, myname=None):
         my_subcommands = command.get('subcommands', {})
@@ -58,6 +60,7 @@ class CommandsSitemap(sitemaps.Sitemap):
 
 class ShardStatusSitemap(sitemaps.Sitemap):
     changefreq = 'always'
+    protocol = 'https'
 
     def items(self):
         status_url = settings.DH_API_URL + "/status"

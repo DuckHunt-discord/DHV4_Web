@@ -6,6 +6,7 @@ from docs.views import MARKDOWN_FILES
 
 class DocsSitemap(sitemaps.Sitemap):
     changefreq = 'weekly'
+    protocol = 'https'
 
     def items(self):
         return list(MARKDOWN_FILES.rglob("*.md"))

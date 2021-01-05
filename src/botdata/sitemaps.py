@@ -14,6 +14,7 @@ class PaginatedSitemap(sitemaps.Sitemap):
 
 class PlayersPagesSitemap(PaginatedSitemap):
     changefreq = 'always'
+    protocol = 'https'
 
     def items(self):
         return Player.objects.select_related('member').order_by('pk').all()
@@ -24,6 +25,7 @@ class PlayersPagesSitemap(PaginatedSitemap):
 
 class ChannelsPagesSitemap(PaginatedSitemap):
     changefreq = 'hourly'
+    protocol = 'https'
 
     def items(self):
         return DiscordChannel.objects.filter(enabled=True).order_by('pk').all()
@@ -34,6 +36,7 @@ class ChannelsPagesSitemap(PaginatedSitemap):
 
 class ChannelsSettingsPagesSitemap(PaginatedSitemap):
     changefreq = 'daily'
+    protocol = 'https'
 
     def items(self):
         return DiscordChannel.objects.filter(enabled=True).order_by('pk').all()
@@ -44,6 +47,7 @@ class ChannelsSettingsPagesSitemap(PaginatedSitemap):
 
 class GuildPagesSitemap(PaginatedSitemap):
     changefreq = 'daily'
+    protocol = 'https'
 
     def items(self):
         return DiscordGuild.objects.order_by('pk').all()
@@ -54,6 +58,7 @@ class GuildPagesSitemap(PaginatedSitemap):
 
 class GuildListSitemap(PaginatedSitemap):
     changefreq = 'hourly'
+    protocol = 'https'
 
     def items(self):
         guilds = get_guilds_list()
