@@ -45,6 +45,8 @@ def get_from_api(url, cache_for=60):
                     "current_event_value": ["Bot is down", "Bot under maintenance"],
                     "global_ready": False,
                 }
+            elif "api/commands" in url:
+                return None
         cache.set('duckhunt_api_' + url, r, cache_for)
     return r
 
@@ -153,6 +155,9 @@ def bot_commands(request, command: str = None):
 
     commands_url = settings.DH_API_URL + "/help/commands"
     commands = get_from_api(commands_url, cache_for=24 * 60 * 60)
+
+    if not commands:
+        return render(request, "public/commands_api_error.jinja2")
 
     if command_to_see:
         scs = command_to_see.split()
