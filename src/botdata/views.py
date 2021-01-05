@@ -104,11 +104,7 @@ def get_guilds_list(language=None):
         guild_vip_status DESC,
         guild_id ASC;
     """
-    start = time.time()
     res = cache.get('guilds_list_custom_sql')
-    end = time.time()
-    print(end-start)
-
     if res:
         return res
 
@@ -117,17 +113,11 @@ def get_guilds_list(language=None):
         desc = [d[0] for d in cursor.description]
         all_data = cursor.fetchall()
 
-    start = time.time()
-
     result = defaultdict(list)
     for channel_data in all_data:
         channel_result = {k: v for k, v in zip(desc, channel_data)}
 
         result[channel_result["guild_id"]].append(channel_result)
-
-    end = time.time()
-
-    print(end-start)
 
     res = list(result.items())
     cache.set('guilds_list_custom_sql', res, 12 * HOUR)
@@ -136,6 +126,14 @@ def get_guilds_list(language=None):
 
 guilds_list = get_guilds_list()
 guilds_paginator = CustomPaginator(guilds_list, 100)
+ascii_lowercase = list(string.ascii_lowercase)
+
+
+def startswith(string_, prefix):
+    if prefix == "others":
+        return string_[0] not in ascii_lowercase
+    else:
+        return string_.startswith(prefix)
 
 
 def guilds(request, language=None):
@@ -147,16 +145,16 @@ def guilds(request, language=None):
         current_guilds_list = [
             (k, v) for k, v in guilds_list
             if v[0]["language"].startswith(language)
-               and v[0]["guild_name"].lower().startswith(name_start_with)
+               and startswith(v[0]["guild_name"].lower(), name_start_with)
         ]
         filters = []
         current_guilds_paginator = CustomPaginator(current_guilds_list, 100)
     else:
-        filters = list(string.ascii_lowercase)
+        filters = ascii_lowercase
         if name_start_with:
             current_guilds_list = [
                 (k, v) for k, v in guilds_list
-                if v[0]["guild_name"].lower().startswith(name_start_with)
+                if startswith(v[0]["guild_name"].lower(), name_start_with)
             ]
             current_guilds_paginator = CustomPaginator(current_guilds_list, 100)
         else:
