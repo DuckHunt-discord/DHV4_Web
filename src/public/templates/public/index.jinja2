@@ -1,7 +1,11 @@
 {% extends "base.jinja2" %}
 
+{% block canonical %}
+    <link rel="canonical" href="https://duckhunt.me"/>
+{% endblock %}
+
 {% block metadesc %}
-   <meta name="description" content="DuckHunt, the best game bot on Discord">
+    <meta name="description" content="DuckHunt, the best game bot on Discord">
 {% endblock %}
 
 {% block title %}
@@ -50,15 +54,17 @@
                                 <div class="d-flex flex-row justify-content-between">
                                     <div class="media-body text-left">
                                         <div id="odometer-{{ loop.index }}"
-                                             class="card-value text-{{ stat['color'] }}{% if stat.odometer %} odometer{% endif %}">
+                                             class="card-value text-
+                                                     {{ stat['color'] }}{% if stat.odometer %} odometer{% endif %}">
                                             {{ stat['value'] }}
-                                            {% if not stat.odometer %}<span class="odometer" style="visibility: hidden"></span> {% endif %}
+                                            {% if not stat.odometer %}
+                                                <span class="odometer" style="visibility: hidden"></span> {% endif %}
                                         </div>
                                         {% if stat.odometer %}
                                             <script>
                                                 document.getElementById("odometer-{{ loop.index }}").innerHTML = "0";
                                                 document.addEventListener("DOMContentLoaded", function (event) {
-                                                     document.getElementById("odometer-{{ loop.index }}").innerHTML = "{{ stat['value'] }}";
+                                                    document.getElementById("odometer-{{ loop.index }}").innerHTML = "{{ stat['value'] }}";
                                                 });
                                             </script>
                                         {% endif %}
