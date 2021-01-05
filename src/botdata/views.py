@@ -142,16 +142,26 @@ def guilds(request, language=None):
     start = time.time()
     # I couldn't find a good way to do this using django ORM without it taking a ton of time.
     page_number = request.GET.get('page', 1)
-    name_start_with = request.GET.get('sw', None)
+    name_start_with = request.GET.get('sw', '').lower()
     params_end = time.time()
 
     if language:
-        current_guilds_list = [(k, v) for k, v in guilds_list if v[0]["language"].startswith(language)]
+        current_guilds_list = [
+            (k, v) for k, v in guilds_list
+            if v[0]["language"].startswith(language)
+               and v[0]["guild_name"].lower().startswith(name_start_with)
+        ]
         filters = []
         current_guilds_paginator = CustomPaginator(guilds_list, 100)
     else:
         filters = list(string.ascii_lowercase)
-        current_guilds_list = guilds_list
+        if name_start_with:
+            current_guilds_list = [
+                (k, v) for k, v in guilds_list
+                if v[0]["guild_name"].lower().startswith(name_start_with)
+            ]
+        else:
+            current_guilds_list = guilds_list
         current_guilds_paginator = guilds_paginator
 
     if_block_end = time.time()
