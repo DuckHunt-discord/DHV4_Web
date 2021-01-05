@@ -26,6 +26,8 @@ def get_from_api(url, cache_for=60):
     if not r:
         try:
             r = requests.get(url).json()
+            cache.set('duckhunt_api_' + url, r, cache_for)
+            return r
         except:
             if "api/status" in url:
                 return {
@@ -47,7 +49,6 @@ def get_from_api(url, cache_for=60):
                 }
             elif "api/commands" in url:
                 return None
-        cache.set('duckhunt_api_' + url, r, cache_for)
     return r
 
 
@@ -127,6 +128,7 @@ def get_command(commands, name):
                 return command
 
 
+@cache_page(1 * MINUTE)
 def status(request):
     status_url = settings.DH_API_URL + "/status"
     api_status = get_from_api(status_url)
@@ -134,6 +136,7 @@ def status(request):
     return render(request, "public/status.jinja2", {"status": api_status})
 
 
+@cache_page(1 * MINUTE)
 def shard_status(request, shard_id):
     status_url = settings.DH_API_URL + "/status"
     api_status = get_from_api(status_url)
@@ -147,6 +150,7 @@ def shard_status(request, shard_id):
     return render(request, "public/shard_status.jinja2", {"status": api_status, "shard": shard})
 
 
+@cache_page(1 * HOUR)
 def bot_commands(request, command: str = None):
     if not command:
         command_to_see: Optional[str] = request.GET.get("command", None)

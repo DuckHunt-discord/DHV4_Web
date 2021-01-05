@@ -12,6 +12,8 @@ from django.core.paginator import Paginator, Page
 from django.db.models import Prefetch, Q, Count, Exists, OuterRef, Max
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404
+from django.views.decorators.cache import cache_page
+
 from .models import DiscordGuild, DiscordChannel, DiscordUser, Player, DUCKS_COLORS, DUCKS_DAY_CATEGORIES, \
     DUCKS_NIGHT_CATEGORIES
 
@@ -135,6 +137,7 @@ guilds_list = get_guilds_list()
 guilds_paginator = CustomPaginator(guilds_list, 100)
 
 
+@cache_page(5 * HOUR)
 def guilds(request, language=None):
     start = time.time()
     # I couldn't find a good way to do this using django ORM without it taking a ton of time.
