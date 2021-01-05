@@ -3,6 +3,7 @@ django-enumfield
 django_extensions
 django-debug-toolbar~=3.2
 django-jinja
+django-pipeline~=2.0.5
 psycopg2
 gunicorn
 requests~=2.25.1
@@ -10,3 +11,5 @@ babel~=2.9.0
 pytz~=2020.5
 markdown~=3.3.3
 pylibmc~=1.6.1
+jsmin~=2.2.2
+css-html-js-minify~=2.5.5

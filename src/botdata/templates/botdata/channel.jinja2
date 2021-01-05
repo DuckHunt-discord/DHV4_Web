@@ -8,6 +8,11 @@
     DuckHunt V4 - Top Scores for #{{ channel.name }}
 {% endblock %}
 
+{% block head %}
+    {% javascript 'highcharts' %}
+    <script src="{{ static('public/js/sorttable.js') }}"></script>
+{% endblock %}
+
 {% block content %}
     <h1>{{ paginator.count }} players on #{{ channel.name }}</h1>
 

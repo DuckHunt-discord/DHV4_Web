@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 import sys
 from pathlib import Path
+from django_jinja.builtins import DEFAULT_EXTENSIONS
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -53,6 +54,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'pipeline.middleware.MinifyHTMLMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -73,6 +75,7 @@ INSTALLED_APPS.extend(['django.contrib.sites',
                        'botdata.apps.BotdataConfig',
                        'django_jinja',
                        'django_extensions',
+                       'pipeline'
                        ])
 
 ROOT_URLCONF = 'DHV4_Web.urls'
@@ -90,6 +93,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            "extensions": DEFAULT_EXTENSIONS + [
+                'pipeline.jinja2.PipelineExtension'
+            ]
         },
     },
     {
@@ -190,6 +196,15 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR.parent / "static"
 
+STATICFILES_STORAGE = 'pipeline.storage.PipelineManifestStorage'
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'pipeline.finders.PipelineFinder',
+)
+
+
 DH_API_KEY = os.environ.get("DH_API_KEY", "")
 DH_API_URL = os.environ.get("DH_API_URL", "http://duckhunt.me/api")
 
@@ -238,3 +253,34 @@ if not DEBUG:
             },
         },
     }
+
+PIPELINE = {
+    'JAVASCRIPT': {
+        'highcharts': {
+            'source_filenames': (
+              'public/js/highcharts.js',
+              'public/js/highcharts-more.js',
+              'public/js/modules/item-series.js',
+              'public/js/themes/high-contrast-dark.js',
+            ),
+            'output_filename': 'js/highcharts_pip.js',
+        },
+
+    },
+    'STYLESHEETS': {
+        'base': {
+            'source_filenames': (
+                'public/css/bootstrap.min.css',
+                'public/css/all.min.css',
+                'public/css/odometer.css',
+                'public/css/base.css',
+            ),
+            'output_filename': 'css/allthecss.css',
+            'extra_context': {
+                'media': 'screen,projection',
+            },
+        },
+    },
+    'CSS_COMPRESSOR': 'pipeline.compressors.csshtmljsminify.CssHtmlJsMinifyCompressor',
+    'JS_COMPRESSOR': 'pipeline.compressors.jsmin.JSMinCompressor',
+}

@@ -8,6 +8,10 @@
     DuckHunt V4 - {{ guild.name }}
 {% endblock %}
 
+{% block head %}
+        <script src="{{ static('public/js/jquery.min.js') }}"></script>
+{% endblock %}
+
 {% block content %}
     <h1>{{ guild.name }} on Discord</h1>
 
