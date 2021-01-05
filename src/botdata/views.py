@@ -227,8 +227,7 @@ def channel(request, pk: int):
             .select_related("member__user")
             .order_by('-experience')
             .only("experience", "member__user__name", "member__user__discord_id", "member__user__discriminator",
-                  "member__user__name", "shooting_stats", "best_times")
-        [:100])
+                  "member__user__name", "shooting_stats", "best_times"))
 
     chart_best_players_data_experience = []
     for chart_player in current_players[:100]:
