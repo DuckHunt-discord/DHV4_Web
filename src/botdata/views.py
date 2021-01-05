@@ -136,11 +136,11 @@ guilds_paginator = CustomPaginator(guilds_list, 100)
 
 
 def guilds(request, language=None):
+    start = time.time()
     # I couldn't find a good way to do this using django ORM without it taking a ton of time.
     page_number = request.GET.get('page', 1)
     name_start_with = request.GET.get('sw', None)
-
-    has_others = False
+    params_end = time.time()
 
     if language:
         current_guilds_list = [(k, v) for k, v in guilds_list if v[0]["language"].startswith(language)]
@@ -151,14 +151,25 @@ def guilds(request, language=None):
         current_guilds_list = guilds_list
         current_guilds_paginator = guilds_paginator
 
+    if_block_end = time.time()
+
     if len(current_guilds_list) == 0:
         raise Http404("Nothing matching provided filters")
 
+    len_end = time.time()
+
     page_obj = current_guilds_paginator.get_page(page_number)
 
+    get_page_end = time.time()
+
+    times = {"params": params_end - start,
+             "if_block": if_block_end - params_end,
+             "len": len_end - if_block_end,
+             "get_page": get_page_end - len_end,
+             "total": get_page_end - start
+             }
     return render(request, "botdata/guilds.jinja2",
-                  {"guilds": page_obj, "language": language, "sw": name_start_with, "filters": sorted(list(filters)),
-                   "has_others": has_others})
+                  {"guilds": page_obj, "language": language, "sw": name_start_with, "filters": filters, "times": times})
 
 
 def guild(request, pk: int):
