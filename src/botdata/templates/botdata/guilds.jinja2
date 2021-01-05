@@ -34,25 +34,25 @@
                 <div class="card background-normal h-100 nice-card-borders">
                     <div class="card-body">
                         <a href="{{ url('guild', pk=guild) }}" class="text-decoration-none">
-                            <div class="h4 card-title flex-grow-1 text-white-75">{{ channels[0].guild_name }}</div>
+                            <div class="h4 card-title flex-grow-1 text-white-75">{{ channels[0]['guild_name'] }}</div>
                         </a>
                     </div>
                     <ul class="list-group list-group-flush">
                         {% for channel in channels %}
                             <li class="list-group-item background-normal border-bottom-0">
                                 <div class="row row-cols-2">
-                                    <a href="{{ url('channel', pk=channel.channel_id) }}" class="text-blurple col-8">
+                                    <a href="{{ url('channel', pk=channel['channel_id']) }}" class="text-blurple col-8">
                                         <div>
-                                            #{{ channel.channel_name }}
+                                            #{{ channel['channel_name'] }}
                                         </div>
                                     </a>
 
-                                    <a href="{{ url('channel', pk=channel.channel_id) }}" class="text-blurple col-3">
+                                    <a href="{{ url('channel', pk=channel['channel_id']) }}" class="text-blurple col-3">
                                         <div>
-                                            <span class="badge bg-dark text-white-75">{{ channel.players_count }} players</span>
+                                            <span class="badge bg-dark text-white-75">{{ channel['players_count'] }} players</span>
                                         </div>
                                     </a>
-                                    <a href="{{ url('channel_settings', pk=channel.channel_id) }}" class="text-decoration-none col-1" title="Settings">
+                                    <a href="{{ url('channel_settings', pk=channel['channel_id']) }}" class="text-decoration-none col-1" title="Settings">
                                         <div>
                                             ⚙️
                                         </div>

@@ -5,7 +5,7 @@ trophys = \
     {
         "v3_player": {
             "name": _("V3 Player"),
-            "description": _("That guy even played on the previous version. What a champ!")
+            "description": _("They even played on the previous version. What a champ!")
         }
     }
 
