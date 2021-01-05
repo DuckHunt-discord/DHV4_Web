@@ -50,14 +50,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'debug_toolbar',
-    'django.contrib.sites',
-    'django.contrib.sitemaps',
-    'public.apps.PublicConfig',
-    'docs.apps.DocsConfig',
-    'botdata.apps.BotdataConfig',
-    'django_jinja',
-    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -68,8 +60,20 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware'
 ]
+
+if DEBUG and False:
+    MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
+    INSTALLED_APPS.append('debug_toolbar')
+
+INSTALLED_APPS.extend(['django.contrib.sites',
+                       'django.contrib.sitemaps',
+                       'public.apps.PublicConfig',
+                       'docs.apps.DocsConfig',
+                       'botdata.apps.BotdataConfig',
+                       'django_jinja',
+                       'django_extensions',
+                       ])
 
 ROOT_URLCONF = 'DHV4_Web.urls'
 

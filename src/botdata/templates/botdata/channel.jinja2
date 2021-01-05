@@ -43,11 +43,12 @@
         </tr>
         </thead>
         <tbody>
+        {% set player_url = url('player_nopk', channel_pk=channel.pk) %}
         {% for player in players %}
             <tr>
                 <th scope="row">{{ loop.index }}</th>
                 <td>
-                    <a href="{{ url('player', channel_pk=channel.pk, user_pk=player.member.user.pk) }}">{{ player.member.user.name }}#{{ player.member.user.discriminator }}</a>
+                    <a href="{{ player_url }}{{player.member.user.pk}}">{{ player.member.user.name }}#{{ player.member.user.discriminator }}</a>
                 </td>
                 <td class="text-end">{{ intcomma(player.experience) }}</td>
                 {# <td class="text-end">{{ player.total_ducks_killed }}</td> #}

@@ -33,9 +33,10 @@
                             </tr>
                             </thead>
                             <tbody>
+                            {% set guild_url = url('guild_nopk') %}
                             {% for guild in shard["guilds"] %}
                                 <tr>
-                                    <td><a href="{{ url("guild", pk=guild['id']) }}">{{ guild['name'] }}</a></td>
+                                    <td><a href="{{ guild_url }}{{ guild['id'] }}">{{ guild['name'] }}</a></td>
                                     <td>{{ guild['members'] }}</td>
                                 </tr>
                             {% endfor %}
