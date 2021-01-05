@@ -33,6 +33,18 @@ def get_from_api(url, cache_for=60):
                     "shards_status": [],
                     "unsharded_guilds": []
                 }
+            elif "api/stats" in url:
+                return {
+                    "members_count": 0,
+                    "guilds_count": 0,
+                    "channels_count": 0,
+                    "players_count": 0,
+                    "alive_ducks_count": 0,
+                    "uptime": 0,
+                    "current_event_name": "DOWN",
+                    "current_event_value": ["Bot is down", "Bot under maintenance"],
+                    "global_ready": False,
+                }
         cache.set('duckhunt_api_' + url, r, cache_for)
     return r
 
