@@ -56,7 +56,7 @@
                     <a href="{{ player_url }}{{player.member.user.pk}}">{{ player.member.user.name }}#{{ player.member.user.discriminator }}</a>
                 </td>
                 <td class="text-end">{{ intcomma(player.experience) }}</td>
-                <td class="text-end">{{ player.total_ducks_killed }}</td>
+                {# <td class="text-end">{{ player.total_ducks_killed }}</td> #}
             </tr>
         {% endfor %}
         </tbody>
