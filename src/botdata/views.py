@@ -23,7 +23,6 @@ DAY = 24 * HOUR
 
 # Create your views here.
 
-
 class CustomPage(Page):
     def included_range(self, start, stop, step=1):
         return range(max(0, start), min(self.paginator.num_pages, stop), step)
@@ -102,55 +101,60 @@ def get_guilds_list(language=None):
         guild_vip_status DESC,
         guild_id ASC;
     """
-    desc = cache.get('guilds_list_custom_sql_desc')
-    all_data = cache.get('guilds_list_custom_sql_all_data')
+    start = time.time()
+    res = cache.get('guilds_list_custom_sql')
+    end = time.time()
+    print(end-start)
 
-    if not desc or not all_data:
-        with connection.cursor() as cursor:
-            cursor.execute(sql)
-            desc = cursor.description
-            all_data = cursor.fetchall()
-        cache.set('guilds_list_custom_sql_desc', desc, 12 * HOUR)
-        cache.set('guilds_list_custom_sql_all_data', all_data, 12 * HOUR)
+    if res:
+        return res
 
-    now = time.time()
-    Result = namedtuple('Result', [col[0] for col in desc])
+    with connection.cursor() as cursor:
+        cursor.execute(sql)
+        desc = [d[0] for d in cursor.description]
+        all_data = cursor.fetchall()
+
+    start = time.time()
 
     result = defaultdict(list)
     for channel_data in all_data:
-        channel_result = Result(*channel_data)
+        channel_result = {k: v for k, v in zip(desc, channel_data)}
 
-        if language and not channel_result.guild_language.startswith(language):
-            continue
+        result[channel_result["guild_id"]].append(channel_result)
 
-        result[channel_result.guild_id].append(channel_result)
     end = time.time()
 
-    print(end-now)
+    print(end-start)
 
-    return list(result.items())
+    res = list(result.items())
+    cache.set('guilds_list_custom_sql', res, 12 * HOUR)
+    return res
+
+
+guilds_list = get_guilds_list()
+guilds_paginator = CustomPaginator(guilds_list, 100)
 
 
 def guilds(request, language=None):
     # I couldn't find a good way to do this using django ORM without it taking a ton of time.
-    guilds_list_unfiltered = get_guilds_list(language=language)
-
     page_number = request.GET.get('page', 1)
     name_start_with = request.GET.get('sw', None)
 
     has_others = False
 
     if language:
+        current_guilds_list = [(k, v) for k, v in guilds_list if v[0]["language"].startswith(language)]
         filters = []
+        current_guilds_paginator = CustomPaginator(guilds_list, 100)
     else:
         filters = list(string.ascii_lowercase)
+        current_guilds_list = guilds_list
+        current_guilds_paginator = guilds_paginator
 
-    if len(guilds_list_unfiltered) == 0:
+    if len(current_guilds_list) == 0:
         raise Http404("Nothing matching provided filters")
 
-    guilds_paginator = CustomPaginator(guilds_list_unfiltered, 100)
-
-    page_obj = guilds_paginator.get_page(page_number)
+    page_obj = current_guilds_paginator.get_page(page_number)
 
     return render(request, "botdata/guilds.jinja2",
                   {"guilds": page_obj, "language": language, "sw": name_start_with, "filters": sorted(list(filters)),
