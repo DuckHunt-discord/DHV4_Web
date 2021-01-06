@@ -54,8 +54,7 @@
                                 <div class="d-flex flex-row justify-content-between">
                                     <div class="media-body text-left">
                                         <div id="odometer-{{ loop.index }}"
-                                             class="card-value text-
-                                                     {{ stat['color'] }}{% if stat.odometer %} odometer{% endif %}">
+                                             class="card-value text-{{ stat['color'] }}{% if stat.odometer %} odometer{% endif %}">
                                             {{ stat['value'] }}
                                             {% if not stat.odometer %}
                                                 <span class="odometer" style="visibility: hidden"></span> {% endif %}
