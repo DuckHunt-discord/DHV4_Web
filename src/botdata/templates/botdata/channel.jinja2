@@ -22,9 +22,10 @@
     </p>
 
     {# Graphs #}
-    <div class="h2">Best players</div>
-
-    <div id="chart-best-players"></div>
+    {% if chart_best_players_data_experience %}
+        <div class="h2">Best players</div>
+        <div id="chart-best-players"></div>
+    {% endif %}
 
     <div class="h2">Where do bullets go ?</div>
     <div id="chart-shots"></div>
@@ -53,7 +54,8 @@
             <tr>
                 <th scope="row">{{ loop.index }}</th>
                 <td>
-                    <a href="{{ player_url }}{{player.member.user.pk}}">{{ player.member.user.name }}#{{ player.member.user.discriminator }}</a>
+                    <a href="
+                            {{ player_url }}{{ player.member.user.pk }}">{{ player.member.user.name }}#{{ player.member.user.discriminator }}</a>
                 </td>
                 <td class="text-end">{{ intcomma(player.experience) }}</td>
                 <td class="text-end">{{ player.total_ducks_killed }}</td>
@@ -63,84 +65,86 @@
     </table>
 
     {% if paginator.num_pages != 1 %}
-    <div class="d-flex justify-content-center">
-        <nav aria-label="Page navigation" style="margin-top: 1em;">
-            <ul class="pagination pagination-sm flex-wrap">
-                {% for i in range(paginator.num_pages) %}
-                    {% if i + 1 == players.number %}
-                        <li class="page-item active" aria-current="page">
-                            <span class="page-link">{{ i + 1 }}</span>
-                        </li>
-                    {% else %}
-                        <li class="page-item"><a href="{{ request.path }}?page={{ i + 1 }}"
-                                                 class="page-link">{{ i + 1 }}</a></li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
-        </nav>
-    </div>
+        <div class="d-flex justify-content-center">
+            <nav aria-label="Page navigation" style="margin-top: 1em;">
+                <ul class="pagination pagination-sm flex-wrap">
+                    {% for i in range(paginator.num_pages) %}
+                        {% if i + 1 == players.number %}
+                            <li class="page-item active" aria-current="page">
+                                <span class="page-link">{{ i + 1 }}</span>
+                            </li>
+                        {% else %}
+                            <li class="page-item"><a href="{{ request.path }}?page={{ i + 1 }}"
+                                                     class="page-link">{{ i + 1 }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </nav>
+        </div>
     {% endif %}
 
     <script>
-        Highcharts.chart('chart-best-players', {
-            tooltip: {
-                pointFormat: 'Exp: {point.y}'
-            },
-            legend: {
-                enabled: true
-            },
-            chart: {
-                type: 'column'
-            },
-            title: {
-                text: ''
-            },
-            yAxis: {
-                type: 'logarithmic',
-                title: {
-                    text: 'Experience',
+        {% if chart_best_players_data_experience %}
+            Highcharts.chart('chart-best-players', {
+                tooltip: {
+                    pointFormat: 'Exp: {point.y}'
                 },
-            },
-            xAxis: {
-                labels: {
-                    enabled: true,
+                legend: {
+                    enabled: true
+                },
+                chart: {
+                    type: 'column'
                 },
                 title: {
-                    text: 'Rank',
+                    text: ''
                 },
-            },
-            {# This force the graph to only show one serie at a time #}
-            plotOptions: {
-                series: {
-                    events: {
-                        show: (function () {
-                            var chart = this.chart,
-                                series = chart.series,
-                                i = series.length,
-                                otherSeries;
-                            while (i--) {
-                                otherSeries = series[i];
-                                if (otherSeries != this && otherSeries.visible) {
-                                    otherSeries.hide();
+                yAxis: {
+                    type: 'logarithmic',
+                    title: {
+                        text: 'Experience',
+                    },
+                },
+                xAxis: {
+                    labels: {
+                        enabled: true,
+                    },
+                    title: {
+                        text: 'Rank',
+                    },
+                },
+                {# This force the graph to only show one serie at a time #}
+                plotOptions: {
+                    series: {
+                        events: {
+                            show: (function () {
+                                var chart = this.chart,
+                                    series = chart.series,
+                                    i = series.length,
+                                    otherSeries;
+                                while (i--) {
+                                    otherSeries = series[i];
+                                    if (otherSeries != this && otherSeries.visible) {
+                                        otherSeries.hide();
+                                    }
                                 }
-                            }
-                        })
+                            })
+                        }
                     }
-                }
-            },
-            series: [
-                {
-                    name: 'Experience',
-                    colorByPoint: false,
-                    data: {{ chart_best_players_data_experience|tojson }},
                 },
-                {#  {
-                    name: 'Ducks Killed',
-                    colorByPoint: false,
-                    visible: false,
-                    data: {{ chart_best_players_data_ducks|tojson }},
-                }  #}]
-        });
+                series: [
+                    {
+                        name: 'Experience',
+                        colorByPoint: false,
+                        data: {{ chart_best_players_data_experience|tojson }},
+                    },
+                    {#  {
+                        name: 'Ducks Killed',
+                        colorByPoint: false,
+                        visible: false,
+                        data: {{ chart_best_players_data_ducks|tojson }},
+                    }  #}]
+            });
+        {% endif %}
 
         Highcharts.chart('chart-shots', {
             chart: {

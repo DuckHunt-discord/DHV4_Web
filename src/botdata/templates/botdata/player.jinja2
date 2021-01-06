@@ -11,11 +11,11 @@
     <meta property="profile:first_name" content="{{ current_user.name }}"/>
     <meta property="profile:last_name" content="{{ current_user.discriminator }}"/>
     <meta property="og:description"
-          content="Player {{ current_user.name }}#{{ current_user.discriminator }} statistics on #{{ channel.name }}."/>
+          content="Discord player {{ current_user.name }}#{{ current_user.discriminator }} statistics on #{{ channel.name }}."/>
 {% endblock %}
 
 {% block title %}
-    DuckHunt V4 - {{ current_user.name }}#{{ current_user.discriminator }} : #{{ channel.name }}
+    DuckHunt Discord - {{ current_user.name }}#{{ current_user.discriminator }} : #{{ channel.name }}
 {% endblock %}
 
 {% block metadesc %}
@@ -29,9 +29,7 @@
 {% endblock %}
 
 {% block content %}
-    <h1>{{ current_user.name }}#{{ current_user.discriminator }} : <a
-            href="{{ url("channel", pk=channel.pk) }}">#{{ channel.name }}</a></h1>
-
+    <h1>DHV4 Discord Player {{ current_user.name }}#{{ current_user.discriminator }} in channel #{{ channel.name }}</h1>
     <div class="h2">📈 General statistics</div>
 
     <p>
@@ -512,4 +510,5 @@
 
     </script>
     <script>JsBarcode(".barcode").init();</script>
+    <h2>Back to <a href="{{ url("channel", pk=channel.pk) }}">the #{{ channel.name }} discord chanel</a></h2>
 {% endblock %}
