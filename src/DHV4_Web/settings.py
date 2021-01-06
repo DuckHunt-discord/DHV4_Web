@@ -271,7 +271,6 @@ PIPELINE = {
     'STYLESHEETS': {
         'base': {
             'source_filenames': (
-                'public/css/bootstrap.min.css',
                 'public/css/all.min.css',
                 'public/css/odometer.css',
                 'public/css/base.css',
