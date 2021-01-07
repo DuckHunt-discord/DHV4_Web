@@ -1,7 +1,7 @@
 from typing import Optional
 
 from django.core.cache import cache
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, HttpResponsePermanentRedirect
 from django.shortcuts import render
 from django.conf import settings
 from django.template import loader
@@ -204,3 +204,12 @@ def robots_txt(request):
 def handler404(request, exception=None):
     content = loader.render_to_string('public/404.jinja2', None, request)
     return HttpResponse(content, None, 404)
+
+
+def old_pages_and_weird_urls(request):
+    path = request.get_full_path()
+
+    if path.startswith('/fr/parametres'):
+        return HttpResponsePermanentRedirect(reverse("bot_commands", kwargs={"command": "settings"}))
+
+    return HttpResponsePermanentRedirect('/')

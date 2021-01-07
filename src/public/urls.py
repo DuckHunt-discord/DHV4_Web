@@ -10,5 +10,6 @@ urlpatterns = [
     re_path(r'commands/(?P<command>(?:[A-z0-9\-]*/?)*)', views.bot_commands, name="bot_commands"),
     path('status', views.status, name="bot_status"),
     path('status/<int:shard_id>', views.shard_status, name="bot_shard_status"),
-    path('404page', views.handler404)
+    path('404page', views.handler404),
+    re_path(r'fr/.*', views.old_pages_and_weird_urls),
 ]
