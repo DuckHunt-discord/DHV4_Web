@@ -1,17 +1,22 @@
 import datetime
 import json
+import re
 from typing import Union, List, Dict, Any
 
-import babel
 from babel.dates import format_timedelta
 from babel.lists import format_list
 from django.utils.safestring import mark_safe
-from django.utils.timesince import timeuntil
 from django_jinja import library
 from django.contrib.humanize.templatetags import humanize
-from django_jinja.utils import safe
-
 from botdata.models import DUCKS_COLORS
+
+_paragraph_re = re.compile(r"(?:\r\n|\r(?!\n)|\n){2,}")
+
+
+@library.filter
+def nl2br(value):
+    result = u'\n\n'.join(u'<p>%s</p>' % p.replace(u'\r\n', u'<br/>') for p in _paragraph_re.split(value))
+    return mark_safe(result)
 
 
 @library.global_function
@@ -91,4 +96,3 @@ def format_settings_value(value):
             return "✅"
         else:
             return "❌"
-

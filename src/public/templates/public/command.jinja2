@@ -36,7 +36,7 @@
                     {% endfor %}
                 </h6>
             {% endif %}
-            <p>{{ command['help'] }}</p>
+            <p>{{ command['help']|nl2br }}</p>
             Invoke with:
             <pre>{{ prefix }}{{ command['invoke_with'] }}</pre>
 
