@@ -23,7 +23,7 @@
                         {% if command['aliases'] %}
                             <h6 class="card-subtitle mb-2 text-muted">Aliases:
                                 {% for alias in command['aliases'] %}
-                                    <a href="{{ url("bot_commands", command=alias) }}" class="text-decoration-none">
+                                    <a href="{{ url("bot_commands", command=alias) }}" class="text-decoration-none pe-1">
                                         <span class="badge bg-secondary">{{ alias }}</span>
                                     </a>
                                 {% endfor %}
