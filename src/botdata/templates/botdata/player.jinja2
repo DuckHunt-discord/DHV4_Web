@@ -54,9 +54,7 @@
 
         <ul>
             {% for achievement in player.unlocked_achievements %}
-                {% if unlocked %}
-                    <li>{{ achievements[achievement]['name'] }}: {{ achievements[achievement]['description'] }}</li>
-                {% endif %}
+                <li>{{ achievements[achievement]['name'] }}: {{ achievements[achievement]['description'] }}</li>
             {% endfor %}
         </ul>
     {% endif %}
