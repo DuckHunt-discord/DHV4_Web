@@ -8,6 +8,10 @@
     DuckHunt V4 - Settings for #{{ channel.name }}
 {% endblock %}
 
+{% block head %}
+    {% javascript 'highcharts' %}
+{% endblock %}
+
 {% block content %}
     <h1>Settings for #{{ channel.name }}</h1>
 
