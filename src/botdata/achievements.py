@@ -20,7 +20,7 @@ trophys = \
             "description": _("That person helps moderating everything related to the bot.")
         },
         "maker": {
-            "name": _("Moderator"),
+            "name": _("Maker"),
             "description": _("That person made the bot.")
         },
         "beta": {
