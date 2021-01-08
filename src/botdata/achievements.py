@@ -23,6 +23,10 @@ trophys = \
             "name": _("Moderator"),
             "description": _("That person made the bot.")
         },
+        "beta": {
+            "name": _("Beta Tester"),
+            "description": _("That person helped me test V4 before the release.")
+        },
     }
 
 achievements = \
