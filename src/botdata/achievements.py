@@ -27,6 +27,10 @@ trophys = \
             "name": _("Beta Tester"),
             "description": _("That person helped me test V4 before the release.")
         },
+        "donator": {
+            "name": _("Donator"),
+            "description": _("That person donated towards the development of the bot 💸.")
+        },
     }
 
 achievements = \
