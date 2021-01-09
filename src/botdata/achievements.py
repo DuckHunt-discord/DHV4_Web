@@ -31,6 +31,10 @@ trophys = \
             "name": _("Donator"),
             "description": _("That person donated towards the development of the bot 💸.")
         },
+        "artist": {
+            "name": _("Artist"),
+            "description": _("That person made some art for the bot 🎨.")
+        },
     }
 
 achievements = \
