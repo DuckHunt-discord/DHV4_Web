@@ -270,6 +270,27 @@
     <div class="h2">🎯 Shooting stats</div>
     <div id="chart-shots"></div>
 
+    {% if player.shooting_stats.get('thrown_clovers', 0) > 0 or player.shooting_stats.get('cops_seen', 0) > 0 %}
+        <div class="h2">👮 Cops and fines</div>
+        {% if player.shooting_stats.get('thrown_clovers', 0) > 0 %}
+            <p>
+                {{ current_user.name }} threw {{ player.shooting_stats.get('thrown_clovers', 0) }} clovers on the
+                ground...
+                In front of a cop, getting fined a total of {{ 13 * player.shooting_stats.get('thrown_clovers', 0) }}
+                exp in
+                total for littering.
+            </p>
+        {% endif %}
+        {% if player.shooting_stats.get('cops_seen', 0) > 0 %}
+            <p>
+                When getting ready to throw a clover on the ground, {{ current_user.name }} saw a cop farther down the
+                street.
+                They chickened out and left without getting a fine {{ player.shooting_stats.get('cops_seen', 0) }}
+                times.
+            </p>
+        {% endif %}
+    {% endif %}
+
     <div class="h2">🛸 Misc</div>
     <p>
         {{ current_user.name }} used {{ player.shooting_stats.get('bullets_used', 0) }} bullets
