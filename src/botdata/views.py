@@ -10,7 +10,7 @@ from django.db import connection
 
 from django.core.paginator import Paginator, Page
 from django.db.models import Prefetch, Q, Count, Exists, OuterRef, Max
-from django.http import Http404
+from django.http import Http404, HttpResponseGone
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.cache import cache_page
 
@@ -320,7 +320,10 @@ def player(request, channel_pk: int, user_pk: int):
     # TODO: Replace that by an API call
     current_channel = get_object_or_404(DiscordChannel, pk=channel_pk)
     current_user = get_object_or_404(DiscordUser, pk=user_pk)
-    current_player = get_object_or_404(Player, member__user=current_user, channel=current_channel)
+    try:
+        current_player = Player.objects.get(member__user=current_user, channel=current_channel)
+    except Player.DoesNotExist:
+        return HttpResponseGone("410 Gone: The data was deleted, or you can't spell an URL")
 
     barcode = random.choice([
         "DonaldDuck",
