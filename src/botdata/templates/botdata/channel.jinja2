@@ -52,7 +52,7 @@
         {% set player_url = url('player_nopk', channel_pk=channel.pk) %}
         {% for player in players %}
             <tr>
-                <th scope="row">{{ loop.index }}</th>
+                <th scope="row">{{ players.start_index() + loop.index0 }}</th>
                 <td>
                     <a href="{{ player_url }}{{ player.member.user.pk }}">{{ player.member.user.name }}#{{ player.member.user.discriminator }}</a>
                 </td>
