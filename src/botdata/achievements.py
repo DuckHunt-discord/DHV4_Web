@@ -80,6 +80,10 @@ achievements = \
             "name": _("Sentry gun"),
             "description": _("Use more than 1000 bullets."),
         },
+        "homing_killed": {
+            "name": _("Homing kills (you)"),
+            "description": _("Use the homing projectiles."),
+        },
 
         # Stored
         "you_monster": {
