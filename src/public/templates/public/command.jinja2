@@ -27,7 +27,7 @@
                     <span itemprop="name" class="text-blurple">Commands</span></a>
                 <meta itemprop="position" content="1"/>
             </li>
-            {% set position = 1 %}
+            {% set position = namespace(value=1) %}
             {% if parent %}
                 {% for chld in parent_name.split('/') %}
                     {% set position = position + 1 %}
