@@ -40,7 +40,7 @@
     <title>{% block title %}DuckHunt Discord{% endblock %}</title>
     {% block head %}{% endblock %}
 </head>
-<body class="background-light">
+<body {% block body_headers %}class="background-light"{% endblock %}>
 <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
     <div class="container-fluid">
         <a href="/" class="navbar-brand">
