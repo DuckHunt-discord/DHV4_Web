@@ -27,6 +27,32 @@
                     {{ parsed_summary }}
                 </div>
                 <br/>
+                <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>'" class="small">
+                    <ol class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+                        <li class="breadcrumb-item{% if page == "README" %} active{% endif %}" itemprop="itemListElement" itemscope
+                            itemtype="https://schema.org/ListItem">
+                            <a itemtype="https://schema.org/WebPage"
+                               itemprop="item" href="{{ canonical_domain_uri }}{{ url("docs:index") }}">
+                                <span itemprop="name" class="text-muted">Documentation</span></a>
+                            <meta itemprop="position" content="1"/>
+                        </li>
+                        {% if category %}
+                            <li class="breadcrumb-item" itemprop="itemListElement" itemscope
+                                itemtype="https://schema.org/ListItem">
+                                <span itemprop="name" class="text-muted">{{ category.replace('-', ' ').title() }}</span>
+                                <meta itemprop="position" content="2"/>
+                            </li>
+                        {% endif %}
+                        {% if page != "README" %}
+                            <li class="breadcrumb-item active" itemprop="itemListElement" itemscope
+                                itemtype="https://schema.org/ListItem">
+                                <span itemprop="name" class="text-muted">{{ page.replace('-', ' ').title() }}</span>
+                                <meta itemprop="position" content="3"/>
+                            </li>
+                        {% endif %}
+                    </ol>
+                </nav>
+
                 <hr/>
 
                 <div class="text-center"><a href="{{ gh_file }}"><i class="fab fa-github"></i> Edit this page on github</a>
