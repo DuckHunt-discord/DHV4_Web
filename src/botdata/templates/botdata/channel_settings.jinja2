@@ -32,14 +32,15 @@
                     <span itemprop="name" class="text-blurple text-decoration-none">{{ channel.guild.name }}</span></a>
                 <meta itemprop="position" content="2"/>
             </li>
-            <li class="breadcrumb-item active" itemprop="itemListElement" itemscope
+            <li class="breadcrumb-item" itemprop="itemListElement" itemscope
                 itemtype="https://schema.org/ListItem">
                 <a itemtype="https://schema.org/WebPage" class="text-decoration-none"
                    itemprop="item" href="{{ canonical_domain_uri }}{{ url("channel", pk=channel.pk) }}">
                     <span itemprop="name" class="text-blurple text-decoration-none">#{{ channel.name }}</span></a>
                 <meta itemprop="position" content="3"/>
             </li>
-            <li class="breadcrumb-item">
+            <li class="breadcrumb-item active" itemprop="itemListElement" itemscope
+                itemtype="https://schema.org/ListItem">
                 <span itemprop="name" class="text-light text-decoration-none">Settings</span>
                 <meta itemprop="position" content="4"/>
             </li>
