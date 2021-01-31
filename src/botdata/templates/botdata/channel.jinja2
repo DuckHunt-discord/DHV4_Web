@@ -13,214 +13,177 @@
     <script src="{{ static('public/js/sorttable.js') }}"></script>
 {% endblock %}
 
-{% block content %}
-    <h1>{{ paginator.count }} players on #{{ channel.name }}</h1>
+{% block container %}
+    <div class="container text-light" itemscope itemtype="https://schema.org/Game">
 
-    <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>'" class="background-grey rounded">
-        <ol class="breadcrumb p-2" itemscope itemtype="https://schema.org/BreadcrumbList">
-            <li class="breadcrumb-item" itemprop="itemListElement" itemscope
-                itemtype="https://schema.org/ListItem">
-                <a itemtype="https://schema.org/WebPage" class="text-decoration-none"
-                   itemprop="item" href="{{ canonical_domain_uri }}{{ url("guilds") }}">
-                    <span itemprop="name" class="text-blurple">Guilds</span></a>
-                <meta itemprop="position" content="1"/>
-            </li>
-            <li class="breadcrumb-item" itemprop="itemListElement" itemscope
-                itemtype="https://schema.org/ListItem">
-                <a itemtype="https://schema.org/WebPage" class="text-decoration-none"
-                   itemprop="item" href="{{ canonical_domain_uri }}{{ url("guild", pk=channel.guild_id) }}">
-                    <span itemprop="name" class="text-blurple text-decoration-none">{{ channel.guild.name }}</span></a>
-                <meta itemprop="position" content="2"/>
-            </li>
-            <li class="breadcrumb-item active" itemprop="itemListElement" itemscope
-                itemtype="https://schema.org/ListItem">
-                <span itemprop="name" class="text-light">#{{ channel.name }}</span>
-                <meta itemprop="position" content="3"/>
-            </li>
-            <li class="breadcrumb-item">
-                <a class="text-decoration-none"
-                   href="{{ canonical_domain_uri }}{{ url("channel_settings", pk=channel.pk) }}">
-                    <span class="text-blurple text-decoration-none">Settings</span></a>
-            </li>
-        </ol>
-    </nav>
+        <h1><span itemprop="numberOfPlayers">{{ paginator.count }}</span> players on #{{ channel.name }}</h1>
 
-    {# Graphs #}
-    {% if chart_best_players_data_experience %}
-        <div class="h2">Best players</div>
-        <div id="chart-best-players"></div>
-    {% endif %}
+        <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>'" class="background-grey rounded">
+            <ol class="breadcrumb p-2" itemscope itemtype="https://schema.org/BreadcrumbList">
+                <li class="breadcrumb-item" itemprop="itemListElement" itemscope
+                    itemtype="https://schema.org/ListItem">
+                    <a itemtype="https://schema.org/WebPage" class="text-decoration-none"
+                       itemprop="item" href="{{ canonical_domain_uri }}{{ url("guilds") }}">
+                        <span itemprop="name" class="text-blurple">Guilds</span></a>
+                    <meta itemprop="position" content="1"/>
+                </li>
+                <li class="breadcrumb-item" itemprop="itemListElement" itemscope
+                    itemtype="https://schema.org/ListItem">
+                    <a itemtype="https://schema.org/WebPage" class="text-decoration-none"
+                       itemprop="item" href="{{ canonical_domain_uri }}{{ url("guild", pk=channel.guild_id) }}">
+                        <span itemprop="name" class="text-blurple text-decoration-none">{{ channel.guild.name }}</span></a>
+                    <meta itemprop="position" content="2"/>
+                </li>
+                <li class="breadcrumb-item active" itemprop="itemListElement" itemscope
+                    itemtype="https://schema.org/ListItem">
+                    <span itemprop="name" class="text-light">#{{ channel.name }}</span>
+                    <meta itemprop="position" content="3"/>
+                </li>
+                <li class="breadcrumb-item">
+                    <a class="text-decoration-none"
+                       href="{{ canonical_domain_uri }}{{ url("channel_settings", pk=channel.pk) }}">
+                        <span class="text-blurple text-decoration-none">Settings</span></a>
+                </li>
+            </ol>
+        </nav>
 
-    <div class="h2">Where do bullets go ?</div>
-    <div id="chart-shots"></div>
-
-    {% if global_best_times %}
-        <div class="h2">Fastest hunters in the west</div>
-        <div id="chart-best-times"></div>
-    {% endif %}
-
-    {# Top scores #}
-
-    <h2>Top scores</h2>
-
-    <table class="table table-dark table-hover sortable">
-        <thead>
-        <tr>
-            <th class="background-green" scope="col">#</th>
-            <th class="background-green" scope="col">Name</th>
-            <th class="text-end background-green" scope="col">Experience</th>
-            <th class="text-end background-green" scope="col">Ducks killed</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% set player_url = url('player_nopk', channel_pk=channel.pk) %}
-        {% for player in players %}
-            <tr>
-                <th scope="row">{{ players.start_index() + loop.index0 }}</th>
-                <td>
-                    <a href="
-
-
-                            {{ player_url }}{{ player.member.user.pk }}">{{ player.member.user.name }}#{{ player.member.user.discriminator }}</a>
-                </td>
-                <td class="text-end">{{ intcomma(player.experience) }}</td>
-                <td class="text-end">{{ player.total_ducks_killed }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    {% if paginator.num_pages != 1 %}
-        <div class="d-flex justify-content-center">
-            <nav aria-label="Page navigation" style="margin-top: 1em;">
-                <ul class="pagination pagination-sm flex-wrap">
-                    {% for i in range(paginator.num_pages) %}
-                        {% if i + 1 == players.number %}
-                            <li class="page-item active" aria-current="page">
-                                <span class="page-link">{{ i + 1 }}</span>
-                            </li>
-                        {% else %}
-                            <li class="page-item"><a href="{{ request.path }}?page={{ i + 1 }}"
-                                                     class="page-link">{{ i + 1 }}</a></li>
-                        {% endif %}
-                    {% endfor %}
-                </ul>
-            </nav>
-        </div>
-    {% endif %}
-
-    <script>
+        {# Graphs #}
         {% if chart_best_players_data_experience %}
-            Highcharts.chart('chart-best-players', {
-                tooltip: {
-                    pointFormat: 'Exp: {point.y}'
-                },
-                legend: {
-                    enabled: true
-                },
-                chart: {
-                    type: 'column'
-                },
-                title: {
-                    text: ''
-                },
-                yAxis: {
-                    type: 'logarithmic',
-                    title: {
-                        text: 'Experience',
-                    },
-                },
-                xAxis: {
-                    labels: {
-                        enabled: true,
-                    },
-                    title: {
-                        text: 'Rank',
-                    },
-                },
-                {# This force the graph to only show one serie at a time #}
-                plotOptions: {
-                    series: {
-                        events: {
-                            show: (function () {
-                                var chart = this.chart,
-                                    series = chart.series,
-                                    i = series.length,
-                                    otherSeries;
-                                while (i--) {
-                                    otherSeries = series[i];
-                                    if (otherSeries != this && otherSeries.visible) {
-                                        otherSeries.hide();
-                                    }
-                                }
-                            })
-                        }
-                    }
-                },
-                series: [
-                    {
-                        name: 'Experience',
-                        colorByPoint: false,
-                        data: {{ chart_best_players_data_experience|tojson }},
-                    },
-                    {#  {
-                        name: 'Ducks Killed',
-                        colorByPoint: false,
-                        visible: false,
-                        data: {{ chart_best_players_data_ducks|tojson }},
-                    }  #}]
-            });
+            <div class="h2">Best players</div>
+            <div id="chart-best-players"></div>
         {% endif %}
 
-        Highcharts.chart('chart-shots', {
-            chart: {
-                type: 'bar'
-            },
-            title: {
-                text: 'Shots...'
-            },
-            yAxis: {
-                title: {
-                    text: 'Count',
-                    align: 'high'
-                },
-            },
-            xAxis: {
-                labels: {
-                    enabled: false,
-                }
-            },
-            plotOptions: {
-                bar: {
-                    dataLabels: {
-                        enabled: true
-                    }
-                }
-            },
-            legend: {
-                enabled: false
-            },
-            series: [{
-                name: 'Shoots',
-                colorByPoint: true,
-                data: {{ shots_chart_data|tojson }},
-                dataLabels: {
-                    enabled: true,
-                    format: '{point.name}: {point.y} shots'
-                },
-            }]
-        });
+        <div class="h2">Where do bullets go ?</div>
+        <div id="chart-shots"></div>
+
         {% if global_best_times %}
-            Highcharts.chart('chart-best-times', {
+            <div class="h2">Fastest hunters in the west</div>
+            <div id="chart-best-times"></div>
+        {% endif %}
+
+        {# Top scores #}
+
+        <h2>Top scores</h2>
+
+        <table class="table table-dark table-hover sortable">
+            <thead>
+            <tr>
+                <th class="background-green" scope="col">#</th>
+                <th class="background-green" scope="col">Name</th>
+                <th class="text-end background-green" scope="col">Experience</th>
+                <th class="text-end background-green" scope="col">Ducks killed</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% set player_url = url('player_nopk', channel_pk=channel.pk) %}
+            {% for player in players %}
+                <tr itemprop="character" itemscope itemtype="https://schema.org/Person">
+                    <th scope="row">{{ players.start_index() + loop.index0 }}</th>
+                    <td>
+                        <a itemprop="url" itemtype="https://schema.org/WebPage"
+                           href="{{ player_url }}{{ player.member.user.pk }}">
+                            <span itemprop="givenName">{{ player.member.user.name }}</span>#{{ player.member.user.discriminator }}
+                        </a>
+                    </td>
+                    <td class="text-end">{{ intcomma(player.experience) }}</td>
+                    <td class="text-end">{{ player.total_ducks_killed }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        {% if paginator.num_pages != 1 %}
+            <div class="d-flex justify-content-center">
+                <nav aria-label="Page navigation" style="margin-top: 1em;">
+                    <ul class="pagination pagination-sm flex-wrap">
+                        {% for i in range(paginator.num_pages) %}
+                            {% if i + 1 == players.number %}
+                                <li class="page-item active" aria-current="page">
+                                    <span class="page-link">{{ i + 1 }}</span>
+                                </li>
+                            {% else %}
+                                <li class="page-item"><a href="{{ request.path }}?page={{ i + 1 }}"
+                                                         class="page-link">{{ i + 1 }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </nav>
+            </div>
+        {% endif %}
+
+        <script>
+            {% if chart_best_players_data_experience %}
+                Highcharts.chart('chart-best-players', {
+                    tooltip: {
+                        pointFormat: 'Exp: {point.y}'
+                    },
+                    legend: {
+                        enabled: true
+                    },
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: ''
+                    },
+                    yAxis: {
+                        type: 'logarithmic',
+                        title: {
+                            text: 'Experience',
+                        },
+                    },
+                    xAxis: {
+                        labels: {
+                            enabled: true,
+                        },
+                        title: {
+                            text: 'Rank',
+                        },
+                    },
+                    {# This force the graph to only show one serie at a time #}
+                    plotOptions: {
+                        series: {
+                            events: {
+                                show: (function () {
+                                    var chart = this.chart,
+                                        series = chart.series,
+                                        i = series.length,
+                                        otherSeries;
+                                    while (i--) {
+                                        otherSeries = series[i];
+                                        if (otherSeries != this && otherSeries.visible) {
+                                            otherSeries.hide();
+                                        }
+                                    }
+                                })
+                            }
+                        }
+                    },
+                    series: [
+                        {
+                            name: 'Experience',
+                            colorByPoint: false,
+                            data: {{ chart_best_players_data_experience|tojson }},
+                        },
+                        {#  {
+                            name: 'Ducks Killed',
+                            colorByPoint: false,
+                            visible: false,
+                            data: {{ chart_best_players_data_ducks|tojson }},
+                        }  #}]
+                });
+            {% endif %}
+
+            Highcharts.chart('chart-shots', {
                 chart: {
-                    type: 'column'
+                    type: 'bar'
                 },
                 title: {
-                    text: ''
+                    text: 'Shots...'
                 },
                 yAxis: {
                     title: {
-                        text: 'Time to kill (seconds)',
+                        text: 'Count',
                         align: 'high'
                     },
                 },
@@ -228,9 +191,6 @@
                     labels: {
                         enabled: false,
                     }
-                },
-                tooltip: {
-                    valueSuffix: ' seconds'
                 },
                 plotOptions: {
                     bar: {
@@ -243,19 +203,64 @@
                     enabled: false
                 },
                 series: [{
-                    name: 'Best Times',
+                    name: 'Shoots',
                     colorByPoint: true,
-                    data: {{ chart_best_time|tojson }},
+                    data: {{ shots_chart_data|tojson }},
                     dataLabels: {
                         enabled: true,
-                        format: '{point.name}<br/>{point.y:.1f}s'
+                        format: '{point.name}: {point.y} shots'
                     },
-                    colors: {{ chart_best_colors|tojson }}
                 }]
             });
-        {% endif %}
+            {% if global_best_times %}
+                Highcharts.chart('chart-best-times', {
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: ''
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Time to kill (seconds)',
+                            align: 'high'
+                        },
+                    },
+                    xAxis: {
+                        labels: {
+                            enabled: false,
+                        }
+                    },
+                    tooltip: {
+                        valueSuffix: ' seconds'
+                    },
+                    plotOptions: {
+                        bar: {
+                            dataLabels: {
+                                enabled: true
+                            }
+                        }
+                    },
+                    legend: {
+                        enabled: false
+                    },
+                    series: [{
+                        name: 'Best Times',
+                        colorByPoint: true,
+                        data: {{ chart_best_time|tojson }},
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.name}<br/>{point.y:.1f}s'
+                        },
+                        colors: {{ chart_best_colors|tojson }}
+                    }]
+                });
+            {% endif %}
 
-    </script>
+        </script>
+
+    Back to <a href="{{ url("guild", pk=channel.guild_id) }}" itemprop="gameLocation">{{ channel.guild.name }}</a>
+    </div>
 
 
 {% endblock %}
