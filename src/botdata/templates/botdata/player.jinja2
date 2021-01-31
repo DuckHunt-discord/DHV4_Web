@@ -28,464 +28,518 @@
     <script src="{{ static('public/js/JsBarcode.all.min.js') }}"></script>
 {% endblock %}
 
-{% block content %}
-    <h1>DHV4 Discord Player {{ current_user.name }}#{{ current_user.discriminator }} in channel #{{ channel.name }}</h1>
+{% block container %}
+    <div class="container text-light" itemscope itemtype="https://schema.org/Person">
 
-    <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>'" class="background-grey rounded">
-        <ol class="breadcrumb p-2" itemscope itemtype="https://schema.org/BreadcrumbList">
-            <li class="breadcrumb-item" itemprop="itemListElement" itemscope
-                itemtype="https://schema.org/ListItem">
-                <a itemtype="https://schema.org/WebPage" class="text-decoration-none"
-                   itemprop="item" href="{{ canonical_domain_uri }}{{ url("guilds") }}">
-                    <span itemprop="name" class="text-blurple">Guilds</span></a>
-                <meta itemprop="position" content="1"/>
-            </li>
-            <li class="breadcrumb-item" itemprop="itemListElement" itemscope
-                itemtype="https://schema.org/ListItem">
-                <a itemtype="https://schema.org/WebPage" class="text-decoration-none"
-                   itemprop="item" href="{{ canonical_domain_uri }}{{ url("guild", pk=channel.guild_id) }}">
-                    <span itemprop="name" class="text-blurple text-decoration-none">{{ channel.guild.name }}</span></a>
-                <meta itemprop="position" content="2"/>
-            </li>
-            <li class="breadcrumb-item" itemprop="itemListElement" itemscope
-                itemtype="https://schema.org/ListItem">
-                <a itemtype="https://schema.org/WebPage" class="text-decoration-none"
-                   itemprop="item" href="{{ canonical_domain_uri }}{{ url("channel", pk=channel.pk) }}">
-                    <span itemprop="name" class="text-blurple text-decoration-none">#{{ channel.name }}</span></a>
-                <meta itemprop="position" content="3"/>
-            </li>
-            <li class="breadcrumb-item active" itemprop="itemListElement" itemscope
-                itemtype="https://schema.org/ListItem">
-                <span itemprop="name" class="text-light text-decoration-none">{{ current_user.name }}#{{ current_user.discriminator }}</span>
-                <meta itemprop="position" content="4"/>
-            </li>
-        </ol>
-    </nav>
+        <h1>{{ current_user.name }}#{{ current_user.discriminator }} on Duck Hunt</h1>
 
-    <div class="h2">📈 General statistics</div>
+        <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>'" class="background-grey rounded">
+            <ol class="breadcrumb p-2" itemscope itemtype="https://schema.org/BreadcrumbList">
+                <li class="breadcrumb-item" itemprop="itemListElement" itemscope
+                    itemtype="https://schema.org/ListItem">
+                    <a itemtype="https://schema.org/WebPage" class="text-decoration-none"
+                       itemprop="item" href="{{ canonical_domain_uri }}{{ url("guilds") }}">
+                        <span itemprop="name" class="text-blurple">Guilds</span></a>
+                    <meta itemprop="position" content="1"/>
+                </li>
+                <li class="breadcrumb-item" itemprop="itemListElement" itemscope
+                    itemtype="https://schema.org/ListItem">
+                    <a itemtype="https://schema.org/WebPage" class="text-decoration-none"
+                       itemprop="item" href="{{ canonical_domain_uri }}{{ url("guild", pk=channel.guild_id) }}">
+                        <span itemprop="name" class="text-blurple text-decoration-none">{{ channel.guild.name }}</span></a>
+                    <meta itemprop="position" content="2"/>
+                </li>
+                <li class="breadcrumb-item" itemprop="itemListElement" itemscope
+                    itemtype="https://schema.org/ListItem">
+                    <a itemtype="https://schema.org/WebPage" class="text-decoration-none"
+                       itemprop="item" href="{{ canonical_domain_uri }}{{ url("channel", pk=channel.pk) }}">
+                        <span itemprop="name" class="text-blurple text-decoration-none">#{{ channel.name }}</span></a>
+                    <meta itemprop="position" content="3"/>
+                </li>
+                <li class="breadcrumb-item active" itemprop="itemListElement" itemscope
+                    itemtype="https://schema.org/ListItem">
+                    <span itemprop="name"
+                          class="text-light text-decoration-none">{{ current_user.name }}#{{ current_user.discriminator }}</span>
+                    <meta itemprop="position" content="4"/>
+                </li>
+            </ol>
+        </nav>
 
-    <p>
-        <span class="statistic">{{ player.givebacks }}</span> days played,
-        <span class="statistic">{{ intcomma(player.experience) }}</span> experience points.
-        {{ intcomma(player.total_ducks_killed) }} ducks killed.
-    </p>
+        <div class="h2">📈 General statistics</div>
 
-    {% if current_user.trophys|length %}
-        <div class="h2">🏆️ Trophies</div>
-        <ul>
-            {% for trophy, unlocked in current_user.trophys.items() %}
-                {% if unlocked %}
-                    <li>{{ trophys[trophy]['name'] }}: {{ trophys[trophy]['description'] }}</li>
-                {% endif %}
-            {% endfor %}
-        </ul>
-    {% endif %}
+        <p itemprop="description">
+            <span class="statistic">{{ player.givebacks }}</span> days played,
+            <span class="statistic">{{ intcomma(player.experience) }}</span> experience points.
+            {{ intcomma(player.total_ducks_killed) }} ducks killed.
+        </p>
 
-    {% if player.unlocked_achievements|length %}
-        <div class="h2">✨ Achievements</div>
-
-        <ul>
-            {% for achievement in player.unlocked_achievements %}
-                <li>{{ achievements[achievement]['name'] }}: {{ achievements[achievement]['description'] }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-
-    {% if player.prestige >= 1 %}
-        <div class="h2">💠 Prestige</div>
-        You've got to prestige level {{ player.prestige }}, and claimed {{ player.prestige_dailies }} prestige dailies
-    {% endif %}
-
-
-    {% if player.killed|length %}
-        <h2>🦆 Ducks killed</h2>
-        <div id="chart-ducks-killed"></div>
-    {% endif %}
-
-    {% if player.best_times|length %}
-        <div class="h2">🔫 Shooting range</div>
-        <div id="chart-best-times"></div>
-    {% endif %}
-
-    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 justify-content-around">
-
-        {% if player.hugged|length %}
-            <div class="col">
-                <div class="h2">🤗 Ducks hugged</div>
-                <div id="chart-ducks-hugged"></div>
-            </div>
+        {% if current_user.trophys|length %}
+            <div class="h2">🏆️ Trophies</div>
+            <ul>
+                {% for trophy, unlocked in current_user.trophys.items() %}
+                    {% if unlocked %}
+                        <li itemprop="award">{{ trophys[trophy]['name'] }}: {{ trophys[trophy]['description'] }}</li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
         {% endif %}
 
-        {% if player.hurted|length %}
-            <div class="col">
-                <div class="h2">🚑️ Ducks hurt</div>
-                <div id="chart-ducks-hurt"></div>
-            </div>
+        {% if player.unlocked_achievements|length %}
+            <div class="h2">✨ Achievements</div>
+
+            <ul>
+                {% for achievement in player.unlocked_achievements %}
+                    <li itemprop="award">{{ achievements[achievement]['name'] }}: {{ achievements[achievement]['description'] }}</li>
+                {% endfor %}
+            </ul>
         {% endif %}
 
-        {% if player.frightened|length %}
-            <div class="col">
-                <h2>😱 Ducks frightened</h2>
-                <div id="chart-ducks-frightened"></div>
-            </div>
+        {% if player.prestige >= 1 %}
+            <div class="h2">💠 Prestige</div>
+            You've got to prestige level {{ player.prestige }}, and claimed {{ player.prestige_dailies }} prestige
+            dailies
         {% endif %}
-    </div>
 
-    {% set powerups = player.get_only_active_powerups() %}
-    {% if powerups|length or player.bought_items|length or player.found_items|length %}
-        <div class="h2">🎒 Backpack</div>
+
+        {% if player.killed|length %}
+            <h2>🦆 Ducks killed</h2>
+            <div id="chart-ducks-killed"></div>
+        {% endif %}
+
+        {% if player.best_times|length %}
+            <div class="h2">🔫 Shooting range</div>
+            <div id="chart-best-times"></div>
+        {% endif %}
 
         <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 justify-content-around">
-            {% if powerups|length %}
-                <div class="card text-dark col">
-                    <div class="card-body">
-                        <table class="table">
-                            <thead>
-                            <tr style="border-bottom: hidden;">
-                                <th colspan="2"><h2 class="text-center">Duck Hunt Shop</h2><br/><br/></th>
-                            </tr>
-                            <tr>
-                                <th>
-                                    <span class="text-muted fw-lighter">Invoice No.</span><br/>
-                                    <span class="fw-lighter fs-6">{{ current_user.pk }}</span><br/><br/>
-                                </th>
-                                <th class="text-end">
-                                    <span class="text-muted fw-lighter">Payment Date.</span><br/>
-                                    <span class="fw-lighter fs-6">{{ player.last_giveback|date }}</span><br/><br/>
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% if powerups.get('ap_ammo', False) %}
-                                <tr>
-                                    <td>Armor Piercing ammo</td>
-                                    <td class="text-end">{{ show_timestamp(powerups['ap_ammo']) }} left</td>
-                                </tr>
-                            {% endif %}
-                            {% if powerups.get('explosive_ammo', False) %}
-                                <tr>
-                                    <td>Explosive ammo</td>
-                                    <td class="text-end">{{ show_timestamp(powerups['explosive_ammo']) }} left</td>
-                                </tr>
-                            {% endif %}
-                            {% if powerups.get('grease', False) %}
-                                <tr>
-                                    <td>Gun grease</td>
-                                    <td class="text-end">{{ show_timestamp(powerups['grease']) }} left</td>
-                                </tr>
-                            {% endif %}
-                            {% if powerups.get('sight', False) %}
-                                <tr>
-                                    <td>Sight</td>
-                                    <td class="text-end">{{ powerups['sight'] }} shots</td>
-                                </tr>
-                            {% endif %}
-                            {% if powerups.get('detector', False) %}
-                                <tr>
-                                    <td>Infrared detector</td>
-                                    <td class="text-end">{{ powerups['detector'] }} misses</td>
-                                </tr>
-                            {% endif %}
-                            {% if powerups.get('silencer', False) %}
-                                <tr>
-                                    <td>Silencer</td>
-                                    <td class="text-end">{{ show_timestamp(powerups['silencer']) }} left</td>
-                                </tr>
-                            {% endif %}
-                            {% if powerups.get('clover', False) %}
-                                <tr>
-                                    <td>Clover: {{ player.active_powerups['clover_exp'] }} exp</td>
-                                    <td class="text-end">{{ show_timestamp(powerups['clover']) }} left</td>
-                                </tr>
-                            {% endif %}
-                            {% if powerups.get('sunglasses', False) %}
-                                <tr>
-                                    <td>Sunglasses</td>
-                                    <td class="text-end">{{ show_timestamp(powerups['sunglasses']) }} left</td>
-                                </tr>
-                            {% endif %}
-                            {% if powerups.get('coat', False) %}
-                                <tr>
-                                    <td>Rain coat</td>
-                                    <td class="text-end">{{ show_timestamp(powerups['coat']) }} left</td>
-                                </tr>
-                            {% endif %}
-                            {% if powerups.get('licence', False) %}
-                                <tr>
-                                    <td>Licence to kill</td>
-                                    <td class="text-end">{{ show_timestamp(powerups['licence']) }} left</td>
-                                </tr>
-                            {% endif %}
-                            {% if powerups.get('reloader', False) %}
-                                <tr>
-                                    <td>Automatic reloader</td>
-                                    <td class="text-end">{{ show_timestamp(powerups['reloader']) }} left</td>
-                                </tr>
-                            {% endif %}
-                            {% if powerups.get('homing_bullets', False) %}
-                                <tr>
-                                    <td>Homing bullets</td>
-                                    <td class="text-end">{{ powerups['homing_bullets'] }} ✨</td>
-                                </tr>
-                            {% endif %}
-                            </tbody>
-                            <tfoot>
-                            <tr style="border-bottom: hidden;">
-                                <td class="text-end">Total:</td>
-                                <td class="text-end fw-bolder">{{ powerups|length }} items</td>
-                            </tr>
-                            <tr style="border-bottom: hidden;">
-                                <td class="text-center" colspan="2">
-                                    <br/><br/>
-                                    Thanks for buying in the shop.<br/>
-                                    We hope to see you soon.<br/>
-                                    Thanks for spending {{ intcomma(player.spent_experience) }} exp in
-                                    there<br/><br/><br/>
 
-                                    <svg class="barcode"
-                                         jsbarcode-format="auto"
-                                         jsbarcode-value="{{ barcode }}"
-                                         jsbarcode-textmargin="0"
-                                         jsbarcode-fontoptions="bold"
-                                         jsbarcode-displayValue="false">
-                                    </svg>
-
-                                </td>
-                            </tr>
-                            </tfoot>
-                        </table>
-                    </div>
+            {% if player.hugged|length %}
+                <div class="col">
+                    <div class="h2">🤗 Ducks hugged</div>
+                    <div id="chart-ducks-hugged"></div>
                 </div>
             {% endif %}
-            <div class="col align-self-center">
-                {% if player.bought_items|length %}
-                    <div class="h5">Purchased and used...</div>
-                    <ul>
-                        {% for item, qty in player.bought_items.items() %}
-                            <li>{{ qty }} {{ item.replace('_', ' ').capitalize() }}</li>
-                        {% endfor %}
-                    </ul>
-                    <br/>
-                {% endif %}
-                {% if player.found_items|length %}
-                    {% if player.get_found_trash()|length %}
-                        <div class="h5">Trash found in bushes</div>
-                        <ul>
-                            {% for item, qty in player.get_found_trash().items() %}
-                                <li>{{ qty }} {{ item.replace('took_trash', '').replace('_', ' ').capitalize() }}</li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                    {% if player.get_found_useful(left=False)|length %}
-                        <div class="h5">Items took from bushes</div>
-                        <ul>
-                            {% for item, qty in player.get_found_useful(left=False).items() %}
-                                <li>{{ qty }} {{ item.replace('took_', '').replace('_', ' ').capitalize() }}</li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                    {% if player.get_found_useful(left=True)|length %}
-                        <div class="h5">Items left in bushes</div>
-                        <ul>
-                            {% for item, qty in player.get_found_useful(left=True).items() %}
-                                <li>{{ qty }} {{ item.replace('left_', '').replace('_', ' ').capitalize() }}</li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                {% endif %}
-            </div>
+
+            {% if player.hurted|length %}
+                <div class="col">
+                    <div class="h2">🚑️ Ducks hurt</div>
+                    <div id="chart-ducks-hurt"></div>
+                </div>
+            {% endif %}
+
+            {% if player.frightened|length %}
+                <div class="col">
+                    <h2>😱 Ducks frightened</h2>
+                    <div id="chart-ducks-frightened"></div>
+                </div>
+            {% endif %}
         </div>
 
-    {% endif %}
+        {% set powerups = player.get_only_active_powerups() %}
+        {% if powerups|length or player.bought_items|length or player.found_items|length %}
+            <div class="h2">🎒 Backpack</div>
+
+            <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 justify-content-around">
+                {% if powerups|length %}
+                    <div class="card text-dark col">
+                        <div class="card-body">
+                            <table class="table">
+                                <thead>
+                                <tr style="border-bottom: hidden;">
+                                    <th colspan="2"><h2 class="text-center">Duck Hunt Shop</h2><br/><br/></th>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <span class="text-muted fw-lighter">Invoice No.</span><br/>
+                                        <span class="fw-lighter fs-6" itemprop="identifier">{{ current_user.pk }}</span><br/><br/>
+                                    </th>
+                                    <th class="text-end">
+                                        <span class="text-muted fw-lighter">Payment Date.</span><br/>
+                                        <span class="fw-lighter fs-6">{{ player.last_giveback|date }}</span><br/><br/>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% if powerups.get('ap_ammo', False) %}
+                                    <tr>
+                                        <td>Armor Piercing ammo</td>
+                                        <td class="text-end">{{ show_timestamp(powerups['ap_ammo']) }} left</td>
+                                    </tr>
+                                {% endif %}
+                                {% if powerups.get('explosive_ammo', False) %}
+                                    <tr>
+                                        <td>Explosive ammo</td>
+                                        <td class="text-end">{{ show_timestamp(powerups['explosive_ammo']) }} left</td>
+                                    </tr>
+                                {% endif %}
+                                {% if powerups.get('grease', False) %}
+                                    <tr>
+                                        <td>Gun grease</td>
+                                        <td class="text-end">{{ show_timestamp(powerups['grease']) }} left</td>
+                                    </tr>
+                                {% endif %}
+                                {% if powerups.get('sight', False) %}
+                                    <tr>
+                                        <td>Sight</td>
+                                        <td class="text-end">{{ powerups['sight'] }} shots</td>
+                                    </tr>
+                                {% endif %}
+                                {% if powerups.get('detector', False) %}
+                                    <tr>
+                                        <td>Infrared detector</td>
+                                        <td class="text-end">{{ powerups['detector'] }} misses</td>
+                                    </tr>
+                                {% endif %}
+                                {% if powerups.get('silencer', False) %}
+                                    <tr>
+                                        <td>Silencer</td>
+                                        <td class="text-end">{{ show_timestamp(powerups['silencer']) }} left</td>
+                                    </tr>
+                                {% endif %}
+                                {% if powerups.get('clover', False) %}
+                                    <tr>
+                                        <td>Clover: {{ player.active_powerups['clover_exp'] }} exp</td>
+                                        <td class="text-end">{{ show_timestamp(powerups['clover']) }} left</td>
+                                    </tr>
+                                {% endif %}
+                                {% if powerups.get('sunglasses', False) %}
+                                    <tr>
+                                        <td>Sunglasses</td>
+                                        <td class="text-end">{{ show_timestamp(powerups['sunglasses']) }} left</td>
+                                    </tr>
+                                {% endif %}
+                                {% if powerups.get('coat', False) %}
+                                    <tr>
+                                        <td>Rain coat</td>
+                                        <td class="text-end">{{ show_timestamp(powerups['coat']) }} left</td>
+                                    </tr>
+                                {% endif %}
+                                {% if powerups.get('licence', False) %}
+                                    <tr>
+                                        <td>Licence to kill</td>
+                                        <td class="text-end">{{ show_timestamp(powerups['licence']) }} left</td>
+                                    </tr>
+                                {% endif %}
+                                {% if powerups.get('reloader', False) %}
+                                    <tr>
+                                        <td>Automatic reloader</td>
+                                        <td class="text-end">{{ show_timestamp(powerups['reloader']) }} left</td>
+                                    </tr>
+                                {% endif %}
+                                {% if powerups.get('homing_bullets', False) %}
+                                    <tr>
+                                        <td>Homing bullets</td>
+                                        <td class="text-end">{{ powerups['homing_bullets'] }} ✨</td>
+                                    </tr>
+                                {% endif %}
+                                </tbody>
+                                <tfoot>
+                                <tr style="border-bottom: hidden;">
+                                    <td class="text-end">Total:</td>
+                                    <td class="text-end fw-bolder">{{ powerups|length }} items</td>
+                                </tr>
+                                <tr style="border-bottom: hidden;">
+                                    <td class="text-center" colspan="2">
+                                        <br/><br/>
+                                        Thanks for buying in the shop.<br/>
+                                        We hope to see you soon.<br/>
+                                        Thanks for spending {{ intcomma(player.spent_experience) }} exp in
+                                        there<br/><br/><br/>
+
+                                        <svg class="barcode"
+                                             jsbarcode-format="auto"
+                                             jsbarcode-value="{{ barcode }}"
+                                             jsbarcode-textmargin="0"
+                                             jsbarcode-fontoptions="bold"
+                                             jsbarcode-displayValue="false">
+                                        </svg>
+
+                                    </td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="col align-self-center">
+                    {% if player.bought_items|length %}
+                        <div class="h5">Purchased and used...</div>
+                        <ul>
+                            {% for item, qty in player.bought_items.items() %}
+                                <li>{{ qty }} {{ item.replace('_', ' ').capitalize() }}</li>
+                            {% endfor %}
+                        </ul>
+                        <br/>
+                    {% endif %}
+                    {% if player.found_items|length %}
+                        {% if player.get_found_trash()|length %}
+                            <div class="h5">Trash found in bushes</div>
+                            <ul>
+                                {% for item, qty in player.get_found_trash().items() %}
+                                    <li>{{ qty }} {{ item.replace('took_trash', '').replace('_', ' ').capitalize() }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        {% if player.get_found_useful(left=False)|length %}
+                            <div class="h5">Items took from bushes</div>
+                            <ul>
+                                {% for item, qty in player.get_found_useful(left=False).items() %}
+                                    <li>{{ qty }} {{ item.replace('took_', '').replace('_', ' ').capitalize() }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        {% if player.get_found_useful(left=True)|length %}
+                            <div class="h5">Items left in bushes</div>
+                            <ul>
+                                {% for item, qty in player.get_found_useful(left=True).items() %}
+                                    <li>{{ qty }} {{ item.replace('left_', '').replace('_', ' ').capitalize() }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+
+        {% endif %}
 
 
-    <div class="h2">🎯 Shooting stats</div>
-    <div id="chart-shots"></div>
+        <div class="h2">🎯 Shooting stats</div>
+        <div id="chart-shots"></div>
 
-    {% if player.shooting_stats.get('thrown_clovers', 0) > 0 or player.shooting_stats.get('cops_seen', 0) > 0 %}
-        <div class="h2">👮 Cops and fines</div>
-        {% if player.shooting_stats.get('thrown_clovers', 0) > 0 %}
+        {% if player.shooting_stats.get('thrown_clovers', 0) > 0 or player.shooting_stats.get('cops_seen', 0) > 0 %}
+            <div class="h2">👮 Cops and fines</div>
+            {% if player.shooting_stats.get('thrown_clovers', 0) > 0 %}
+                <p>
+                    {{ current_user.name }} threw {{ player.shooting_stats.get('thrown_clovers', 0) }} clovers on the
+                    ground...
+                    In front of a cop, getting fined a total
+                    of {{ 13 * player.shooting_stats.get('thrown_clovers', 0) }}
+                    exp in
+                    total for littering.
+                </p>
+            {% endif %}
+            {% if player.shooting_stats.get('cops_seen', 0) > 0 %}
+                <p>
+                    When getting ready to throw a clover on the ground, {{ current_user.name }} saw a cop farther down
+                    the
+                    street.
+                    They chickened out and left without getting a fine {{ player.shooting_stats.get('cops_seen', 0) }}
+                    times.
+                </p>
+            {% endif %}
+        {% endif %}
+
+        <div class="h2">🛸 Misc</div>
+        <p>
+            <span itemprop="name">{{ current_user.name }}#{{ current_user.discriminator }}</span> used {{ player.shooting_stats.get('bullets_used', 0) }} bullets
+            {% if player.shooting_stats.get('homing_kills', 0) %}(of which
+                {{ player.shooting_stats.get('homing_kills', 0) }} were homing){% endif %}
+            and {{ player.shooting_stats.get('reloads', 0) }}
+            magazines. They missed their target {{ player.shooting_stats.get('missed', 0) }} times, killed someone
+            {{ player.shooting_stats.get('killed', 0) }} times, and
+            murdered {{ player.shooting_stats.get('murders', 0) }}
+            players.
+        </p>
+
+        {% if player.shooting_stats.get('suicides', 0) %}
             <p>
-                {{ current_user.name }} threw {{ player.shooting_stats.get('thrown_clovers', 0) }} clovers on the
-                ground...
-                In front of a cop, getting fined a total of {{ 13 * player.shooting_stats.get('thrown_clovers', 0) }}
-                exp in
-                total for littering.
+                They killed themselves {{ player.shooting_stats.get('suicides', 0) }} times.
             </p>
         {% endif %}
-        {% if player.shooting_stats.get('cops_seen', 0) > 0 %}
+
+        {% if player.shooting_stats.get('got_killed', 0) %}
             <p>
-                When getting ready to throw a clover on the ground, {{ current_user.name }} saw a cop farther down the
-                street.
-                They chickened out and left without getting a fine {{ player.shooting_stats.get('cops_seen', 0) }}
-                times.
+                They got killed {{ player.shooting_stats.get('got_killed', 0) }} times
+                {% if player.shooting_stats.get('brains_eaten', 0) %}, and had to eat
+                    {{ player.shooting_stats.get('brains_eaten', 0) }}
+                    brains to revive themselves ({{ player.shooting_stats.get('revives', 0) }} times). They were really
+                    hungry once when they
+                    ate {{ player.shooting_stats.get('max_brains_eaten_at_once', 0) }} brains at once{% endif %}.
             </p>
         {% endif %}
-    {% endif %}
 
-    <div class="h2">🛸 Misc</div>
-    <p>
-        {{ current_user.name }} used {{ player.shooting_stats.get('bullets_used', 0) }} bullets
-        {% if player.shooting_stats.get('homing_kills', 0) %}(of which
-            {{ player.shooting_stats.get('homing_kills', 0) }} were homing){% endif %}
-        and {{ player.shooting_stats.get('reloads', 0) }}
-        magazines. They missed their target {{ player.shooting_stats.get('missed', 0) }} times, killed someone
-        {{ player.shooting_stats.get('killed', 0) }} times, and murdered {{ player.shooting_stats.get('murders', 0) }}
-        players.
-    </p>
+        {% if player.shooting_stats.get('useless_revives', 0) %}
+            <p>
+                They also tried reviving themselves {{ player.shooting_stats.get('useless_revives', 0) }} times, but
+                they
+                were
+                already alive.
+            </p>
+        {% endif %}
 
-    {% if player.shooting_stats.get('suicides', 0) %}
-        <p>
-            They killed themselves {{ player.shooting_stats.get('suicides', 0) }} times.
-        </p>
-    {% endif %}
+        {% if player.shooting_stats.get('autoreloads', 0) or player.shooting_stats.get('failed_autoreloads', 0) %}
+            <p>
+                {{ current_user.name }}'s gun was reloaded
+                automatically {{ player.shooting_stats.get('autoreloads', 0) }}
+                times
+                (and the autoreloader failed {{ player.shooting_stats.get('failed_autoreloads', 0) }} times, because
+                they
+                had no
+                more magazines.)
+            </p>
+        {% endif %}
 
-    {% if player.shooting_stats.get('got_killed', 0) %}
-        <p>
-            They got killed {{ player.shooting_stats.get('got_killed', 0) }} times
-            {% if player.shooting_stats.get('brains_eaten', 0) %}, and had to eat
-                {{ player.shooting_stats.get('brains_eaten', 0) }}
-                brains to revive themselves ({{ player.shooting_stats.get('revives', 0) }} times). They were really
-                hungry once when they
-                ate {{ player.shooting_stats.get('max_brains_eaten_at_once', 0) }} brains at once{% endif %}.
-        </p>
-    {% endif %}
-
-    {% if player.shooting_stats.get('useless_revives', 0) %}
-        <p>
-            They also tried reviving themselves {{ player.shooting_stats.get('useless_revives', 0) }} times, but they
-            were
-            already alive.
-        </p>
-    {% endif %}
-
-    {% if player.shooting_stats.get('autoreloads', 0) or player.shooting_stats.get('failed_autoreloads', 0) %}
-        <p>
-            {{ current_user.name }}'s gun was reloaded automatically {{ player.shooting_stats.get('autoreloads', 0) }}
-            times
-            (and the autoreloader failed {{ player.shooting_stats.get('failed_autoreloads', 0) }} times, because they
-            had no
-            more magazines.)
-        </p>
-    {% endif %}
-
-    They have {{ player.bullets }} bullets in their gun, and {{ player.magazines }} magazines in their backpack.
+        They have {{ player.bullets }} bullets in their gun, and {{ player.magazines }} magazines in their backpack.
 
 
-    <script>
-        Highcharts.setOptions({
-            chart: {
-                plotBackgroundColor: null,
-                plotBorderWidth: null,
-                plotShadow: false,
-                type: 'pie'
-            },
-            title: {
-                text: ''
-            },
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: true,
-                        format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-                    }
-                }
-            },
-        });
-        {% if player.killed|length %}
-            Highcharts.chart('chart-ducks-killed', {
+        <script>
+            Highcharts.setOptions({
                 chart: {
-                    type: 'column'
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
                 },
-                tooltip: {
-                    pointFormat: 'Killed: {point.y} ducks'
+                title: {
+                    text: ''
                 },
-                xAxis: {
-                    categories: {{ titleize(player.sorted_killed().keys())|tojson }},
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                        }
+                    }
                 },
-                legend: {
-                    enabled: false
-                },
-                series: [{
-                    name: 'Killed',
-                    colorByPoint: true,
-                    data: {{ player.sorted_killed().values()|list|tojson }},
-                    colors: {{ ducks_names_to_colors(player.sorted_killed().keys())|tojson }}
-                }{#, {
+            });
+            {% if player.killed|length %}
+                Highcharts.chart('chart-ducks-killed', {
+                    chart: {
+                        type: 'column'
+                    },
+                    tooltip: {
+                        pointFormat: 'Killed: {point.y} ducks'
+                    },
+                    xAxis: {
+                        categories: {{ titleize(player.sorted_killed().keys())|tojson }},
+                    },
+                    legend: {
+                        enabled: false
+                    },
+                    series: [{
+                        name: 'Killed',
+                        colorByPoint: true,
+                        data: {{ player.sorted_killed().values()|list|tojson }},
+                        colors: {{ ducks_names_to_colors(player.sorted_killed().keys())|tojson }}
+                    }{#, {
                     name: "Best Times",
                     colorByPoint: true,
                     data: {{ values_from_keys(player.sorted_killed().keys(), player.best_times)|tojson }},
                     colors: {{ ducks_names_to_colors(player.sorted_killed().keys())|tojson }}
                 } #}
-                ]
-            });
-        {% endif %}
+                    ]
+                });
+            {% endif %}
 
-        {% if player.hugged|length %}
-            Highcharts.chart('chart-ducks-hugged', {
-                tooltip: {
-                    pointFormat: 'Hugged: {point.y} (<b>{point.percentage:.1f}%</b>)'
-                },
-                legend: {
-                    enabled: false
-                },
-                series: [{
-                    name: 'Hugged',
-                    colorByPoint: true,
-                    data: {{ dict_to_highcharts(player.hugged) }},
-                    colors: {{ ducks_names_to_colors(player.hugged)|tojson }}
-                }]
-            });
-        {% endif %}
+            {% if player.hugged|length %}
+                Highcharts.chart('chart-ducks-hugged', {
+                    tooltip: {
+                        pointFormat: 'Hugged: {point.y} (<b>{point.percentage:.1f}%</b>)'
+                    },
+                    legend: {
+                        enabled: false
+                    },
+                    series: [{
+                        name: 'Hugged',
+                        colorByPoint: true,
+                        data: {{ dict_to_highcharts(player.hugged) }},
+                        colors: {{ ducks_names_to_colors(player.hugged)|tojson }}
+                    }]
+                });
+            {% endif %}
 
-        {% if player.hurted|length %}
-            Highcharts.chart('chart-ducks-hurt', {
-                tooltip: {
-                    pointFormat: 'Hurt: {point.y} (<b>{point.percentage:.1f}%</b>)'
-                },
-                legend: {
-                    enabled: false
-                },
-                series: [{
-                    name: 'Hurt',
-                    colorByPoint: true,
-                    data: {{ dict_to_highcharts(player.hurted) }},
-                    colors: {{ ducks_names_to_colors(player.hurted)|tojson }}
-                }]
-            });
-        {% endif %}
+            {% if player.hurted|length %}
+                Highcharts.chart('chart-ducks-hurt', {
+                    tooltip: {
+                        pointFormat: 'Hurt: {point.y} (<b>{point.percentage:.1f}%</b>)'
+                    },
+                    legend: {
+                        enabled: false
+                    },
+                    series: [{
+                        name: 'Hurt',
+                        colorByPoint: true,
+                        data: {{ dict_to_highcharts(player.hurted) }},
+                        colors: {{ ducks_names_to_colors(player.hurted)|tojson }}
+                    }]
+                });
+            {% endif %}
 
-        {% if player.frightened|length %}
-            Highcharts.chart('chart-ducks-frightened', {
-                tooltip: {
-                    pointFormat: 'Frightened: {point.y} (<b>{point.percentage:.1f}%</b>)'
-                },
-                legend: {
-                    enabled: false
-                },
-                series: [{
-                    name: 'Frightened',
-                    colorByPoint: true,
-                    data: {{ dict_to_highcharts(player.frightened) }},
-                    colors: {{ ducks_names_to_colors(player.frightened)|tojson }}
-                }]
-            });
-        {% endif %}
+            {% if player.frightened|length %}
+                Highcharts.chart('chart-ducks-frightened', {
+                    tooltip: {
+                        pointFormat: 'Frightened: {point.y} (<b>{point.percentage:.1f}%</b>)'
+                    },
+                    legend: {
+                        enabled: false
+                    },
+                    series: [{
+                        name: 'Frightened',
+                        colorByPoint: true,
+                        data: {{ dict_to_highcharts(player.frightened) }},
+                        colors: {{ ducks_names_to_colors(player.frightened)|tojson }}
+                    }]
+                });
+            {% endif %}
 
-        {% if player.best_times|length %}
+            {% if player.best_times|length %}
 
-            Highcharts.chart('chart-best-times', {
+                Highcharts.chart('chart-best-times', {
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Best times'
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Time to kill (seconds)',
+                            align: 'high'
+                        },
+                    },
+                    xAxis: {
+                        labels: {
+                            enabled: false,
+                        }
+                    },
+                    tooltip: {
+                        valueSuffix: ' seconds'
+                    },
+                    plotOptions: {
+                        bar: {
+                            dataLabels: {
+                                enabled: true
+                            }
+                        }
+                    },
+                    legend: {
+                        enabled: false
+                    },
+                    series: [{
+                        name: 'Best Times',
+                        colorByPoint: true,
+                        data: {{ dict_to_highcharts(player.best_times, select_first=False, reverse=True) }},
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.name}: {point.y:.1f}s'
+                        },
+                        colors: {{ ducks_names_to_colors(player.best_times, reverse=True)|tojson }}
+                    }]
+                });
+            {% endif %}
+
+            Highcharts.chart('chart-shots', {
                 chart: {
-                    type: 'column'
+                    type: 'bar'
                 },
                 title: {
-                    text: 'Best times'
+                    text: 'Shots...'
                 },
                 yAxis: {
                     title: {
-                        text: 'Time to kill (seconds)',
+                        text: 'Count',
                         align: 'high'
                     },
                 },
@@ -493,9 +547,6 @@
                     labels: {
                         enabled: false,
                     }
-                },
-                tooltip: {
-                    valueSuffix: ' seconds'
                 },
                 plotOptions: {
                     bar: {
@@ -508,58 +559,18 @@
                     enabled: false
                 },
                 series: [{
-                    name: 'Best Times',
+                    name: 'Shots count',
                     colorByPoint: true,
-                    data: {{ dict_to_highcharts(player.best_times, select_first=False, reverse=True) }},
+                    data: {{ shots_chart_data|tojson }},
                     dataLabels: {
                         enabled: true,
-                        format: '{point.name}: {point.y:.1f}s'
+                        format: '{point.name}: {point.y} shots'
                     },
-                    colors: {{ ducks_names_to_colors(player.best_times, reverse=True)|tojson }}
                 }]
             });
-        {% endif %}
 
-        Highcharts.chart('chart-shots', {
-            chart: {
-                type: 'bar'
-            },
-            title: {
-                text: 'Shots...'
-            },
-            yAxis: {
-                title: {
-                    text: 'Count',
-                    align: 'high'
-                },
-            },
-            xAxis: {
-                labels: {
-                    enabled: false,
-                }
-            },
-            plotOptions: {
-                bar: {
-                    dataLabels: {
-                        enabled: true
-                    }
-                }
-            },
-            legend: {
-                enabled: false
-            },
-            series: [{
-                name: 'Shots count',
-                colorByPoint: true,
-                data: {{ shots_chart_data|tojson }},
-                dataLabels: {
-                    enabled: true,
-                    format: '{point.name}: {point.y} shots'
-                },
-            }]
-        });
-
-    </script>
-    <script>JsBarcode(".barcode").init();</script>
-    <h2>Back to <a href="{{ url("channel", pk=channel.pk) }}">the #{{ channel.name }} discord chanel</a></h2>
+        </script>
+        <script>JsBarcode(".barcode").init();</script>
+        <h2>Back to <a href="{{ url("channel", pk=channel.pk) }}">the #{{ channel.name }} discord chanel</a></h2>
+    </div>
 {% endblock %}
