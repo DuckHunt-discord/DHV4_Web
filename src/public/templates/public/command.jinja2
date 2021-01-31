@@ -30,7 +30,7 @@
             {% set position = namespace(value=1) %}
             {% if parent %}
                 {% for chld in parent_name.split('/') %}
-                    {% set position = position.value + 1 %}
+                    {% set position.value = position.value + 1 %}
                     <li class="breadcrumb-item" itemprop="itemListElement" itemscope
                         itemtype="https://schema.org/ListItem">
                         <a itemtype="https://schema.org/WebPage" class="text-decoration-none"
