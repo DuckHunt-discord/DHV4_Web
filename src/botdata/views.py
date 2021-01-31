@@ -229,7 +229,7 @@ def generate_shots_chart_data(shooting_stats):
 
 
 def channel(request, pk: int):
-    current_channel = get_object_or_404(DiscordChannel, pk=pk)
+    current_channel = get_object_or_404(DiscordChannel.objects.all().select_related("guild"), pk=pk,)
     # We cast to a list because we slice first then later use the whole thing.
     # If we didn't, we would have 2 queries : one with a limit and one without
     page_number = request.GET.get("page", 1)

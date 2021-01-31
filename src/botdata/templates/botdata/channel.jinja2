@@ -16,10 +16,35 @@
 {% block content %}
     <h1>{{ paginator.count }} players on #{{ channel.name }}</h1>
 
-    <p>
-        To see the settings used by this channel, you can click <a href="{{ url("channel_settings", pk=channel.pk) }}">here</a>.
-        To see all the channels on the server, click <a href="{{ url("guild", pk=channel.guild_id) }}">here</a>
-    </p>
+    <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>'" class="background-grey rounded">
+        <ol class="breadcrumb p-2" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li class="breadcrumb-item" itemprop="itemListElement" itemscope
+                itemtype="https://schema.org/ListItem">
+                <a itemtype="https://schema.org/WebPage" class="text-decoration-none"
+                   itemprop="item" href="{{ canonical_domain_uri }}{{ url("guilds") }}">
+                    <span itemprop="name" class="text-blurple">Guilds</span></a>
+                <meta itemprop="position" content="1"/>
+            </li>
+            <li class="breadcrumb-item" itemprop="itemListElement" itemscope
+                itemtype="https://schema.org/ListItem">
+                <a itemtype="https://schema.org/WebPage" class="text-decoration-none"
+                   itemprop="item" href="{{ canonical_domain_uri }}{{ url("guild", pk=channel.guild_id) }}">
+                    <span itemprop="name" class="text-blurple text-decoration-none">{{ channel.guild.name }}</span></a>
+                <meta itemprop="position" content="2"/>
+            </li>
+            <li class="breadcrumb-item active" itemprop="itemListElement" itemscope
+                itemtype="https://schema.org/ListItem">
+                <span itemprop="name" class="text-light">#{{ channel.name }}</span>
+                <meta itemprop="position" content="3"/>
+            </li>
+            <li class="breadcrumb-item">
+                <a itemtype="https://schema.org/WebPage" class="text-decoration-none"
+                   itemprop="item" href="{{ canonical_domain_uri }}{{ url("channel_settings", pk=channel.pk) }}">
+                    <span itemprop="name" class="text-blurple text-decoration-none">Settings</span></a>
+                <meta itemprop="position" content="3"/>
+            </li>
+        </ol>
+    </nav>
 
     {# Graphs #}
     {% if chart_best_players_data_experience %}
@@ -54,7 +79,10 @@
             <tr>
                 <th scope="row">{{ players.start_index() + loop.index0 }}</th>
                 <td>
-                    <a href="{{ player_url }}{{ player.member.user.pk }}">{{ player.member.user.name }}#{{ player.member.user.discriminator }}</a>
+                    <a href="
+
+
+                            {{ player_url }}{{ player.member.user.pk }}">{{ player.member.user.name }}#{{ player.member.user.discriminator }}</a>
                 </td>
                 <td class="text-end">{{ intcomma(player.experience) }}</td>
                 <td class="text-end">{{ player.total_ducks_killed }}</td>
