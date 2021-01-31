@@ -16,7 +16,7 @@
                 <div class="card background-normal h-100 nice-card-borders">
                     <div class="card-body">
                         <div class="d-flex">
-                            <span class="h5 card-title flex-grow-1"><a href="{{ url("bot_commands", command=command['name']) }}" class="text-decoration-none">{{ command['name'] }}</a> {% if command.get('access_name') %}
+                            <span class="h5 card-title flex-grow-1"><a href="{{ url("bot_commands", command=command['name']) }}" class="text-decoration-none text-light">{{ command['name'] }}</a> {% if command.get('access_name') %}
                                 <span class="badge bg-danger">{{ command.get('access_name') }}</span>{% endif %}</span>
                         </div>
                         {% if command['aliases'] %}
