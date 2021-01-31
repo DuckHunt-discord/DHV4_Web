@@ -318,7 +318,7 @@ def channel_settings(request, pk: int):
 def player(request, channel_pk: int, user_pk: int):
     from .achievements import achievements, trophys
     # TODO: Replace that by an API call
-    current_channel = get_object_or_404(DiscordChannel, pk=channel_pk)
+    current_channel = get_object_or_404(DiscordChannel.objects.all().select_related('guild'), pk=channel_pk)
     current_user = get_object_or_404(DiscordUser, pk=user_pk)
     try:
         current_player = Player.objects.get(member__user=current_user, channel=current_channel)
