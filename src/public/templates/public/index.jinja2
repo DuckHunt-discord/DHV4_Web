@@ -54,12 +54,12 @@
                         <div class="card-content">
                             <div class="card-body">
                                 <div class="d-flex flex-row justify-content-between">
-                                    <div class="media-body text-left">
-                                        <div id="odometer-{{ loop.index }}"
-                                             class="card-value text-{{ stat['color'] }}{% if stat.odometer %} odometer{% endif %}">
-                                            {{ stat['value'] }}
+                                    <div class="media-body text-left" {% if stat.odometer %}itemprop="size" itemscope itemtype="https://schema.org/QuantitativeValue"{% endif %}>
+                                        <div class="card-value text-{{ stat['color'] }}{% if stat.odometer %} odometer{% endif %}">
+                                            <span id="odometer-{{ loop.index }}" {% if stat.odometer %}itemprop="value" content="{{ stat['numerical_value'] }}"{% endif %}>{{ stat['value'] }}</span>
                                             {% if not stat.odometer %}
-                                                <span class="odometer" style="visibility: hidden"></span> {% endif %}
+                                                <span class="odometer" style="visibility: hidden"></span>
+                                            {% endif %}
                                         </div>
                                         {% if stat.odometer %}
                                             <script>
@@ -69,7 +69,7 @@
                                                 });
                                             </script>
                                         {% endif %}
-                                        <span class="text-dark">{{ stat['name'] }}</span>
+                                        <span class="text-dark" {% if stat.odometer %}itemprop="name"{% endif %}>{{ stat['name'] }}</span>
                                     </div>
                                     <div class="align-self-center float-end bg-{{ stat['color'] }}-gradient"
                                          style="margin-top: -90px; padding-bottom: 10px; border-radius: 10px;">

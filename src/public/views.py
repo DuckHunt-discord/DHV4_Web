@@ -60,6 +60,7 @@ def index(request):
     parsed_stats = [
         {
             "name": "Guilds",
+            "numerical_value": api_stats['guilds_count'],
             "value": intcomma(api_stats['guilds_count']),
             "color": "success",
             "icon": "fas fa-server",
@@ -67,6 +68,7 @@ def index(request):
         },
         {
             "name": "Channels",
+            "numerical_value": api_stats['channels_count'],
             "value": intcomma(api_stats['channels_count']),
             "color": "success",
             "icon": "fab fa-slack-hash",
@@ -74,6 +76,7 @@ def index(request):
         },
         {
             "name": "Players",
+            "numerical_value": api_stats['players_count'],
             "value": intcomma(api_stats['players_count']),
             "color": "success",
             "icon": "fas fa-hat-cowboy-side",
@@ -81,6 +84,7 @@ def index(request):
         },
         {
             "name": "Members",
+            "numerical_value": api_stats['members_count'],
             "value": intcomma(api_stats['members_count']),
             "color": "success",
             "icon": "fas fa-users",
@@ -88,6 +92,7 @@ def index(request):
         },
         {
             "name": "Ducks",
+            "numerical_value": api_stats['alive_ducks_count'],
             "value": intcomma(api_stats['alive_ducks_count']),
             "color": "success",
             "icon": "fas fa-feather",
