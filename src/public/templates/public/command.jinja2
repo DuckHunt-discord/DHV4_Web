@@ -14,8 +14,41 @@
 {% endblock %}
 
 {% block content %}
-    <h1><code>{{ command_to_see }}</code>{% if command['name'] != command_to_see %} (<code>{{ command['name'] }}</code>
-        ){% endif %}</h1>
+    <h1><code>{{ command_to_see }}</code>{% if command['name'] != command_to_see %}
+        (<code>{{ command['name'] }}</code>){% endif %}</h1>
+
+
+    <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>'" class="background-grey rounded">
+        <ol class="breadcrumb p-2" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li class="breadcrumb-item" itemprop="itemListElement" itemscope
+                itemtype="https://schema.org/ListItem">
+                <a itemtype="https://schema.org/WebPage" class="text-decoration-none"
+                   itemprop="item" href="{{ canonical_domain_uri }}{{ url("bot_commands") }}">
+                    <span itemprop="name" class="text-blurple">Commands</span></a>
+                <meta itemprop="position" content="1"/>
+            </li>
+            {% set position = 1 %}
+            {% if parent %}
+                {% for chld in parent_name.split('/') %}
+                    {% set position = position + 1 %}
+                    <li class="breadcrumb-item" itemprop="itemListElement" itemscope
+                        itemtype="https://schema.org/ListItem">
+                        <a itemtype="https://schema.org/WebPage" class="text-decoration-none"
+                           itemprop="item" href="{{ canonical_domain_uri }}{{ url("bot_commands", command=chld.replace(' ', '/')) }}">
+                            <span itemprop="name"
+                                  class="text-blurple text-decoration-none">{{ chld }}</span></a>
+                        <meta itemprop="position" content="{{ position }}"/>
+                    </li>
+                {% endfor %}
+            {% endif %}
+            <li class="breadcrumb-item active" itemprop="itemListElement" itemscope
+                itemtype="https://schema.org/ListItem">
+                <span itemprop="name" class="text-light text-decoration-none">{{ command_to_see.split(' ')[-1] }}</span>
+                <meta itemprop="position" content="{{ position }}"/>
+            </li>
+        </ol>
+    </nav>
+
     <div class="card background-normal h-100">
         <div class="card-body">
             <h5 class="card-title flex-grow-1">{{ command['name'] }} {% if command.get('access_name') %}
@@ -69,12 +102,4 @@
             </div>
         {% endif %}
         </div>
-        {% if parent %}
-            You can got back to the
-            <a href="{{ url("bot_commands", command=parent_name.replace(' ', '/')) }}">{{ parent_name }} help page</a>,
-            or
-            <a href="{{ url("bot_commands") }}">see all the commands</a>.
-        {% else %}
-            You can also <a href="{{ url("bot_commands") }}">see all the commands</a>.
-        {% endif %}
 {% endblock %}
