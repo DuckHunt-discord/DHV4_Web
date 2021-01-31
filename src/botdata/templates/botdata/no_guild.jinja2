@@ -2,9 +2,9 @@
 
 {% block canonical %}
     {% if not guild %}
-        <link rel="canonical" href="https://duckhunt.me{{ url("guild", pk=0) }}"/>
+        <link rel="canonical" href="{{ canonical_domain_uri }}{{ url("guild", pk=0) }}"/>
     {% else %}
-        <link rel="canonical" href="https://duckhunt.me{{ request.get_full_path() }}"/>
+        <link rel="canonical" href="{{ canonical_domain_uri }}{{ request.get_full_path() }}"/>
     {% endif %}
 {% endblock %}
 

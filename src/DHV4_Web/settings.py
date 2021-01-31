@@ -93,6 +93,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            "constants": {
+                "canonical_domain_uri": "https://" + os.environ.get("DOMAIN", "duckhunt.me"),
+            },
             "extensions": DEFAULT_EXTENSIONS + [
                 'pipeline.jinja2.PipelineExtension'
             ]

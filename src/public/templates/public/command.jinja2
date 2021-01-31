@@ -6,7 +6,7 @@
 
 {% block canonical %}
     <link rel="canonical"
-          href="https://duckhunt.me{{ url("bot_commands", command=command_to_see.replace(' ', '/')) }}"/>
+          href="{{ canonical_domain_uri }}{{ url("bot_commands", command=command_to_see.replace(' ', '/')) }}"/>
 {% endblock %}
 
 {% block title %}

@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-site-verification" content="KlSQKyZeTCwrcPnW3RY3O2dBuh7jl0z4rkd388sPYhk"/>
     {% block canonical %}
-        <link rel="canonical" href="https://duckhunt.me{{ request.get_full_path() }}"/>
+        <link rel="canonical" href="{{ canonical_domain_uri }}{{ request.get_full_path() }}"/>
     {% endblock %}
     {% block ogp %}
         <meta property="og:title" content="DuckHunt"/>
         <meta property="og:type" content="website"/>
-        <meta property="og:url" content="https://duckhunt.me{{ request.get_full_path() }}"/>
-        <meta property="og:image" content="https://duckhunt.me{{ static("public/img/Speaking_Ducc_Globloxmen.png") }}"/>
+        <meta property="og:url" content="{{ canonical_domain_uri }}{{ request.get_full_path() }}"/>
+        <meta property="og:image" content="{{ canonical_domain_uri }}{{ static("public/img/Speaking_Ducc_Globloxmen.png") }}"/>
         <meta property="og:site_name" content="DuckHunt Discord V4"/>
         <meta property="og:description"
               content="DuckHunt V4 is the next version of the popular DuckHunt Discord Bot." />
