@@ -9,11 +9,28 @@
 {% endblock %}
 
 {% block head %}
-        <script src="{{ static('public/js/jquery.min.js') }}"></script>
+    <script src="{{ static('public/js/jquery.min.js') }}"></script>
 {% endblock %}
 
 {% block content %}
     <h1>{{ guild.name }} on Discord</h1>
+
+    <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>'" class="background-grey rounded">
+        <ol class="breadcrumb p-2" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li class="breadcrumb-item" itemprop="itemListElement" itemscope
+                itemtype="https://schema.org/ListItem">
+                <a itemtype="https://schema.org/WebPage" class="text-decoration-none"
+                   itemprop="item" href="{{ canonical_domain_uri }}{{ url("guilds") }}">
+                    <span itemprop="name" class="text-blurple">Guilds</span></a>
+                <meta itemprop="position" content="1"/>
+            </li>
+            <li class="breadcrumb-item" itemprop="itemListElement" itemscope
+                itemtype="https://schema.org/ListItem">
+                <span itemprop="name" class="text-light">{{ guild.name }}</span>
+                <meta itemprop="position" content="2"/>
+            </li>
+        </ol>
+    </nav>
 
     <div class="card background-normal h-100">
         <div class="card-body">
