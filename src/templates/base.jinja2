@@ -11,10 +11,11 @@
         <meta property="og:title" content="DuckHunt"/>
         <meta property="og:type" content="website"/>
         <meta property="og:url" content="{{ canonical_domain_uri }}{{ request.get_full_path() }}"/>
-        <meta property="og:image" content="{{ canonical_domain_uri }}{{ static("public/img/Speaking_Ducc_Globloxmen.png") }}"/>
+        <meta property="og:image"
+              content="{{ canonical_domain_uri }}{{ static("public/img/Speaking_Ducc_Globloxmen.png") }}"/>
         <meta property="og:site_name" content="DuckHunt Discord V4"/>
         <meta property="og:description"
-              content="DuckHunt V4 is the next version of the popular DuckHunt Discord Bot." />
+              content="DuckHunt V4 is the next version of the popular DuckHunt Discord Bot."/>
     {% endblock %}
 
     {% block metadesc %}
@@ -38,6 +39,18 @@
     {# <script src="{{ static('public/js/modules/exporting.js') }}"></script> #}
 
     <title>{% block title %}DuckHunt Discord{% endblock %}</title>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "url": "{{ canonical_domain_uri }}",
+      "logo": "{{ canonical_domain_uri }}{{ static('logo.png') }}",
+      "name": "DuckHunt",
+      "alternateName": "Duck Hunt",
+      "slogan": "Entertain your members with the best game on Discord."
+    }
+    </script>
+
     {% block head %}{% endblock %}
 </head>
 <body {% block body_headers %}class="background-light"{% endblock %}>
