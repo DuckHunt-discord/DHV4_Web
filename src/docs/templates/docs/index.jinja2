@@ -39,7 +39,10 @@
                         {% if category %}
                             <li class="breadcrumb-item" itemprop="itemListElement" itemscope
                                 itemtype="https://schema.org/ListItem">
-                                <span itemprop="name" class="text-muted">{{ category.replace('-', ' ').title() }}</span>
+                                <a itemtype="https://schema.org/WebPage"
+                                   itemprop="item" href="{{ canonical_domain_uri }}{{ url("docs:summary") }}#{{ category.lower() }}">
+                                    <span itemprop="name" class="text-muted">{{ category.replace('-', ' ').title() }}</span>
+                                </a>
                                 <meta itemprop="position" content="2"/>
                             </li>
                         {% endif %}
