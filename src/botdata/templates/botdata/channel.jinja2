@@ -38,10 +38,9 @@
                 <meta itemprop="position" content="3"/>
             </li>
             <li class="breadcrumb-item">
-                <a itemtype="https://schema.org/WebPage" class="text-decoration-none"
-                   itemprop="item" href="{{ canonical_domain_uri }}{{ url("channel_settings", pk=channel.pk) }}">
-                    <span itemprop="name" class="text-blurple text-decoration-none">Settings</span></a>
-                <meta itemprop="position" content="3"/>
+                <a class="text-decoration-none"
+                   href="{{ canonical_domain_uri }}{{ url("channel_settings", pk=channel.pk) }}">
+                    <span class="text-blurple text-decoration-none">Settings</span></a>
             </li>
         </ol>
     </nav>
