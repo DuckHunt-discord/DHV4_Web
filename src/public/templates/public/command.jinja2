@@ -30,14 +30,14 @@
             {% set position = namespace(value=1) %}
             {% if parent %}
                 {% for chld in parent_name.split('/') %}
-                    {% set position = position + 1 %}
+                    {% set position = position.value + 1 %}
                     <li class="breadcrumb-item" itemprop="itemListElement" itemscope
                         itemtype="https://schema.org/ListItem">
                         <a itemtype="https://schema.org/WebPage" class="text-decoration-none"
                            itemprop="item" href="{{ canonical_domain_uri }}{{ url("bot_commands", command=chld.replace(' ', '/')) }}">
                             <span itemprop="name"
                                   class="text-blurple text-decoration-none">{{ chld }}</span></a>
-                        <meta itemprop="position" content="{{ position }}"/>
+                        <meta itemprop="position" content="{{ position.value }}"/>
                     </li>
                 {% endfor %}
             {% endif %}
