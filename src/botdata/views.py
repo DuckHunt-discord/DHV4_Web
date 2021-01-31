@@ -291,7 +291,7 @@ def channel(request, pk: int):
 
 
 def channel_settings(request, pk: int):
-    current_channel = get_object_or_404(DiscordChannel, pk=pk)
+    current_channel = get_object_or_404(DiscordChannel.objects.all().select_related("guild"), pk=pk)
 
     parliament_day_data = []
     parliament_night_data = []

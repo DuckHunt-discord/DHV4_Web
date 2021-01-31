@@ -15,10 +15,36 @@
 {% block content %}
     <h1>Settings for #{{ channel.name }}</h1>
 
-    <p>
-        To go back and see the hunters scores for this channel, you can click
-        <a href="{{ url("channel", pk=channel.pk) }}">here</a>.
-    </p>
+
+    <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>'" class="background-grey rounded">
+        <ol class="breadcrumb p-2" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li class="breadcrumb-item" itemprop="itemListElement" itemscope
+                itemtype="https://schema.org/ListItem">
+                <a itemtype="https://schema.org/WebPage" class="text-decoration-none"
+                   itemprop="item" href="{{ canonical_domain_uri }}{{ url("guilds") }}">
+                    <span itemprop="name" class="text-blurple">Guilds</span></a>
+                <meta itemprop="position" content="1"/>
+            </li>
+            <li class="breadcrumb-item" itemprop="itemListElement" itemscope
+                itemtype="https://schema.org/ListItem">
+                <a itemtype="https://schema.org/WebPage" class="text-decoration-none"
+                   itemprop="item" href="{{ canonical_domain_uri }}{{ url("guild", pk=channel.guild_id) }}">
+                    <span itemprop="name" class="text-blurple text-decoration-none">{{ channel.guild.name }}</span></a>
+                <meta itemprop="position" content="2"/>
+            </li>
+            <li class="breadcrumb-item active" itemprop="itemListElement" itemscope
+                itemtype="https://schema.org/ListItem">
+                <a itemtype="https://schema.org/WebPage" class="text-decoration-none"
+                   itemprop="item" href="{{ canonical_domain_uri }}{{ url("channel", pk=channel.pk) }}">
+                    <span itemprop="name" class="text-blurple text-decoration-none">#{{ channel.name }}</span></a>
+                <meta itemprop="position" content="3"/>
+            </li>
+            <li class="breadcrumb-item">
+                <span itemprop="name" class="text-light text-decoration-none">Settings</span>
+                <meta itemprop="position" content="4"/>
+            </li>
+        </ol>
+    </nav>
 
     <p>
         The channel is currently {% if channel.enabled %}enabled{% else %}disabled{% endif %}
