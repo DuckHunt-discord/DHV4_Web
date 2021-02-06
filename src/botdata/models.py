@@ -168,7 +168,6 @@ class DiscordUser(models.Model):
     discord_id = models.BigAutoField(primary_key=True)
     first_seen = models.DateTimeField(auto_now_add=True)
 
-
     name = models.TextField()
     discriminator = models.CharField(max_length=4)
     times_ran_example_command = models.IntegerField(default=0)
@@ -182,6 +181,7 @@ class DiscordUser(models.Model):
     first_use = models.BooleanField(default=True)
 
     access_level_override = EnumField(AccessLevel, default=AccessLevel.DEFAULT)
+    votes = models.IntegerField(default=0)
 
     def __str__(self):
         return f"{self.name}#{self.discriminator}"
