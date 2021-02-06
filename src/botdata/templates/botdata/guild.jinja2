@@ -34,7 +34,7 @@
 
     <div class="card background-normal h-100">
         <div class="card-body">
-            <div class="h4 card-title flex-grow-1 text-white-75"><span class="guild-name">{{ guild.name }}</span>
+            <div class="h4 card-title flex-grow-1 text-white-75">{% if guild.vip %}<span class="badge text-danger background-golden float-end ">VIP</span>{% endif %}<span class="guild-name">{{ guild.name }}</span>
                 <span class="widget-info d-none"> (<span class="online-member-count"></span> members online)</span>
             </div>
         </div>
