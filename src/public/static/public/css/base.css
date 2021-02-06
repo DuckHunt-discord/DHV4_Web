@@ -18,6 +18,10 @@
     background-color: black !important;
 }
 
+.background-golden {
+    background-color: #ddba00 !important;
+}
+
 .background-dark-green {
     background-color: rgb(15, 102, 34) !important;
 }
@@ -64,6 +68,10 @@ h1, .h1 {
 
 .text-white-75 {
     color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.text-black-75 {
+    color: rgba(0, 0, 0, 0.75) !important;
 }
 
 html {

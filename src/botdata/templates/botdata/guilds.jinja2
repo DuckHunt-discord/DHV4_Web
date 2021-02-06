@@ -33,10 +33,10 @@
     <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
         {% for guild, channels in guilds.object_list %}
             <div class="col">
-                <div class="card background-normal h-100 nice-card-borders">
+                <div class="card {% if channels[0]['guild_vip_status'] %}background-golden{% else %}background-normal{% endif %} h-100 nice-card-borders">
                     <div class="card-body">
                         <a href="{{ guild_url }}{{ guild }}" class="text-decoration-none">
-                            <div class="h4 card-title flex-grow-1 text-white-75">{{ channels[0]['guild_name'] }}</div>
+                            <div class="h4 card-title flex-grow-1 {% if channels[0]['guild_vip_status'] %}text-black-75{% else %}text-white-75{% endif %}">{{ channels[0]['guild_name'] }}{% if channels[0]['guild_vip_status'] %}<span class="badge text-danger border-dark border-1 border me-3 float-end ">VIP</span>{% endif %}</div>
                         </a>
                     </div>
                     <ul class="list-group list-group-flush">
