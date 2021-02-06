@@ -226,6 +226,12 @@
                                         <td class="text-end">{{ show_timestamp(powerups['reloader']) }} left</td>
                                     </tr>
                                 {% endif %}
+                                {% if powerups.get('kill_licence', False) %}
+                                    <tr>
+                                        <td>Licence to kill</td>
+                                        <td class="text-end">{{ show_timestamp(powerups['kill_licence']) }} left</td>
+                                    </tr>
+                                {% endif %}
                                 {% if powerups.get('homing_bullets', False) %}
                                     <tr>
                                         <td>Homing bullets</td>
