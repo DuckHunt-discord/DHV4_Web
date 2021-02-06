@@ -182,6 +182,7 @@ class DiscordUser(models.Model):
 
     access_level_override = EnumField(AccessLevel, default=AccessLevel.DEFAULT)
     votes = models.IntegerField(default=0)
+    boss_kills = models.IntegerField(default=0)
 
     def __str__(self):
         return f"{self.name}#{self.discriminator}"
