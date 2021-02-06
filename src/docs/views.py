@@ -61,7 +61,9 @@ def display_page(request, path, ctx=None):
     file = MARKDOWN_FILES / file
 
     if not file.exists():
-        raise Http404(f"This page {path} does not exist in the documentation. Can you create it ?")
+        return redirect(reverse('docs:index'), permanent=True)
+        # Commented to allow for old docs pages to redirect to the doc index for now
+        #raise Http404(f"This page {path} does not exist in the documentation. Can you create it ?")
 
     with open(file, "r") as f:
         parsed = markdown.markdown(f.read(),
