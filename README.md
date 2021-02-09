@@ -14,7 +14,7 @@ This is a Django website hosted in a docker container. The website uses three ma
 - The DuckHunt API (`/api/*`)
 - The DuckHunt Website (Everything else)
 
-The DuckHunt website itelf is distributed in multiple distinct parts (apps in django) :
+The DuckHunt website itself is distributed in multiple distinct parts (apps in django) :
 
 - Public, for the homepage, status pages, command lists and more
 - Botdata, for everything related to the bot database : Guilds (discord servers), Channels, Players
