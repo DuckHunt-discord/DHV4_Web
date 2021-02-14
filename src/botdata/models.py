@@ -400,6 +400,9 @@ class BotList(models.Model):
     def __str__(self):
         return f"<BotList {self.name}>"
 
+    class Meta:
+        db_table = 'botlist'
+
 
 class Vote(models.Model):
     user = models.ForeignKey(DiscordUser, models.CASCADE, related_name="votes", db_index=True)
@@ -408,3 +411,5 @@ class Vote(models.Model):
     at = models.DateTimeField(auto_now_add=True)
     multiplicator = models.IntegerField(default=1)
 
+    class Meta:
+        db_table = 'vote'
