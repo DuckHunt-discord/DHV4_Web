@@ -30,6 +30,13 @@ admin.site.register(models.DiscordMember, DiscordMemberAdmin)
 class PlayerAdmin(admin.ModelAdmin):
     raw_id_fields = ["channel", "member"]
 
+    def get_queryset(self, **kwargs):
+        qs = super().get_queryset(**kwargs)
+        return qs.prefetch_related('member__user', 'channel')
+
+
+
+
 
 admin.site.register(models.Player, PlayerAdmin)
 
