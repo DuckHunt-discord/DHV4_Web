@@ -181,7 +181,9 @@ class DiscordUser(models.Model):
     first_use = models.BooleanField(default=True)
 
     access_level_override = EnumField(AccessLevel, default=AccessLevel.DEFAULT)
-    votes = models.IntegerField(default=0)
+    votes = DefaultDictJSONField(default_factory=int)
+    last_votes = DefaultDictJSONField(default_factory=int)
+
     boss_kills = models.IntegerField(default=0)
 
     def __str__(self):
