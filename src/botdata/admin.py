@@ -1,13 +1,55 @@
 from django.contrib import admin
 
 from . import models
+
+
 # Register your models here.
 
-#admin.site.register(models.Aerich)
-admin.site.register(models.DiscordChannel)
-admin.site.register(models.DiscordGuild)
-admin.site.register(models.DiscordMember)
-admin.site.register(models.Player)
-admin.site.register(models.DiscordUser)
-admin.site.register(models.BotList)
-admin.site.register(models.Vote)
+
+class DiscordChannelAdmin(admin.ModelAdmin):
+    raw_id_fields = ["guild"]
+
+
+admin.site.register(models.DiscordChannel, DiscordChannelAdmin)
+
+
+class DiscordGuildAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(models.DiscordGuild, DiscordGuildAdmin)
+
+
+class DiscordMemberAdmin(admin.ModelAdmin):
+    raw_id_fields = ["guild", "user"]
+
+
+admin.site.register(models.DiscordMember, DiscordMemberAdmin)
+
+
+class PlayerAdmin(admin.ModelAdmin):
+    raw_id_fields = ["channel", "member"]
+
+
+admin.site.register(models.Player, PlayerAdmin)
+
+
+class DiscordUserAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(models.DiscordUser, DiscordUserAdmin)
+
+
+class BotListAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(models.BotList, BotListAdmin)
+
+
+class VoteAdmin(admin.ModelAdmin):
+    raw_id_fields = ["user"]
+
+
+admin.site.register(models.Vote, VoteAdmin)
