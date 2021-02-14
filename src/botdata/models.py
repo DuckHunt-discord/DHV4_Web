@@ -398,6 +398,9 @@ class BotList(models.Model):
                                                   blank=True,
                                                   max_length=128)
 
+    def __str__(self):
+        return f"<BotList {self.name}>"
+
 
 class Vote(models.Model):
     user = models.ForeignKey(DiscordUser, models.CASCADE, related_name="votes", db_index=True)
