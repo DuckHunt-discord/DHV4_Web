@@ -5,6 +5,7 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name="index"),
+    path('privacy_policy', views.privacy_policy, name="privacy_policy"),
     path('robots.txt', views.robots_txt, name="robotstxt"),
     path('commands', views.bot_commands, name="bot_commands"),
     re_path(r'commands/(?P<command>(?:[A-z0-9\-]*/?)*)', views.bot_commands, name="bot_commands"),

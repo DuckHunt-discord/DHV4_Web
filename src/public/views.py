@@ -156,6 +156,11 @@ def shard_status(request, shard_id):
     return render(request, "public/shard_status.jinja2", {"status": api_status, "shard": shard})
 
 
+@cache_page(3 * DAY)
+def privacy_policy(request):
+    return render(request, "public/privacy_policy.jinja2", {})
+
+
 @cache_page(1 * HOUR)
 def bot_commands(request, command: str = None):
     if not command:
