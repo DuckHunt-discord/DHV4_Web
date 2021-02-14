@@ -376,7 +376,6 @@ class BotList(models.Model):
     webhook_auth = models.TextField(help_text="Secret used for authentication of the webhooks messages if not the same the auth token",
                                     blank=True)
 
-
     # **Statistics**
 
     post_stats_method = models.CharField(help_text="What HTTP method should be used to send the stats",
