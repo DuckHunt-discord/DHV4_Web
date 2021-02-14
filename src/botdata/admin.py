@@ -29,7 +29,7 @@ admin.site.register(models.DiscordMember, DiscordMemberAdmin)
 
 
 class PlayerAdmin(DynamicRawIDMixin, admin.ModelAdmin):
-    dynamic_raw_id_fields = ["channel", "member"]
+    dynamic_raw_id_fields = ["channel", "member", "weapon_sabotaged_by"]
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
