@@ -1,4 +1,5 @@
 from django.contrib import admin
+from dynamic_raw_id.admin import DynamicRawIDMixin
 
 from . import models
 
@@ -6,8 +7,8 @@ from . import models
 # Register your models here.
 
 
-class DiscordChannelAdmin(admin.ModelAdmin):
-    raw_id_fields = ["guild"]
+class DiscordChannelAdmin(DynamicRawIDMixin, admin.ModelAdmin):
+    dynamic_raw_id_fields = ["guild"]
 
 
 admin.site.register(models.DiscordChannel, DiscordChannelAdmin)
@@ -20,22 +21,19 @@ class DiscordGuildAdmin(admin.ModelAdmin):
 admin.site.register(models.DiscordGuild, DiscordGuildAdmin)
 
 
-class DiscordMemberAdmin(admin.ModelAdmin):
-    raw_id_fields = ["guild", "user"]
+class DiscordMemberAdmin(DynamicRawIDMixin, admin.ModelAdmin):
+    dynamic_raw_id_fields = ["guild", "user"]
 
 
 admin.site.register(models.DiscordMember, DiscordMemberAdmin)
 
 
-class PlayerAdmin(admin.ModelAdmin):
-    raw_id_fields = ["channel", "member"]
+class PlayerAdmin(DynamicRawIDMixin, admin.ModelAdmin):
+    dynamic_raw_id_fields = ["channel", "member"]
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         return qs.prefetch_related('member__user', 'channel')
-
-
-
 
 
 admin.site.register(models.Player, PlayerAdmin)
@@ -55,8 +53,8 @@ class BotListAdmin(admin.ModelAdmin):
 admin.site.register(models.BotList, BotListAdmin)
 
 
-class VoteAdmin(admin.ModelAdmin):
-    raw_id_fields = ["user"]
+class VoteAdmin(DynamicRawIDMixin, admin.ModelAdmin):
+    dynamic_raw_id_fields = ["user"]
 
 
 admin.site.register(models.Vote, VoteAdmin)

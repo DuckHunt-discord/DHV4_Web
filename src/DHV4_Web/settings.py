@@ -75,7 +75,8 @@ INSTALLED_APPS.extend(['django.contrib.sites',
                        'botdata.apps.BotdataConfig',
                        'django_jinja',
                        'django_extensions',
-                       'pipeline'
+                       'pipeline',
+                       'dynamic_raw_id',
                        ])
 
 ROOT_URLCONF = 'DHV4_Web.urls'

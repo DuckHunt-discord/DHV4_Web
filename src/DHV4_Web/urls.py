@@ -25,6 +25,7 @@ urlpatterns = [
     path('docs/', include('docs.urls'), ),
     path('data/', include('botdata.urls')),
     path('admin/', admin.site.urls),
+    path('admin/dynamic_raw_id/', include('dynamic_raw_id.urls')),
     path('__debug__/', include(debug_toolbar.urls)),
     path('sitemap.xml', sitemap_views.index, {'sitemaps': sitemaps}),
     path('sitemap-<section>.xml', sitemap_views.sitemap, {'sitemaps': sitemaps},
