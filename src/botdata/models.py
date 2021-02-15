@@ -404,6 +404,9 @@ class BotList(models.Model):
 
     # **Others**
 
+    bot_verified = models.BooleanField(help_text="Whether the bot was verified by the bot list staff",
+                                       default=False)
+
     bot_certified = models.BooleanField(help_text="Whether the bot was certified on that bot list",
                                         default=False)
 
@@ -411,7 +414,7 @@ class BotList(models.Model):
                                   blank=True)
 
     def __str__(self):
-        return f"<BotList {self.name}>"
+        return f"BotList {self.name}"
 
     class Meta:
         db_table = 'botlist'
