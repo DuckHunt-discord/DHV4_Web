@@ -48,6 +48,7 @@ admin.site.register(models.DiscordUser, DiscordUserAdmin)
 
 class BotListAdmin(admin.ModelAdmin):
     list_display = ["name", "can_vote", "webhook_handler", "post_stats_method", "bot_certified"]
+    ordering = "key"
 
 
 admin.site.register(models.BotList, BotListAdmin)
