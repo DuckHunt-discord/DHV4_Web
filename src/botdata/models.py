@@ -384,7 +384,8 @@ class BotList(models.Model):
 
     post_stats_method = models.CharField(help_text="What HTTP method should be used to send the stats",
                                          choices=(("POST", "POST"),
-                                                  ("PATCH", "PATCH")),
+                                                  ("PATCH", "PATCH"),
+                                                  ("None", "None")),
                                          default="POST",
                                          max_length=10)
 
