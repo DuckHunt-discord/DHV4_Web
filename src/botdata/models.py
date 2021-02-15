@@ -333,6 +333,9 @@ class BotList(models.Model):
 
     bot_url = models.URLField(help_text="URL for the main bot page")
 
+    notes = models.TextField(help_text="Informations about this bot list",
+                             blank=True)
+
     auth = models.TextField(help_text="Token used to authenticate requests to/from the bot")
 
     # **Votes**
@@ -397,6 +400,14 @@ class BotList(models.Model):
                                                   default="shard_count",
                                                   blank=True,
                                                   max_length=128)
+
+    # **Others**
+
+    bot_certified = models.BooleanField(help_text="Whether the bot was certified on that bot list",
+                                        default=False)
+
+    embed_code = models.TextField(help_text="Code to show this bot list embed. This HTML won't be escaped.",
+                                  blank=True)
 
     def __str__(self):
         return f"<BotList {self.name}>"
