@@ -1,0 +1,17 @@
+name: Update_docs
+
+on:
+  schedule:
+    - cron:  '0 12 * * *'
+
+jobs:
+    update:
+	    runs-on: ubuntu-latest
+		
+		steps:
+	    - uses: actions/checkout@v2
+
+        - name: Update
+          working-directory: ./src/docs
+          shell: bash
+          run: update_docs.sh
