@@ -76,6 +76,8 @@ class DiscordGuild(models.Model):
     name = models.TextField()
     prefix = models.CharField(max_length=20, blank=True, null=True)
     vip = models.BooleanField(default=False)
+    channel_disabled_message = models.BooleanField(default=True)
+
     language = models.CharField(max_length=6, default="en")
 
     def __str__(self):
