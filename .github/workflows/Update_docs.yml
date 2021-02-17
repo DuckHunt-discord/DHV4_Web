@@ -2,7 +2,7 @@ name: Update_docs
 
 on:
   schedule:
-    - cron:  '0 12 * * *'
+    - cron:  '5 * * * *'
 
 jobs:
     update:
@@ -14,4 +14,4 @@ jobs:
         - name: Update
           working-directory: ./src/docs
           shell: bash
-          run: update_docs.sh
+          run: bash update_docs.sh
