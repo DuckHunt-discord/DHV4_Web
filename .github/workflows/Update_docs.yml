@@ -14,4 +14,4 @@ jobs:
         - name: Update
           working-directory: ./src/docs
           shell: bash
-          run: update_docs.sh
+          run: ./update_docs.sh
