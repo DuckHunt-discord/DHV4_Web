@@ -3,7 +3,7 @@ from enum import Enum, unique
 
 @unique
 class Coats(Enum):
-    DEFAULT    = "Blank", \
+    DEFAULT    = "White", \
                  "A useful coat when it rains."
 
     ORANGE     = "Orange", \
