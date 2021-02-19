@@ -18,6 +18,8 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 # https://www.colorschemer.com/color-picker/
+from botdata.coats import Coats
+
 DUCKS_COLORS = {
     "normal": "#55C8CE",
     "ghost": "#5294CE",
@@ -288,6 +290,8 @@ class Player(models.Model):
             return True
         elif self.prestige >= 7 and powerup == "kill_licence":
             return True
+        elif powerup in ["coat_color", "clover_exp"]:
+            return False
         elif powerup in ["sight", "detector", "sand", "mirror", "homing_bullets", "dead", "confiscated",
                          "jammed"]:
             return self.active_powerups[powerup] > 0
@@ -316,6 +320,17 @@ class Player(models.Model):
             if "trash" in item_name:
                 dct[item_name] = item_count
         return dct
+
+    def get_current_coat_color(self) -> typing.Optional[Coats]:
+        if self.is_powerup_active('coat'):
+            color_name = self.active_powerups.get('coat_color', None)
+            if color_name:
+                return Coats[color_name]
+            else:
+                # This is for older players that bought a "no_colored" coat.
+                return Coats.DEFAULT
+        else:
+            return None
 
     def __str__(self):
         return f"{self.member} playing on {self.channel}"
