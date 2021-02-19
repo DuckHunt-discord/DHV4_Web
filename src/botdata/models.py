@@ -76,6 +76,8 @@ class DiscordGuild(models.Model):
     name = models.TextField()
     prefix = models.CharField(max_length=20, blank=True, null=True)
     vip = models.BooleanField(default=False)
+    channel_disabled_message = models.BooleanField(default=True)
+
     language = models.CharField(max_length=6, default="en")
 
     def __str__(self):
@@ -404,6 +406,9 @@ class BotList(models.Model):
 
     # **Others**
 
+    bot_verified = models.BooleanField(help_text="Whether the bot was verified by the bot list staff",
+                                       default=False)
+
     bot_certified = models.BooleanField(help_text="Whether the bot was certified on that bot list",
                                         default=False)
 
@@ -411,7 +416,7 @@ class BotList(models.Model):
                                   blank=True)
 
     def __str__(self):
-        return f"<BotList {self.name}>"
+        return f"BotList {self.name}"
 
     class Meta:
         db_table = 'botlist'

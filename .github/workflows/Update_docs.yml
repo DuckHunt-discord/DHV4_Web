@@ -15,3 +15,4 @@ jobs:
           working-directory: ./src/docs
           shell: bash
           run: bash update_docs.sh
+          

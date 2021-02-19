@@ -101,12 +101,11 @@ def get_guilds_list(language=None):
                         pla.players_count > 0) AS sqy ON channels.discord_id = sqy.channel_id AND channels.enabled = True)
                          AS chasqy ON chasqy.guild_id = guilds.discord_id
     ORDER BY
-        guild_vip_status DESC,
-        guild_id ASC;
+        guild_vip_status DESC;
     """
-    res = cache.get('guilds_list_custom_sql')
-    if res:
-        return res
+    # res = cache.get('guilds_list_custom_sql')
+    # if res:
+    #     return res
 
     with connection.cursor() as cursor:
         cursor.execute(sql)
@@ -119,7 +118,13 @@ def get_guilds_list(language=None):
 
         result[channel_result["guild_id"]].append(channel_result)
 
-    res = list(result.items())
+    res = list(sorted(
+        [
+            (gid, list(sorted(cl, key=lambda c: -c["players_count"])))  # Sort channel list by most players at the top
+            for gid, cl in result.items()
+        ],
+        key=lambda tup: -(tup[1][0]["players_count"] + tup[1][0]["guild_vip_status"] * 100000)
+    ))  # And then sort guilds by most players, but VIP first.
     cache.set('guilds_list_custom_sql', res, 12 * HOUR)
     return res
 
