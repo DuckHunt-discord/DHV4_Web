@@ -1,6 +1,19 @@
+import markdown
 from django.db import models
 
+
 # Create your models here.
+
+def get_tag(name):
+    # First, search in tags
+    try:
+        return Tag.objects.filter(name__iexact=name).get()
+    except Tag.DoesNotExist:
+        try:
+            alias = TagAlias.objects.filer(name__iexact=name).select_related('tag').get()
+            return alias.tag
+        except TagAlias.DoesNotExist:
+            return None
 
 
 class Tag(models.Model):
@@ -14,8 +27,12 @@ class Tag(models.Model):
 
     # Tag
     official = models.BooleanField(default=False)
-    name = models.CharField(max_length=90, db_index=True)
+    name = models.CharField(max_length=90, db_index=True, unique=True)
     content = models.TextField()
+
+    @property
+    def html(self):
+        return markdown.markdown(self.content)
 
     def __str__(self):
         return f"{self.name}"
@@ -27,8 +44,7 @@ class TagAlias(models.Model):
 
     uses = models.IntegerField(default=0)
 
-    name = models.CharField(max_length=90, db_index=True)
+    name = models.CharField(max_length=90, db_index=True, unique=True)
 
     def __str__(self):
         return f"{self.name} -> {self.tag.name}"
-
