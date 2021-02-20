@@ -17,6 +17,9 @@ class Tag(models.Model):
     name = models.CharField(max_length=90, db_index=True)
     content = models.TextField()
 
+    def __str__(self):
+        return f"{self.name}"
+
 
 class TagAlias(models.Model):
     owner = models.ForeignKey('botdata.DiscordUser', related_name='tags_aliases', on_delete=models.CASCADE)
@@ -25,4 +28,7 @@ class TagAlias(models.Model):
     uses = models.IntegerField(default=0)
 
     name = models.CharField(max_length=90, db_index=True)
+
+    def __str__(self):
+        return f"{self.name} -> {self.tag.name}"
 
