@@ -1,9 +1,5 @@
 {% extends "base.jinja2" %}
 
-{% block canonical %}
-    <link rel="canonical" href="{{ canonical_domain_uri }}"/>
-{% endblock %}
-
 {% block metadesc %}
     <meta name="description" content="DuckHunt tags, learn more about the best game bot on Discord">
 {% endblock %}
@@ -14,4 +10,22 @@
 
 {% block content %}
     <h1>Say hello to tags.</h1>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+        {% for tag in tags %}
+            <div class="col">
+                <div class="card background-normal h-100 nice-card-borders">
+                    <div class="card-body">
+                        <a href="{{ tag.name }}" class="text-decoration-none">
+                            <div class="h4 card-title flex-grow-1 text-white-75">
+                                {{ tag.name.replace('_', ' ').title() }}
+                            </div>
+                        </a>
+
+                        {{ tag.content }}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

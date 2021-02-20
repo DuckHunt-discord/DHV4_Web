@@ -1,4 +1,5 @@
 import markdown
+from django.core.validators import validate_slug, MinValueValidator
 from django.db import models
 
 
@@ -24,12 +25,14 @@ class Tag(models.Model):
     # Statistics
     created = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
-    uses = models.IntegerField(default=0)
-    revisions = models.IntegerField(default=0)
+    uses = models.IntegerField(default=0, validators=[MinValueValidator(0)])
+    revisions = models.IntegerField(default=0, validators=[MinValueValidator(0)])
 
     # Tag
     official = models.BooleanField(default=False)
-    name = models.CharField(max_length=90, db_index=True, unique=True)
+    name = models.CharField(max_length=90, db_index=True, unique=True,
+                            validators=[validate_slug, ],
+                            help_text="Lowercase & without spaces.")
     content = models.TextField()
 
     @property
@@ -47,9 +50,11 @@ class TagAlias(models.Model):
     owner = models.ForeignKey('botdata.DiscordUser', related_name='tags_aliases', on_delete=models.CASCADE)
     tag = models.ForeignKey(Tag, related_name='aliases', on_delete=models.CASCADE)
 
-    uses = models.IntegerField(default=0)
+    uses = models.IntegerField(default=0, validators=[MinValueValidator(0)])
 
-    name = models.CharField(max_length=90, db_index=True, unique=True)
+    name = models.CharField(max_length=90, db_index=True, unique=True,
+                            validators=[validate_slug, ],
+                            help_text="Lowercase & without spaces.")
 
     def __str__(self):
         return f"{self.name} -> {self.tag.name}"

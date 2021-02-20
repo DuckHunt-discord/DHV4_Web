@@ -1,7 +1,7 @@
 {% extends "base.jinja2" %}
 
 {% block canonical %}
-    <link rel="canonical" href="{{ canonical_domain_uri }}"/>
+    <link rel="canonical" href="{{ canonical_domain_uri }}/tags/{{ tag.name }}"/>
 {% endblock %}
 
 {% block metadesc %}
@@ -16,14 +16,17 @@
     <h1>{{ tag.name }}</h1>
     {{ tag.html }}
 
-    <button class="btn btn-outline-light" type="button" data-bs-toggle="collapse" data-bs-target="#rawTag"
-            aria-expanded="false" aria-controls="rawTag">
-        View raw tag data
-    </button>
+    <div class="d-grid gap-2">
+        <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#rawTag"
+                aria-expanded="false" aria-controls="rawTag">
+            View raw tag data
+        </button>
+    </div>
+
 
     <div class="collapse" id="rawTag">
-        <pre>
-            {{ tag.content }}
-        </pre>
+        <pre>{{ tag.content }}</pre>
     </div>
+
+
 {% endblock %}
