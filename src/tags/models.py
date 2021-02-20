@@ -3,6 +3,8 @@ from django.db import models
 
 
 # Create your models here.
+from django.utils.safestring import mark_safe
+
 
 def get_tag(name):
     # First, search in tags
@@ -32,7 +34,7 @@ class Tag(models.Model):
 
     @property
     def html(self):
-        return markdown.markdown(self.content)
+        return mark_safe(markdown.markdown(self.content))
 
     def __str__(self):
         return f"{self.name}"
