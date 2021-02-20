@@ -19,7 +19,7 @@ def get_tag(name):
 
 
 class Tag(models.Model):
-    owners = models.ManyToManyField('botdata.DiscordUser', related_name='tags')
+    owner = models.ForeignKey('botdata.DiscordUser', related_name='tags', on_delete=models.CASCADE)
 
     # Statistics
     created = models.DateTimeField(auto_now_add=True)
