@@ -27,6 +27,7 @@
         <option value="$MODULE_DIR$/src/public/templates" />
         <option value="$MODULE_DIR$/src/botdata/templates" />
         <option value="$MODULE_DIR$/src/docs/templates" />
+        <option value="$MODULE_DIR$/src/tags/templates" />
       </list>
     </option>
   </component>

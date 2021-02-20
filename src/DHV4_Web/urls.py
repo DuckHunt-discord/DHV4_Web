@@ -24,6 +24,7 @@ urlpatterns = [
     path('', include('public.urls')),
     path('docs/', include('docs.urls'), ),
     path('data/', include('botdata.urls')),
+    path('tags/', include('tags.urls')),
     path('admin/', admin.site.urls),
     path('admin/dynamic_raw_id/', include('dynamic_raw_id.urls')),
     path('__debug__/', include(debug_toolbar.urls)),
