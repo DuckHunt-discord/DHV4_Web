@@ -12,7 +12,7 @@ def get_tag(name):
         return Tag.objects.filter(name__iexact=name).get()
     except Tag.DoesNotExist:
         try:
-            alias = TagAlias.objects.filer(name__iexact=name).select_related('tag').get()
+            alias = TagAlias.objects.filter(name__iexact=name).select_related('tag').get()
             return alias.tag
         except TagAlias.DoesNotExist:
             return None
