@@ -15,4 +15,15 @@
 {% block content %}
     <h1>{{ tag.name }}</h1>
     {{ tag.html }}
+
+    <button class="btn  btn-outline-light" type="button" data-bs-toggle="collapse" data-bs-target="#rawTag"
+            aria-expanded="false" aria-controls="rawTag">
+        View raw tag data
+    </button>
+
+    <div class="collapse" id="rawTag">
+        <pre>
+            {{ tag.content }}
+        </pre>
+    </div>
 {% endblock %}
