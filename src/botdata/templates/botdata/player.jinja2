@@ -68,7 +68,7 @@
         <div class="h2">📈 General statistics</div>
 
         <p itemprop="description">
-            <span class="statistic">{{ player.givebacks }}</span> days played,
+            <span class="statistic">{{ player.givebacks + 1 }}</span> days played,
             <span class="statistic">{{ intcomma(player.experience) }}</span> experience points.
             {{ intcomma(player.total_ducks_killed) }} ducks killed.
         </p>
