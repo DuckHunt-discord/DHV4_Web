@@ -39,6 +39,9 @@ class Tag(models.Model):
     def __str__(self):
         return f"{self.name}"
 
+    class Meta:
+        db_table = 'tag'
+
 
 class TagAlias(models.Model):
     owner = models.ForeignKey('botdata.DiscordUser', related_name='tags_aliases', on_delete=models.CASCADE)
@@ -50,3 +53,6 @@ class TagAlias(models.Model):
 
     def __str__(self):
         return f"{self.name} -> {self.tag.name}"
+
+    class Meta:
+        db_table = 'tagalias'
