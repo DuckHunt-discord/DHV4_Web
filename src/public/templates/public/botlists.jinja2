@@ -1,0 +1,21 @@
+{% extends "base.jinja2" %}
+
+{% block metadesc %}
+    <meta name="description" content="DuckHunt is listed on many bot lists. Here are some of them">
+{% endblock %}
+
+{% block title %}
+    DuckHunt V4 - On different bot lists
+{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block content %}
+    <h1>DuckHunt on bot lists</h1>
+    {% for botlist in botlists %}
+        <h2>{{ botlist.name }}</h2>
+        {{ botlist.embed_code|safe }}
+    {% endfor %}
+{% endblock %}

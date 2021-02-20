@@ -12,6 +12,7 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.views.decorators.cache import cache_page
 
+from botdata.models import BotList
 from botdata.templatetags.global_jinja_funcs import show_timestamp, intcomma
 
 SECOND = 1
@@ -159,6 +160,11 @@ def shard_status(request, shard_id):
 @cache_page(3 * DAY)
 def privacy_policy(request):
     return render(request, "public/privacy_policy.jinja2", {})
+
+
+def botlists(request):
+    bls = BotList.objects.exclude(embed_code='')
+    return render(request, "public/botlists.jinja2", {"botlists": bls})
 
 
 @cache_page(1 * HOUR)
