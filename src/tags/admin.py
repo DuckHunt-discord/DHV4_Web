@@ -9,7 +9,7 @@ from . import models
 class AliasesInline(DynamicRawIDMixin, admin.TabularInline):
     dynamic_raw_id_fields = ["owner"]
 
-    model = models.TagAliases
+    model = models.TagAlias
 
 
 class TagsAdmin(DynamicRawIDMixin, admin.ModelAdmin):
@@ -19,5 +19,5 @@ class TagsAdmin(DynamicRawIDMixin, admin.ModelAdmin):
     ]
 
 
-admin.site.register(models.Tags, TagsAdmin)
+admin.site.register(models.Tag, TagsAdmin)
 

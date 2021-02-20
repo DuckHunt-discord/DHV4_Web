@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 
 
-class Tags(models.Model):
+class Tag(models.Model):
     owners = models.ManyToManyField('botdata.DiscordUser', related_name='tags')
 
     # Statistics
@@ -18,9 +18,9 @@ class Tags(models.Model):
     content = models.TextField()
 
 
-class TagAliases(models.Model):
+class TagAlias(models.Model):
     owner = models.ForeignKey('botdata.DiscordUser', related_name='tags_aliases', on_delete=models.CASCADE)
-    tag = models.ForeignKey(Tags, related_name='aliases', on_delete=models.CASCADE)
+    tag = models.ForeignKey(Tag, related_name='aliases', on_delete=models.CASCADE)
 
     uses = models.IntegerField(default=0)
 
