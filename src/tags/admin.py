@@ -13,6 +13,8 @@ class AliasesInline(DynamicRawIDMixin, admin.TabularInline):
 
 
 class TagsAdmin(DynamicRawIDMixin, admin.ModelAdmin):
+    list_display = ["name", "official", "uses", "revisions", "created", "last_modified",]
+
     dynamic_raw_id_fields = ["owner"]
     inlines = [
         AliasesInline,

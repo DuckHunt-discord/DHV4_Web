@@ -33,6 +33,7 @@ class Tag(models.Model):
     name = models.CharField(max_length=90, db_index=True, unique=True,
                             validators=[validate_slug, ],
                             help_text="Lowercase & without spaces.")
+
     content = models.TextField()
 
     @property
