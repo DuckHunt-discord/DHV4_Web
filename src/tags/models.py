@@ -37,7 +37,7 @@ class Tag(models.Model):
 
     @property
     def html(self):
-        return mark_safe(markdown.markdown(self.content))
+        return mark_safe(markdown.markdown(self.content.replace("\n", "\n\n")))
 
     @property
     def description(self):
