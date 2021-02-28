@@ -17,7 +17,7 @@ class ProductPagesSitemap(sitemaps.Sitemap):
         return models.Product.objects.all()
 
     def location(self, item):
-        return reverse('shop_product_info', {'product_id': item.pk})
+        return reverse('shop_product_info', kwargs={'product_id': item.pk})
 
 
 class DesignPagesSitemap(sitemaps.Sitemap):
@@ -28,7 +28,7 @@ class DesignPagesSitemap(sitemaps.Sitemap):
         return models.Design.objects.all()
 
     def location(self, item):
-        return reverse('shop_design_info', {'pk': item.pk})
+        return reverse('shop_design_info', kwargs={'pk': item.pk})
 
 
 class ProductTypePagesSitemap(sitemaps.Sitemap):
@@ -39,4 +39,4 @@ class ProductTypePagesSitemap(sitemaps.Sitemap):
         return models.ProductType.objects.all()
 
     def location(self, item):
-        return reverse('shop_product_type_info', {'pk': item.pk})
+        return reverse('shop_product_type_info', kwargs={'pk': item.pk})

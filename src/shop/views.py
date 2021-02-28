@@ -32,7 +32,7 @@ def view_product_type(request, pk: int):
 
 def view_design(request, pk: int):
     design = get_object_or_404(models.Design.objects.all(),
-                                     pk=pk)
+                               pk=pk)
     products = design.products.all().prefetch_related('product_type', 'design', 'images')
 
     return render(request, "shop/category.jinja2", {"category": design,
