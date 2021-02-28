@@ -14,3 +14,4 @@ pylibmc~=1.6.1
 jsmin~=2.2.2
 css-html-js-minify~=2.5.5
 django-dynamic-raw-id~=2.8
+Pillow

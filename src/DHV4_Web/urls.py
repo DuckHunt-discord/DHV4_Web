@@ -14,10 +14,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 import debug_toolbar
+from django.conf import settings
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 
 from django.contrib.sitemaps import views as sitemap_views
+from django.views.static import serve
+
 from .sitemaps import sitemaps
 
 urlpatterns = [
@@ -25,6 +28,7 @@ urlpatterns = [
     path('docs/', include('docs.urls'), ),
     path('data/', include('botdata.urls')),
     path('tags/', include('tags.urls')),
+    path('shop/', include('shop.urls')),
     path('admin/', admin.site.urls),
     path('admin/dynamic_raw_id/', include('dynamic_raw_id.urls')),
     path('__debug__/', include(debug_toolbar.urls)),
@@ -32,5 +36,12 @@ urlpatterns = [
     path('sitemap-<section>.xml', sitemap_views.sitemap, {'sitemaps': sitemaps},
          name='django.contrib.sitemaps.views.sitemap'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += [
+        re_path(r'^media/(?P<path>.*)$', serve, {
+            'document_root': settings.MEDIA_ROOT,
+        }),
+    ]
 
 handler404 = 'public.views.handler404'

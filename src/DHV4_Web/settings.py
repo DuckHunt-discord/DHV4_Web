@@ -74,6 +74,7 @@ INSTALLED_APPS.extend(['django.contrib.sites',
                        'docs.apps.DocsConfig',
                        'botdata.apps.BotdataConfig',
                        'tags.apps.TagsConfig',
+                       'shop.apps.ShopConfig',
                        'django_jinja',
                        'django_extensions',
                        'pipeline',
@@ -200,6 +201,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR.parent / "static"
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR.parent / "media"
 
 STATICFILES_STORAGE = 'pipeline.storage.PipelineManifestStorage'
 

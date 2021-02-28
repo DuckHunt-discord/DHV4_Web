@@ -8,9 +8,10 @@ def set_site_data(apps, schema_editor):
     # version than this migration expects. We use the historical version.
     Site = apps.get_model('sites', 'Site')
     site = Site.objects.first()
-    site.domain = "duckhunt.me"
-    site.name = "DuckHunt Discord"
-    site.save()
+    if site:
+        site.domain = "duckhunt.me"
+        site.name = "DuckHunt Discord"
+        site.save()
 
 
 class Migration(migrations.Migration):
