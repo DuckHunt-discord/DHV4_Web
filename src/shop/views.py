@@ -24,17 +24,17 @@ def view_product(request, product_id: int):
 def view_product_type(request, pk: int):
     product_type = get_object_or_404(models.ProductType.objects.all(),
                                      pk=pk)
-    products = product_type.products.all().prefetch_related('product_type', 'design', 'images')
+    products = product_type.products.all().prefetch_related('product_type', 'design', 'pictures')
 
-    return render(request, "shop/category.jinja2", {"category": product_type,
-                                                    "products": products,
+    return render(request, "shop/product_type.jinja2", {"category": product_type,
+                                                        "products": products,
                                                     })
 
 
 def view_design(request, pk: int):
     design = get_object_or_404(models.Design.objects.all(),
                                pk=pk)
-    products = design.products.all().prefetch_related('product_type', 'design', 'images')
+    products = design.products.all().prefetch_related('product_type', 'design', 'pictures')
 
     return render(request, "shop/category.jinja2", {"category": design,
                                                     "products": products,

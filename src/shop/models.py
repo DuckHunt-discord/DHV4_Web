@@ -77,4 +77,8 @@ def make_filepath(instance, filename):
 
 class ProductPicture(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="pictures")
+    is_main_image = models.BooleanField(default=False)
     photo = models.ImageField(upload_to=make_filepath, unique=True)
+
+    class Meta:
+        ordering = ["-is_main_image"]

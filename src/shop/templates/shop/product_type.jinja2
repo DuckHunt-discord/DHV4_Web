@@ -1,0 +1,43 @@
+{% extends "base.jinja2" %}
+
+{% block metadesc %}
+    <meta name="description"
+          content="{{ category }}">
+{% endblock %}
+
+{% block title %}
+    DuckHunt V4 Shop - {{ category }}
+{% endblock %}
+
+{% block content %}
+    <h1>{{ category }}</h1>
+
+    <div class="row">
+        {% for product in products %}
+            <div class="col col-12 col-lg-3">
+                <!-- Product info -->
+                <div class="card background-normal h-100">
+                    <img src="{{ product.pictures.first().photo.url }}"
+                         class="card-img-top"
+                         alt="{{ product }} image">
+
+                    <div class="card-body">
+                        <div class="h2 card-title flex-grow-1 text-white-75">
+                            {{ product }}
+                        </div>
+
+                        <div class="text-center">
+
+                            <a href="{{ url('shop_product_info', product_id=product.id) }}" type="button"
+                                    class="btn btn-outline-success"
+                            >
+                                Buy for {{ product.price }} + shipping (soon)
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -55,11 +55,13 @@ class Command(BaseCommand):
                         color_product_name=varient["color_product_name"] or "")
 
                     product.save()
-                    for image_rel_path in varient["images"]:
+                    for image_data in varient["images"]:
+                        image_rel_path = image_data["link"]
                         image_path = base_path / image_rel_path.replace("redbubble/", "", 1)
 
                         with open(image_path, "rb") as image_file:
                             image = ProductPicture(product=product,
+                                                   is_main_image=image_data["main"],
                                                    photo=File(image_file))
 
                             image.save()

@@ -58,12 +58,11 @@
                 <!-- Product info -->
                 <div class="card background-normal h-100">
                     <div class="card-body">
-                        <a href="{{ guild_url }}{{ guild }}"
-                           class="text-decoration-none">
-                            <div class="h2 card-title flex-grow-1 text-white-75">
-                                {{ product.product_type }}
-                            </div>
-                        </a>
+
+                        <div class="h2 card-title flex-grow-1 text-white-75">
+                            {{ product.product_type }}
+                        </div>
+
                         <p>Buy buying this {{ product.product_type }}, you contribute ${{ product.get_margin() }} to the project.</p>
 
                         {% if product.sizes_names %}
