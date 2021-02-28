@@ -1,3 +1,4 @@
+from django.http import HttpResponseNotAllowed, JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from . import models
 
@@ -38,3 +39,12 @@ def view_design(request, pk: int):
     return render(request, "shop/category.jinja2", {"category": design,
                                                     "products": products,
                                                     })
+
+
+def product_api(request, product_id: int):
+    if request.method != 'POST':
+        return HttpResponseNotAllowed(permitted_methods=['POST'])
+
+    product = get_object_or_404(models.Product.objects.all().prefetch_related('design', 'product_type', 'pictures'),
+                                pk=product_id)
+    return HttpResponseRedirect(product.external_url)
