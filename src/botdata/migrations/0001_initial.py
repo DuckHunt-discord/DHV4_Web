@@ -21,7 +21,6 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'aerich',
-                'managed': False,
             },
         ),
         migrations.CreateModel(
@@ -66,7 +65,6 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'channels',
-                'managed': False,
             },
         ),
         migrations.CreateModel(
@@ -80,7 +78,6 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'guilds',
-                'managed': False,
             },
         ),
         migrations.CreateModel(
@@ -91,7 +88,6 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'members',
-                'managed': False,
             },
         ),
         migrations.CreateModel(
@@ -121,7 +117,6 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'players',
-                'managed': False,
             },
         ),
         migrations.CreateModel(
@@ -140,7 +135,6 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'users',
-                'managed': False,
             },
         ),
     ]
