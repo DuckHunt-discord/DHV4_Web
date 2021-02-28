@@ -80,9 +80,16 @@
                         {% endif %}
                         {{ product.html_description|safe }}
 
+                        <script>
+                            function buy(){
+                                alert('Available soon-ish.');
+                            }
+                        </script>
+
                         <div class="text-center">
                             <button type="button"
-                                class="btn btn-outline-success">Buy for {{ product.price }} + shipping</button>
+                                    class="btn btn-outline-success"
+                                    onclick="buy()">Buy for {{ product.price }} + shipping</button>
                         </div>
 
                     </div>
