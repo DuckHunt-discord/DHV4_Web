@@ -34,6 +34,12 @@ class Product(models.Model):
     print_location = models.CharField(choices=(("front", "Front"), ("back", "Back")), blank=True, max_length=10)
     color_product_name = models.CharField(max_length=600, blank=True)
 
+    def get_parsed_price(self) -> float:
+        return float(self.price.replace("$", "").replace(",", "."))
+
+    def get_margin(self) -> float:
+        return round(self.get_parsed_price() * 0.2, 2)
+
     @property
     def color(self):
         return self.color_product_name.replace(self.product_type.name, '', 1).strip()

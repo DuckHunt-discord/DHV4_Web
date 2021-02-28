@@ -1,0 +1,94 @@
+{% extends "base.jinja2" %}
+
+{% block metadesc %}
+    <meta name="description"
+          content="{{ product.display_name }}">
+{% endblock %}
+
+{% block ogp %}
+    <meta property="og:title"
+          content="DuckHunt Shop"/>
+    <meta property="og:type"
+          content="website"/>
+    <meta property="og:url"
+          content="{{ canonical_domain_uri }}{{ request.get_full_path() }}"/>
+    <meta property="og:image"
+          content="{{ canonical_domain_uri }}{{ image.photo.url }}"/>
+    <meta property="og:image:width"
+          content="{{ image.photo.width }}"/>
+    <meta property="og:image:height"
+          content="{{ image.photo.height }}"/>
+    <meta property="og:site_name"
+          content="DuckHunt Discord V4 Shop"/>
+    <meta property="og:description"
+          content="Buy merch to support the bot. Great quality, good looking, and fun."/>
+{% endblock %}
+
+{% block title %}
+    DuckHunt V4 Shop - {{ product.product_type }}
+{% endblock %}
+
+{% block content %}
+    <h1>{{ product }}</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col col-12 col-lg-7">
+                <!-- Product images -->
+                <div class="container">
+                    <div class="row justify-content-around align-items-center">
+                        {% for image_ in images %}
+                            {% if loop.first %}
+                                <div class="col col-12 text-center">
+                                    <img src="{{ image_.photo.url }}"
+                                         style="max-height: 70vh; width: auto;"
+                                         alt="{{ product }}">
+                                </div>
+                            {% else %}
+                                <div class="col col-lg-3 mt-2 mb-2">
+                                    <img src="{{ image_.photo.url }}"
+                                         class="img-fluid img-thumbnail"
+                                         alt="{{ product }} alternative image {{ loop.index0 }}">
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="col col-12 col-lg-5">
+                <!-- Product info -->
+                <div class="card background-normal h-100">
+                    <div class="card-body">
+                        <a href="{{ guild_url }}{{ guild }}"
+                           class="text-decoration-none">
+                            <div class="h2 card-title flex-grow-1 text-white-75">
+                                {{ product.product_type }}
+                            </div>
+                        </a>
+                        <p>Buy buying this {{ product.product_type }}, you contribute ${{ product.get_margin() }} to the project.</p>
+
+                        {% if product.sizes_names %}
+                            <p>Available sizes: </p>
+                            <div class="btn-group mb-2"
+                                 role="group"
+                                 aria-label="Sizes">
+                                {% for size in product.sizes_names %}
+                                    <button type="button"
+                                            class="btn btn-outline-blurple btn-sm">{{ size }}
+                                    </button>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        {{ product.html_description|safe }}
+
+                        <div class="text-center">
+                            <button type="button"
+                                class="btn btn-outline-success">Buy for {{ product.price }} + shipping</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
