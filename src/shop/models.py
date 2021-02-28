@@ -26,8 +26,8 @@ class Product(models.Model):
     html_description = models.TextField()
     external_url = models.URLField()
 
-    design = models.ForeignKey(Design, on_delete=models.CASCADE)
-    product_type = models.ForeignKey(ProductType, on_delete=models.CASCADE)
+    design = models.ForeignKey(Design, on_delete=models.CASCADE, related_name="products")
+    product_type = models.ForeignKey(ProductType, on_delete=models.CASCADE, related_name="products")
 
     sizes_names = models.JSONField(default=list)
     price = models.CharField(max_length=10)
