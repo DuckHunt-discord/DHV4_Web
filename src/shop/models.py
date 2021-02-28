@@ -8,14 +8,14 @@ from django.db import models
 
 
 class Design(models.Model):
-    name = models.CharField(max_length=300)
+    name = models.CharField(max_length=300, unique=True)
 
     def __str__(self):
         return self.name
 
 
 class ProductType(models.Model):
-    name = models.CharField(max_length=300)
+    name = models.CharField(max_length=300, unique=True)
 
     def __str__(self):
         return self.name
@@ -71,4 +71,4 @@ def make_filepath(instance, filename):
 
 class ProductPicture(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="pictures")
-    photo = models.ImageField(upload_to=make_filepath)
+    photo = models.ImageField(upload_to=make_filepath, unique=True)
