@@ -40,6 +40,7 @@
                             {% if loop.first %}
                                 <div class="col col-12 text-center">
                                     <img src="{{ image_.photo.url }}"
+                                         class="img-fluid"
                                          style="max-height: 70vh; width: auto;"
                                          alt="{{ product }}">
                                 </div>
@@ -63,7 +64,7 @@
                             {{ product.product_type }}
                         </div>
 
-                        <p>Buy buying this {{ product.product_type }}, you contribute ${{ product.get_margin() }} to the project.</p>
+                        <p>By buying this {{ product.product_type }}, you contribute ${{ product.get_margin() }} to the project.</p>
 
                         {% if product.sizes_names %}
                             <p>Available sizes: </p>

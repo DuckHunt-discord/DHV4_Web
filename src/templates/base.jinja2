@@ -2,18 +2,25 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="google-site-verification" content="KlSQKyZeTCwrcPnW3RY3O2dBuh7jl0z4rkd388sPYhk"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification"
+          content="KlSQKyZeTCwrcPnW3RY3O2dBuh7jl0z4rkd388sPYhk"/>
     {% block canonical %}
-        <link rel="canonical" href="{{ canonical_domain_uri }}{{ request.get_full_path() }}"/>
+        <link rel="canonical"
+              href="{{ canonical_domain_uri }}{{ request.get_full_path() }}"/>
     {% endblock %}
     {% block ogp %}
-        <meta property="og:title" content="DuckHunt"/>
-        <meta property="og:type" content="website"/>
-        <meta property="og:url" content="{{ canonical_domain_uri }}{{ request.get_full_path() }}"/>
+        <meta property="og:title"
+              content="DuckHunt"/>
+        <meta property="og:type"
+              content="website"/>
+        <meta property="og:url"
+              content="{{ canonical_domain_uri }}{{ request.get_full_path() }}"/>
         <meta property="og:image"
               content="{{ canonical_domain_uri }}{{ static("public/img/Speaking_Ducc_Globloxmen.png") }}"/>
-        <meta property="og:site_name" content="DuckHunt Discord V4"/>
+        <meta property="og:site_name"
+              content="DuckHunt Discord V4"/>
         <meta property="og:description"
               content="DuckHunt V4 is the next version of the popular DuckHunt Discord Bot."/>
     {% endblock %}
@@ -21,17 +28,33 @@
     {% block metadesc %}
     {% endblock %}
 
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ static('apple-touch-icon.png') }}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ static('favicon-32x32.png') }}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ static('favicon-16x16.png') }}">
-    <link rel="manifest" href="{{ static('site.webmanifest') }}">
-    <link rel="mask-icon" href="{{ static('safari-pinned-tab.svg') }}" color="#5bbad5">
-    <link rel="shortcut icon" href="{{ static('favicon.ico') }}">
-    <meta name="msapplication-TileColor" content="#00a300">
-    <meta name="msapplication-config" content="/static/browserconfig.xml">
-    <meta name="theme-color" content="#ffffff">
+    <link rel="apple-touch-icon"
+          sizes="180x180"
+          href="{{ static('apple-touch-icon.png') }}">
+    <link rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="{{ static('favicon-32x32.png') }}">
+    <link rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="{{ static('favicon-16x16.png') }}">
+    <link rel="manifest"
+          href="{{ static('site.webmanifest') }}">
+    <link rel="mask-icon"
+          href="{{ static('safari-pinned-tab.svg') }}"
+          color="#5bbad5">
+    <link rel="shortcut icon"
+          href="{{ static('favicon.ico') }}">
+    <meta name="msapplication-TileColor"
+          content="#00a300">
+    <meta name="msapplication-config"
+          content="/static/browserconfig.xml">
+    <meta name="theme-color"
+          content="#ffffff">
 
-    <link rel="stylesheet" href="{{ static('public/css/bootstrap.min.css') }}">
+    <link rel="stylesheet"
+          href="{{ static('public/css/bootstrap.min.css') }}">
 
     {% stylesheet 'base' %}
 
@@ -56,8 +79,10 @@
 <body {% block body_headers %}class="background-light"{% endblock %}>
 <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
     <div class="container-fluid">
-        <a href="/" class="navbar-brand">
-            DuckHunt Discord V<span class="odometer" id="navbar-odo">4</span>
+        <a href="/"
+           class="navbar-brand">
+            DuckHunt Discord V<span class="odometer"
+                                    id="navbar-odo">4</span>
             <script>
                 document.getElementById("navbar-odo").innerHTML = "0";
                 document.addEventListener("DOMContentLoaded", function (event) {
@@ -65,35 +90,68 @@
                 });
             </script>
 
-            <img src="{{ static("public/img/armored_duck_Calgeka_logo.png") }}" alt="logo"
+            <img src="{{ static("public/img/armored_duck_Calgeka_logo.png") }}"
+                 alt="logo"
                  width="30"
                  height="30">
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="collapse navbar-collapse"
+             id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a href="{{ url('docs:index') }}" class="nav-link">Documentation</a>
+                    <a href="{{ url('docs:index') }}"
+                       class="nav-link">Documentation</a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ url('guilds') }}" class="nav-link">Servers</a>
+                    <a href="{{ url('guilds') }}"
+                       class="nav-link">Servers</a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ url('bot_commands') }}" class="nav-link">Commands</a>
+                    <a href="{{ url('bot_commands') }}"
+                       class="nav-link">Commands</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle"
+                       href="#"
+                       id="shopMainDropdown"
+                       role="button"
+                       data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        Shop
+                    </a>
+                    <ul class="dropdown-menu"
+                        aria-labelledby="shopMainDropdown">
+                        <li>
+                            <a class="dropdown-item"
+                               href="#">By duck</a>
+                        </li>
+                    </ul>
+
                 </li>
                 <li class="nav-item">
                     <a href="https://discord.com/oauth2/authorize?client_id=187636051135823872&scope=bot&permissions=741735489"
-                       class="nav-link" target="_blank" rel="noopener">Invite the bot</a>
+                       class="nav-link"
+                       target="_blank"
+                       rel="noopener">Invite the bot</a>
                 </li>
                 <li class="nav-item">
-                    <a href="https://discordapp.com/invite/2BksEkV" class="nav-link" rel="noopener" target="_blank">Support server</a>
+                    <a href="https://discordapp.com/invite/2BksEkV"
+                       class="nav-link"
+                       rel="noopener"
+                       target="_blank">Support server</a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ url('bot_status') }}" class="nav-link">Status</a>
+                    <a href="{{ url('bot_status') }}"
+                       class="nav-link">Status</a>
                 </li>
             </ul>
             <div class="d-flex">

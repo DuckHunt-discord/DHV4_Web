@@ -56,6 +56,32 @@ class Product(models.Model):
 
         return name
 
+    @property
+    def display_name_on_product_type(self):
+        name = str(self.design)
+
+        if self.print_location == "back" and self.color:
+            name += f" ({self.color}, {self.print_location} printed)"
+        elif self.print_location == "back":
+            name += f", {self.print_location} printed"
+        elif self.color:
+            name += f" ({self.color})"
+
+        return name
+
+    @property
+    def display_name_on_design(self):
+        name = str(self.product_type)
+
+        if self.print_location and self.color:
+            name += f" ({self.color}, {self.print_location} printed)"
+        elif self.print_location:
+            name += f", {self.print_location} printed"
+        elif self.color:
+            name += f" ({self.color})"
+
+        return name
+
     def __str__(self):
         return self.display_name
 
