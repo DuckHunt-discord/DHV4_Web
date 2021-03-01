@@ -130,10 +130,21 @@
                     </a>
                     <ul class="dropdown-menu"
                         aria-labelledby="shopMainDropdown">
+                        {% for duck_design, design_url in get_shop_designs() %}
+                            <li>
+                                <a class="dropdown-item"
+                                   href="{{ design_url }}">{{ duck_design }}</a>
+                            </li>
+                        {% endfor %}
                         <li>
-                            <a class="dropdown-item"
-                               href="#">By duck</a>
+                            <hr class="dropdown-divider">
                         </li>
+                        {% for product_type, product_type_url in get_shop_product_types() %}
+                            <li>
+                                <a class="dropdown-item"
+                                   href="{{ product_type_url }}">{{ product_type }}</a>
+                            </li>
+                        {% endfor %}
                     </ul>
 
                 </li>
