@@ -7,7 +7,7 @@ from django.core.cache import cache
 
 @library.global_function()
 def get_shop_product_types():
-    product_types_infos = cache.get('shop_product_type_infos')
+    product_types_infos = cache.get('shop_product_type_infos', [])
 
     if not product_types_infos:
         for product_type in models.ProductType.objects.all().order_by('name'):
@@ -19,7 +19,7 @@ def get_shop_product_types():
 
 @library.global_function()
 def get_shop_designs():
-    designs_infos = cache.get('shop_design_infos')
+    designs_infos = cache.get('shop_design_infos', [])
 
     if not designs_infos:
         for design in models.Design.objects.all().order_by('name'):
