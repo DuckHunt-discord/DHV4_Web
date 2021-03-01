@@ -119,34 +119,15 @@
                     <a href="{{ url('bot_commands') }}"
                        class="nav-link">Commands</a>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle"
-                       href="#"
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="#shopMenu"
                        id="shopMainDropdown"
                        role="button"
-                       data-bs-toggle="dropdown"
+                       data-bs-toggle="collapse"
                        aria-expanded="false">
                         Shop
                     </a>
-                    <ul class="dropdown-menu"
-                        aria-labelledby="shopMainDropdown">
-                        {% for duck_design, design_url in get_shop_designs() %}
-                            <li>
-                                <a class="dropdown-item"
-                                   href="{{ design_url }}">{{ duck_design }}</a>
-                            </li>
-                        {% endfor %}
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        {% for product_type, product_type_url in get_shop_product_types() %}
-                            <li>
-                                <a class="dropdown-item"
-                                   href="{{ product_type_url }}">{{ product_type }}</a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-
                 </li>
                 <li class="nav-item">
                     <a href="https://discord.com/oauth2/authorize?client_id=187636051135823872&scope=bot&permissions=741735489"
@@ -171,6 +152,33 @@
         </div>
     </div>
 </nav>
+<div class="collapse text-light container pb-3 pt-3" id="shopMenu">
+    <div class="row">
+        <div class="col col-12 col-md-6">
+            <span class="h3">By duck</span>
+
+            <div class="list-group list-group-flush rounded">
+                {% for duck_design, design_url in get_shop_designs() %}
+                    <a class="list-group-item list-group-item-action text-white-75 background-grey"
+                       href="{{ design_url }}">{{ duck_design }}</a>
+                {% endfor %}
+                <a class="list-group-item list-group-item-action text-white background-blurple"
+                   href="{{ url('shop_designs') }}">See all designs...</a>
+            </div>
+        </div>
+        <div class="col col-12 col-md-6">
+            <span class="h3">By product</span>
+            <div class="list-group list-group-flush rounded">
+                {% for product_type, product_type_url in get_shop_product_types() %}
+                    <a class="list-group-item list-group-item-action text-white-75 background-grey"
+                       href="{{ product_type_url }}">{{ product_type }}</a>
+                {% endfor %}
+                <a class="list-group-item list-group-item-action text-white background-blurple"
+                   href="{{ url('shop_product_types') }}">See all product types...</a>
+            </div>
+        </div>
+    </div>
+</div>
 {% block container %}
     <div class="container text-light">
         {% block content %}
