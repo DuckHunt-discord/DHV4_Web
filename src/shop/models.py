@@ -9,6 +9,7 @@ from django.db import models
 
 class Design(models.Model):
     name = models.CharField(max_length=300, unique=True)
+    show_in_menu = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -16,6 +17,7 @@ class Design(models.Model):
 
 class ProductType(models.Model):
     name = models.CharField(max_length=300, unique=True)
+    show_in_menu = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
