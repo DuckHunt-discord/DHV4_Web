@@ -26,10 +26,13 @@
                             {{ product_type_info['product_type_name'] }}
                         </div>
                     </div>
-                    <img src="{{ product_type_info['photo'].url }}"
+                    <picture>
+                        <source srcset="{{ product_type_info['photo'].url }}.webp" type="image/webp"/>
+                        <img src="{{ product_type_info['photo'].url }}"
                          width="{{ product_type_info['photo'].width }}" height="{{ product_type_info['photo'].height }}"
                          class="card-img-top img-fluid"
                          alt="{{ product_type_info['product_type_name'] }} image">
+                    </picture>
                     <div class="card-footer">
                         <div class="row align-content-center">
                             <div class="col">

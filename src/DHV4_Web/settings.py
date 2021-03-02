@@ -297,9 +297,11 @@ PIPELINE = {
 
 THUMBNAIL_ALIASES = {
     '': {
-        'list_display': {'size': (400, 400), 'crop': "scale", 'quality': 70},
-        'suggest_display': {'size': (200, 200), 'crop': "scale", 'quality': 70},
+        'list_display': {'size': (400, 400), 'crop': "scale", 'quality': 85},
+        'suggest_display': {'size': (200, 200), 'crop': "scale", 'quality': 85},
     },
 }
 
 THUMBNAIL_DEBUG = DEBUG
+THUMBNAIL_CACHE_DIMENSIONS = True
+THUMBNAIL_NAMER = "easy_thumbnails.namers.alias"
