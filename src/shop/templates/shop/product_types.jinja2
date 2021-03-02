@@ -1,0 +1,48 @@
+{% extends "base.jinja2" %}
+
+{% block metadesc %}
+    <meta name="description" content="DuckHunt Shop">
+{% endblock %}
+
+{% block title %}
+    DuckHunt V4 Shop
+{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block content %}
+    <h1>DuckHunt shop designs</h1>
+
+    <div class="row">
+        {% for product_type_info in product_types %}
+            <div class="col col-12 col-md-6 col-lg-3 mt-2 mb-2">
+                <!-- Product info -->
+                <div class="card background-normal h-100 nice-card-borders">
+
+                    <div class="card-body">
+                        <div class="h4 card-title flex-grow-1 text-white-75">
+                            {{ product_type_info['product_type_name'] }}
+                        </div>
+                    </div>
+                    <img src="{{ product_type_info['photo_url'] }}"
+                         class="card-img-top"
+                         alt="{{ product_type_info['product_type_name'] }} image">
+                    <div class="card-footer">
+                        <div class="row align-content-center">
+                            <div class="col">
+                                <a href="{{ url('shop_product_type_info', pk=product_type_info['product_type_id']) }}"
+                                   type="button"
+                                   class="btn btn-outline-secondary">
+                                    View more
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}
