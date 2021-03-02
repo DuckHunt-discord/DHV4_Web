@@ -1,3 +1,4 @@
+import datetime
 from typing import Optional
 
 from django.core.cache import cache
@@ -99,14 +100,41 @@ def index(request):
             "icon": "fas fa-feather",
             "odometer": True,
         },
-        {
-            "name": "Uptime" if api_stats['global_ready'] else mark_safe(
-                "Uptime (<a href=\"https://discordstatus.com/\">discord issues</a>)"),
-            "value": show_timestamp(api_stats['uptime']),
-            "color": "success" if api_stats['global_ready'] else "danger",
-            "icon": "fas fa-stopwatch",
-            "odometer": False,
-        },
+    ]
+
+    td = datetime.datetime.now() - datetime.datetime.fromtimestamp(api_stats['uptime'])
+    if not api_stats['global_ready']:
+        parsed_stats.append(
+            {
+                "name": mark_safe("Uptime (<a href=\"https://discordstatus.com/\">discord issues</a>)"),
+                "value": show_timestamp(api_stats['uptime']),
+                "color": "danger",
+                "icon": "fas fa-stopwatch",
+                "odometer": False,
+            },
+        )
+    elif td > datetime.timedelta(days=7):
+        parsed_stats.append(
+            {
+                "name": "Uptime",
+                "value": show_timestamp(api_stats['uptime']),
+                "color": "success",
+                "icon": "fas fa-stopwatch",
+                "odometer": False,
+            },
+        )
+    else:
+        parsed_stats.append(
+            {
+                "name": "Since last update",
+                "value": show_timestamp(api_stats['uptime']),
+                "color": "success",
+                "icon": "fas fa-stopwatch",
+                "odometer": False,
+            },
+        )
+
+    parsed_stats += [
         {
             "name": api_stats['current_event_value'][1],
             "value": api_stats['current_event_value'][0],
