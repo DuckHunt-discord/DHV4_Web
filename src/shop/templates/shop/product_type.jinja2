@@ -23,14 +23,9 @@
                             {{ product.display_name_on_product_type }}
                         </div>
                     </div>
-                    {% set picture=product.pictures.first().photo.list_display %}
-                    <picture>
-                        <source srcset="{{ picture.url }}.webp" type="image/webp"/>
-                        <img src="{{ picture.url }}"
-                             width="{{ picture.width }}" height="{{ picture.height }}"
-                             class="card-img-top img-fluid"
-                             alt="{{ product }} image">
-                    </picture>
+                    <img src="{{ product.pictures.first().photo.url }}"
+                         class="card-img-top"
+                         alt="{{ product }} image">
                     <div class="card-footer">
                         <div class="row">
                             <div class="col">
