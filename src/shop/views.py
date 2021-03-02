@@ -3,6 +3,7 @@ from django.db import connection
 from django.http import HttpResponseNotAllowed, JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from . import models
+import random
 from django.db.models import Prefetch
 from django.db.models import Max
 
@@ -22,9 +23,22 @@ def view_product(request, product_id: int):
     images = product.pictures.all()
     image = images[0]
 
+    # Get random products that don't use the same design or the same product type
+    pks = list(models.Product.objects
+               .exclude(design=product.design)
+               .exclude(product_type=product.product_type)
+               .values_list('pk', flat=True))
+    random_ids = random.sample(pks, 4)
+    random_products = models.Product.objects\
+        .filter(pk__in=random_ids)\
+        .select_related('design', 'product_type')\
+        .prefetch_related('pictures')\
+        .all()
+
     return render(request, "shop/product.jinja2", {"product": product,
                                                    "images": images,
-                                                   "image": image})
+                                                   "image": image,
+                                                   "random_products": random_products})
 
 
 def view_product_type(request, pk: int):

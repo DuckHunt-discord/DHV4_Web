@@ -41,19 +41,39 @@
                                 <div class="col col-12 text-center">
                                     <img src="{{ image_.photo.url }}"
                                          class="img-fluid"
+                                         id="main-display"
                                          style="max-height: 70vh; width: auto;"
                                          alt="{{ product }}">
                                 </div>
                             {% else %}
                                 <div class="col col-lg-3 mt-2 mb-2">
                                     <img src="{{ image_.photo.url }}"
-                                         class="img-fluid img-thumbnail"
+                                         class="img-fluid img-thumbnail script-thumbnail"
                                          alt="{{ product }} alternative image {{ loop.index0 }}">
                                 </div>
                             {% endif %}
                         {% endfor %}
                     </div>
                 </div>
+                <script>
+                    function exchange_srcs() {
+                        var this_src = this.getAttribute('src');
+                        var main_image_src = main_image.getAttribute("src");
+
+                        this.setAttribute('src', main_image_src);
+                        main_image.setAttribute('src', this_src);
+                    }
+
+                    const main_image = document.getElementById("main-display");
+
+                    let thumbnails = document.getElementsByClassName("script-thumbnail");
+
+                    let i;
+                    for (i = 0; i < thumbnails.length; i++) {
+                        thumbnails[i].onclick = exchange_srcs;
+                    }
+
+                </script>
             </div>
             <div class="col col-12 col-lg-5">
                 <!-- Product info -->
@@ -64,7 +84,8 @@
                             {{ product.product_type }}
                         </div>
 
-                        <p>By buying this {{ product.product_type }}, you contribute ${{ product.get_margin() }} to the project.</p>
+                        <p>By buying this {{ product.product_type }}, you contribute ${{ product.get_margin() }} to the
+                            project.</p>
 
                         {% if product.sizes_names %}
                             <p>Available sizes: </p>
@@ -91,6 +112,35 @@
                                     Buy for {{ product.price }} + shipping (soon)
                                 </button>
                             </form>
+                        </div>
+
+                        <div class="h4 mt-3">You might also like...</div>
+                        <div class="row">
+                            {% for random_product in random_products %}
+                                <div class="col-6 mb-2">
+                                    <div class="card background-normal h-100">
+                                        <img src="{{ random_product.pictures.first().photo.url }}"
+                                             class="card-img-top"
+                                             alt="{{ random_product }}">
+                                        <div class="card-body">
+                                            {{ random_product }}
+                                        </div>
+                                        <!-- This is some wild bootstrap magic - https://getbootstrap.com/docs/5.0/helpers/stretched-link -->
+                                        <a href="{{ url('shop_product_info', product_id=random_product.id) }}"
+                                           class="stretched-link"></a>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            <div class="col-6 mb-2">
+                                <a href="{{ url('shop_design_info', pk=product.design.pk) }}"
+                                   type="button"
+                                   class="btn btn-outline-secondary">View more of the same design</a>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <a href="{{ url('shop_product_type_info', pk=product.product_type.pk) }}"
+                                   type="button"
+                                   class="btn btn-outline-secondary">Try different designs on the same product</a>
+                            </div>
                         </div>
 
                     </div>
