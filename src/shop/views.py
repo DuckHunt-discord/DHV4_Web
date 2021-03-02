@@ -1,3 +1,4 @@
+import easy_thumbnails.files
 from django.core.files.storage import get_storage_class
 from django.db import connection
 from django.http import HttpResponseNotAllowed, JsonResponse, HttpResponseRedirect
@@ -98,7 +99,7 @@ def view_designs(request):
 
     for design_data in all_data:
         fieldsdict = {k: v for k, v in zip(desc, design_data)}
-        fieldsdict['photo_url'] = storage.url(fieldsdict['photo_url'])
+        fieldsdict['photo'] = easy_thumbnails.files.get_thumbnailer(storage, relative_name=fieldsdict['photo_url'])['list_display']
 
         designs.append(fieldsdict)
 
@@ -142,7 +143,7 @@ def view_product_types(request):
 
     for design_data in all_data:
         fieldsdict = {k: v for k, v in zip(desc, design_data)}
-        fieldsdict['photo_url'] = storage.url(fieldsdict['photo_url'])
+        fieldsdict['photo'] = easy_thumbnails.files.get_thumbnailer(storage, relative_name=fieldsdict['photo_url'])['list_display']
 
         product_types.append(fieldsdict)
 

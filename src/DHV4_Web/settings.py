@@ -79,6 +79,7 @@ INSTALLED_APPS.extend(['django.contrib.sites',
                        'django_extensions',
                        'pipeline',
                        'dynamic_raw_id',
+                       'easy_thumbnails',
                        ])
 
 ROOT_URLCONF = 'DHV4_Web.urls'
@@ -293,3 +294,12 @@ PIPELINE = {
     'CSS_COMPRESSOR': 'pipeline.compressors.csshtmljsminify.CssHtmlJsMinifyCompressor',
     'JS_COMPRESSOR': 'pipeline.compressors.jsmin.JSMinCompressor',
 }
+
+THUMBNAIL_ALIASES = {
+    '': {
+        'list_display': {'size': (400, 400), 'crop': "scale", 'quality': 70},
+        'suggest_display': {'size': (200, 200), 'crop': "scale", 'quality': 70},
+    },
+}
+
+THUMBNAIL_DEBUG = DEBUG
