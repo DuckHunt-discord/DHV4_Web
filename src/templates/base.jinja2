@@ -120,16 +120,6 @@
                        class="nav-link">Commands</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link"
-                       href="#shopMenu"
-                       id="shopMainDropdown"
-                       role="button"
-                       data-bs-toggle="collapse"
-                       aria-expanded="false">
-                        Shop
-                    </a>
-                </li>
-                <li class="nav-item">
                     <a href="https://discord.com/oauth2/authorize?client_id=187636051135823872&scope=bot&permissions=741735489"
                        class="nav-link"
                        target="_blank"
@@ -144,6 +134,16 @@
                 <li class="nav-item">
                     <a href="{{ url('bot_status') }}"
                        class="nav-link">Status</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="#shopMenu"
+                       id="shopMainDropdown"
+                       role="button"
+                       data-bs-toggle="collapse"
+                       aria-expanded="false">
+                        Shop
+                    </a>
                 </li>
             </ul>
             <div class="d-flex">
@@ -163,7 +163,7 @@
                        href="{{ design_url }}">{{ duck_design }}</a>
                 {% endfor %}
                 <a class="list-group-item list-group-item-action text-white background-blurple"
-                   href="{{ url('shop_designs') }}">See all designs...</a>
+                   href="{{ url('shop_designs') }}">See all ducks...</a>
             </div>
         </div>
         <div class="col col-12 col-md-6">
