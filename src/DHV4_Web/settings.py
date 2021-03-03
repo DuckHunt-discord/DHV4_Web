@@ -203,8 +203,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR.parent / "static"
 
-MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR.parent / "media"
+MEDIA_URL = "/images/"
+MEDIA_ROOT = BASE_DIR.parent / "images"
 
 STATICFILES_STORAGE = 'pipeline.storage.PipelineManifestStorage'
 
