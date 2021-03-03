@@ -79,6 +79,7 @@ INSTALLED_APPS.extend(['django.contrib.sites',
                        'django_extensions',
                        'pipeline',
                        'dynamic_raw_id',
+                       'imagekit',
                        ])
 
 ROOT_URLCONF = 'DHV4_Web.urls'

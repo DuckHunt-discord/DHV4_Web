@@ -23,8 +23,10 @@
                             {{ product.display_name_on_product_type }}
                         </div>
                     </div>
-                    <img src="{{ product.pictures.first().photo.url }}"
-                         class="card-img-top"
+                    {% set picture=product.pictures.first().thumbnail_list %}
+                    <img src="{{ picture.url }}"
+                         width="{{ picture.width }}" height="{{ picture.height }}"
+                         class="card-img-top img-fluid"
                          alt="{{ product }} image">
                     <div class="card-footer">
                         <div class="row">

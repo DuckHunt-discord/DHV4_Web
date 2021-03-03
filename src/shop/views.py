@@ -1,11 +1,17 @@
+from django.conf import settings
 from django.core.files.storage import get_storage_class
 from django.db import connection
 from django.http import HttpResponseNotAllowed, JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
+from imagekit.cachefiles import ImageCacheFile
+from imagekit.cachefiles.namers import source_name_as_path
+
 from . import models
 import random
 from django.db.models import Prefetch
 from django.db.models import Max
+
+from .imagegenerators import ThumbnailList
 
 storage = get_storage_class()()
 
@@ -98,7 +104,8 @@ def view_designs(request):
 
     for design_data in all_data:
         fieldsdict = {k: v for k, v in zip(desc, design_data)}
-        fieldsdict['photo_url'] = storage.url(fieldsdict['photo_url'])
+        photo_url = fieldsdict['photo_url']
+        fieldsdict['photo'] = models.ProductPicture(photo=photo_url).thumbnail_list
 
         designs.append(fieldsdict)
 
@@ -142,7 +149,8 @@ def view_product_types(request):
 
     for design_data in all_data:
         fieldsdict = {k: v for k, v in zip(desc, design_data)}
-        fieldsdict['photo_url'] = storage.url(fieldsdict['photo_url'])
+        photo_url = fieldsdict['photo_url']
+        fieldsdict['photo'] = models.ProductPicture(photo=photo_url).thumbnail_list
 
         product_types.append(fieldsdict)
 

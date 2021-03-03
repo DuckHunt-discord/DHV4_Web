@@ -26,8 +26,9 @@
                             {{ design_info['design_name'] }}
                         </div>
                     </div>
-                    <img src="{{ design_info['photo_url'] }}"
-                         class="card-img-top"
+                    <img src="{{ design_info['photo'].url }}"
+                         width="{{ design_info['photo'].width }}" height="{{ design_info['photo'].height }}"
+                         class="card-img-top img-fluid"
                          alt="{{ design_info['design_name'] }} image">
                     <div class="card-footer">
                         <div class="row align-content-center">

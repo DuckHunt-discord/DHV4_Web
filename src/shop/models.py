@@ -4,7 +4,12 @@ import string
 from django.contrib.auth.models import User
 from django.db import models
 
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFill
+
+
 # Create your models here.
+from shop.imagegenerators import ThumbnailMini, ThumbnailList
 
 
 class Design(models.Model):
@@ -49,7 +54,7 @@ class Product(models.Model):
     @property
     def display_name(self):
         if self.color_product_name:
-            name =  f"{self.design} {self.color_product_name}"
+            name = f"{self.design} {self.color_product_name}"
         else:
             name = self.name
 
@@ -92,14 +97,13 @@ def make_filepath(instance, filename):
     """
     Produces a unique file path for the upload_to of a FileField.
     """
-    product_type = instance.product.product_type.name.replace(' ', '-')
+    product_type = instance.product.product_type.name.replace(' ', '-').replace('&', '-').replace('---', '-')
     product_name = instance.product.display_name.replace(' ', '-')
-    random_string1 = ''.join(random.sample(string.ascii_letters, k=3))
-    random_string2 = ''.join(random.sample(string.ascii_letters, k=3))
+    random_string1 = ''.join(random.sample(string.ascii_letters, k=2))
+    random_string2 = ''.join(random.sample(string.ascii_letters, k=2))
     extension = filename.split('.')[-1]
 
     new_filename = f"{random_string1}-{product_name}-{random_string2}.{extension}"
-
     return '/'.join([instance.__class__.__name__.lower(), product_type, new_filename])
 
 
@@ -107,6 +111,13 @@ class ProductPicture(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="pictures")
     is_main_image = models.BooleanField(default=False)
     photo = models.ImageField(upload_to=make_filepath, unique=True)
+
+    thumbnail_list = ImageSpecField(source='photo',
+                                    id='shop:thumbnail_list')
+
+    thumbnail_mini = ImageSpecField(source='photo',
+                                    id='shop:thumbnail_mini'
+                                    )
 
     class Meta:
         ordering = ["-is_main_image"]

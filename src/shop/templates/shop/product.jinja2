@@ -119,8 +119,10 @@
                             {% for random_product in random_products %}
                                 <div class="col-6 mb-2">
                                     <div class="card background-normal h-100">
-                                        <img src="{{ random_product.pictures.first().photo.url }}"
-                                             class="card-img-top"
+                                        {% set picture=random_product.pictures.first().thumbnail_mini %}
+                                        <img src="{{ picture.url }}"
+                                             width="{{ picture.width }}" height="{{ picture.height }}"
+                                             class="card-img-top img-fluid"
                                              alt="{{ random_product }}">
                                         <div class="card-body">
                                             {{ random_product }}

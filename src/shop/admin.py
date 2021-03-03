@@ -1,10 +1,13 @@
 from django.contrib import admin
+from imagekit.admin import AdminThumbnail
+
 from . import models
 # Register your models here.
 
 
 class PictureInline(admin.TabularInline):
     model = models.ProductPicture
+    admin_thumbnail = AdminThumbnail(image_field='photo')
 
 
 class ProductAdmin(admin.ModelAdmin):
