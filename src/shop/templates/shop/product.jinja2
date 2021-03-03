@@ -105,11 +105,9 @@
                             <form method="POST"
                                   action="{{ url('shop_product_api', product_id=product.id) }}">
                                 {% csrf_token %}
-                                <!-- TODO: Make that a submit and remove soon-->
-                                <button type="button"
-                                        class="btn btn-outline-success"
-                                >
-                                    Buy for {{ product.price }} + shipping (soon)
+                                <button type="submit"
+                                        class="btn btn-outline-success">
+                                    Buy for {{ product.price }} + shipping
                                 </button>
                             </form>
                         </div>
