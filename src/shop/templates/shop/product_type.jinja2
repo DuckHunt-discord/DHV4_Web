@@ -13,6 +13,7 @@
     <h1>{{ category }}</h1>
 
     <div class="row">
+        {% set product_url=url('shop_product_info_without_ID') %}
         {% for product in products %}
             <div class="col col-12 col-md-6 col-lg-3 mt-2 mb-2">
                 <!-- Product info -->
@@ -31,7 +32,7 @@
                     <div class="card-footer">
                         <div class="row">
                             <div class="col">
-                                <a href="{{ url('shop_product_info', product_id=product.id) }}"
+                                <a href="{{ product_url }}{{ product.id }}"
                                    type="button"
                                    class="btn btn-outline-secondary">
                                     View product
@@ -39,7 +40,7 @@
                             </div>
                             <div class="col text-end">
                                 <form method="POST"
-                                      action="{{ url('shop_product_api', product_id=product.id) }}">
+                                      action="{{ product_url }}{{ product.id }}/info">
                                     {% csrf_token %}
                                     <button type="submit"
                                             class="btn btn-success">
