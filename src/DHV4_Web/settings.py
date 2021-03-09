@@ -294,3 +294,5 @@ PIPELINE = {
     'CSS_COMPRESSOR': 'pipeline.compressors.csshtmljsminify.CssHtmlJsMinifyCompressor',
     'JS_COMPRESSOR': 'pipeline.compressors.jsmin.JSMinCompressor',
 }
+
+IMAGEKIT_DEFAULT_CACHEFILE_STRATEGY = 'imagekit.cachefiles.strategies.Optimistic'
