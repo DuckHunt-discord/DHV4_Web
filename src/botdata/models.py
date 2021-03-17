@@ -174,7 +174,6 @@ class DiscordUser(models.Model):
 
     name = models.TextField()
     discriminator = models.CharField(max_length=4)
-    times_ran_example_command = models.IntegerField(default=0)
 
     inventory = models.JSONField(default=list, blank=True)
     trophys = models.JSONField(default=dict, blank=True)
@@ -183,6 +182,8 @@ class DiscordUser(models.Model):
 
     language = models.CharField(max_length=6, default="en")
     first_use = models.BooleanField(default=True)
+
+    opened_support_tickets = models.IntegerField(default=0)
 
     access_level_override = EnumField(AccessLevel, default=AccessLevel.DEFAULT)
 
