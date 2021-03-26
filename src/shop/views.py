@@ -3,7 +3,6 @@ from django.core.files.storage import get_storage_class
 from django.db import connection
 from django.http import HttpResponseNotAllowed, JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
-from django.urls import reverse
 from imagekit.cachefiles import ImageCacheFile
 from imagekit.cachefiles.namers import source_name_as_path
 
@@ -162,7 +161,6 @@ def get_product_types():
         fieldsdict['photo_url'] = photo.url
         fieldsdict['photo_width'] = photo.width
         fieldsdict['photo_height'] = photo.height
-        fieldsdict['view_more_url'] = reverse('shop_product_type_info', kwargs={'pk': fieldsdict['product_type_id']})
 
         product_types.append(fieldsdict)
     return product_types
