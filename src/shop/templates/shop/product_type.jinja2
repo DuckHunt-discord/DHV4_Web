@@ -18,21 +18,20 @@
             <div class="col col-12 col-md-6 col-lg-3 mt-2 mb-2">
                 <!-- Product info -->
                 <div class="card background-normal h-100 nice-card-borders">
-
                     <div class="card-body">
                         <div class="h4 card-title flex-grow-1 text-white-75">
-                            {{ product.display_name_on_product_type }}
+                            {{ product["product_full_name"] }}
                         </div>
                     </div>
-                    {% set picture=product.pictures.first().thumbnail_list %}
-                    <img src="{{ picture.url }}"
-                         width="{{ picture.width }}" height="{{ picture.height }}"
+
+                    <img no-src="{{ product["photo_url"] }}"
+                         width="{{ product["photo_width"] }}" height="{{ product["photo_height"] }}"
                          class="card-img-top img-fluid"
-                         alt="{{ product }} image">
+                         alt="{{ product["product_name"] }} image">
                     <div class="card-footer">
                         <div class="row">
                             <div class="col">
-                                <a href="{{ product_url }}{{ product.id }}"
+                                <a href="{{ product_url }}{{ product["product_id"] }}"
                                    type="button"
                                    class="btn btn-outline-secondary">
                                     View product
@@ -40,11 +39,11 @@
                             </div>
                             <div class="col text-end">
                                 <form method="POST"
-                                      action="{{ product_url }}{{ product.id }}/info">
+                                      action="{{ product_url }}{{ product["product_id"] }}/info">
                                     {% csrf_token %}
                                     <button type="submit"
                                             class="btn btn-success">
-                                        {{ product.price }} <i class="fas fa-cart-arrow-down"></i>
+                                        {{ product["product_price"] }} <i class="fas fa-cart-arrow-down"></i>
                                     </button>
                                 </form>
                             </div>

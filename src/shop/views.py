@@ -1,17 +1,12 @@
-from django.conf import settings
+
+from django.core.cache import cache
 from django.core.files.storage import get_storage_class
 from django.db import connection
 from django.http import HttpResponseNotAllowed, JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
-from imagekit.cachefiles import ImageCacheFile
-from imagekit.cachefiles.namers import source_name_as_path
 
 from . import models
 import random
-from django.db.models import Prefetch
-from django.db.models import Max
-
-from .imagegenerators import ThumbnailList
 
 storage = get_storage_class()()
 
@@ -47,11 +42,84 @@ def view_product(request, product_id: int):
                                                    "random_products": random_products})
 
 
+def get_productype_products(product_type_id):
+    key = f'get_productype_products-{product_type_id}'
+
+    products = cache.get(key, default=[])
+    if len(products):
+        return products
+
+    sql = """
+    SELECT
+    "shop_product"."id" as "product_id",
+    "shop_product"."name" as "product_name",
+    "shop_product"."print_location" as "product_print_location",
+    "shop_product"."color_product_name" as "product_color_product_name",
+    "shop_product"."price" as "product_price",
+    "shop_design"."name" as "design_name",
+    "shop_productpicture"."photo" as "product_photo_url"
+    FROM
+    "shop_product"
+    INNER JOIN "shop_design" ON ("shop_product"."design_id" = "shop_design"."id")
+    INNER JOIN (
+        SELECT
+            "shop_productpicture"."photo",
+            "shop_productpicture"."product_id"
+        FROM
+            "shop_productpicture"
+        WHERE
+            "shop_productpicture"."is_main_image" = TRUE
+    ) AS "shop_productpicture" ON ("shop_product"."id" = "shop_productpicture"."product_id")
+    
+    WHERE
+    "shop_product"."product_type_id" = %s
+    ORDER BY
+    "shop_product"."print_location" DESC,
+    RANDOM()
+    """
+
+    with connection.cursor() as cursor:
+        cursor.execute(sql, [product_type_id])
+        desc = [d[0] for d in cursor.description]
+        all_data = cursor.fetchall()
+
+    for product_data in all_data:
+        fieldsdict = {k: v for k, v in zip(desc, product_data)}
+
+        photo_url = fieldsdict['product_photo_url']
+
+        photo = models.ProductPicture(photo=photo_url).thumbnail_list
+
+        fieldsdict['photo'] = photo
+
+        fieldsdict['photo_url'] = photo.url
+        fieldsdict['photo_width'] = photo.width
+        fieldsdict['photo_height'] = photo.height
+
+        name = fieldsdict['design_name']
+        color = fieldsdict["product_color_product_name"].replace(fieldsdict["product_name"], '', 1).strip()
+        print_location = fieldsdict["product_print_location"]
+        if print_location == "back" and color:
+            name += f" ({color}, {print_location} printed)"
+        elif print_location == "back":
+            name += f", {print_location} printed"
+        elif color:
+            name += f" ({color})"
+
+        fieldsdict['product_full_name'] = name
+
+        products.append(fieldsdict)
+
+    cache.set(key, products, 86400)
+
+    return products
+
+
 def view_product_type(request, pk: int):
-    product_type = get_object_or_404(models.ProductType.objects.all(),
+    product_type = get_object_or_404(models.ProductType,
                                      pk=pk)
-    products = product_type.products.all().prefetch_related('product_type', 'design', 'pictures').order_by(
-        '-print_location', '?')
+
+    products = get_productype_products(pk)
 
     return render(request, "shop/product_type.jinja2", {"category": product_type,
                                                         "products": products,
