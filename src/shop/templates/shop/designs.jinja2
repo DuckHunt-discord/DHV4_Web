@@ -15,6 +15,7 @@
 {% block content %}
     <h1>DuckHunt shop designs</h1>
 
+    {% set url_prefix=url('shop_design_info_without_ID') %}
     <div class="row">
         {% for design_info in designs %}
             <div class="col col-12 col-md-6 col-lg-3 mt-2 mb-2">
@@ -26,14 +27,14 @@
                             {{ design_info['design_name'] }}
                         </div>
                     </div>
-                    <img src="{{ design_info['photo'].url }}"
-                         width="{{ design_info['photo'].width }}" height="{{ design_info['photo'].height }}"
+                    <img src="{{ design_info['photo_url'] }}"
+                         width="{{ design_info['photo_width'] }}" height="{{ design_info['photo_height'] }}"
                          class="card-img-top img-fluid"
                          alt="{{ design_info['design_name'] }} image">
                     <div class="card-footer">
                         <div class="row align-content-center">
                             <div class="col">
-                                <a href="{{ url('shop_design_info', pk=design_info['design_id']) }}"
+                                <a href="{{ url_prefix }}{{ design_info['design_id'] }}"
                                    type="button"
                                    class="btn btn-outline-secondary">
                                     View more

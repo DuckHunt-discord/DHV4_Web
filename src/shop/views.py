@@ -105,8 +105,11 @@ def get_designs():
     for design_data in all_data:
         fieldsdict = {k: v for k, v in zip(desc, design_data)}
         photo_url = fieldsdict['photo_url']
-        fieldsdict['photo'] = models.ProductPicture(photo=photo_url).thumbnail_list
-
+        photo = models.ProductPicture(photo=photo_url).thumbnail_list
+        fieldsdict['photo'] = photo
+        fieldsdict['photo_url'] = photo.url
+        fieldsdict['photo_width'] = photo.width
+        fieldsdict['photo_height'] = photo.height
         designs.append(fieldsdict)
     return designs
 
