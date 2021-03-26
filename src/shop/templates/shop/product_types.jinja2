@@ -26,14 +26,14 @@
                             {{ product_type_info['product_type_name'] }}
                         </div>
                     </div>
-                    <img src="{{ product_type_info['photo'].url }}"
-                         width="{{ product_type_info['photo'].width }}" height="{{ product_type_info['photo'].height }}"
+                    <img src="{{ product_type_info['photo_url'] }}"
+                         width="{{ product_type_info['photo_width'] }}" height="{{ product_type_info['photo_height'] }}"
                          class="card-img-top img-fluid"
                          alt="{{ product_type_info['product_type_name'] }} image">
                     <div class="card-footer">
                         <div class="row align-content-center">
                             <div class="col">
-                                <a href="{{ url('shop_product_type_info', pk=product_type_info['product_type_id']) }}"
+                                <a href="{{ product_type_info['view_more_url'] }}"
                                    type="button"
                                    class="btn btn-outline-secondary">
                                     View more

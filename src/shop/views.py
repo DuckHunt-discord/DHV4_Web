@@ -3,6 +3,7 @@ from django.core.files.storage import get_storage_class
 from django.db import connection
 from django.http import HttpResponseNotAllowed, JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
+from django.urls import reverse
 from imagekit.cachefiles import ImageCacheFile
 from imagekit.cachefiles.namers import source_name_as_path
 
@@ -68,91 +69,106 @@ def view_design(request, pk: int):
                                                   })
 
 
-designs = []
-designs_sql = """
-    SELECT
-        design_name,
-        design_id,
-        shop_product_id,
-        photo AS photo_url
-    FROM
-        shop_productpicture
-        INNER JOIN (
-            SELECT
-                name AS design_name,
-                id AS design_id,
-                shop_product_id
-            FROM
-                shop_design
-                INNER JOIN (
-                    SELECT
-                        design_id,
-                        MAX(shop_product.id) AS shop_product_id
-                    FROM
-                        shop_product
-                    GROUP BY
-                        shop_product.design_id) AS sqy ON shop_design.id = sqy.design_id) AS sqyy ON shop_productpicture.product_id = sqyy.shop_product_id
-    WHERE
-        shop_productpicture.is_main_image = TRUE;
-"""
+def get_designs():
+    designs = []
+    designs_sql = """
+        SELECT
+            design_name,
+            design_id,
+            shop_product_id,
+            photo AS photo_url
+        FROM
+            shop_productpicture
+            INNER JOIN (
+                SELECT
+                    name AS design_name,
+                    id AS design_id,
+                    shop_product_id
+                FROM
+                    shop_design
+                    INNER JOIN (
+                        SELECT
+                            design_id,
+                            MAX(shop_product.id) AS shop_product_id
+                        FROM
+                            shop_product
+                        GROUP BY
+                            shop_product.design_id) AS sqy ON shop_design.id = sqy.design_id) AS sqyy ON shop_productpicture.product_id = sqyy.shop_product_id
+        WHERE
+            shop_productpicture.is_main_image = TRUE;
+    """
 
-with connection.cursor() as cursor:
-    cursor.execute(designs_sql)
-    desc = [d[0] for d in cursor.description]
-    all_data = cursor.fetchall()
+    with connection.cursor() as cursor:
+        cursor.execute(designs_sql)
+        desc = [d[0] for d in cursor.description]
+        all_data = cursor.fetchall()
 
-for design_data in all_data:
-    fieldsdict = {k: v for k, v in zip(desc, design_data)}
-    photo_url = fieldsdict['photo_url']
-    fieldsdict['photo'] = models.ProductPicture(photo=photo_url).thumbnail_list
+    for design_data in all_data:
+        fieldsdict = {k: v for k, v in zip(desc, design_data)}
+        photo_url = fieldsdict['photo_url']
+        fieldsdict['photo'] = models.ProductPicture(photo=photo_url).thumbnail_list
 
-    designs.append(fieldsdict)
+        designs.append(fieldsdict)
+    return designs
+
+
+designs = get_designs()
 
 
 def view_designs(request):
     return render(request, "shop/designs.jinja2", {"designs": designs, })
 
 
-product_types = []
-product_types_sql = """
-    SELECT
-        product_type_name,
-        product_type_id,
-        shop_product_id,
-        photo AS photo_url
-    FROM
-        shop_productpicture
-        INNER JOIN (
-            SELECT
-                name AS product_type_name,
-                id AS product_type_id,
-                shop_product_id
-            FROM
-                shop_producttype
-                INNER JOIN (
-                    SELECT
-                        product_type_id,
-                        MAX(shop_product.id) AS shop_product_id
-                    FROM
-                        shop_product
-                    GROUP BY
-                        shop_product.product_type_id) AS sqy ON shop_producttype.id = sqy.product_type_id) AS sqyy 
-                        ON shop_productpicture.product_id = sqyy.shop_product_id
-    WHERE
-        shop_productpicture.is_main_image = TRUE;
-"""
+def get_product_types():
+    product_types = []
+    product_types_sql = """
+        SELECT
+            product_type_name,
+            product_type_id,
+            shop_product_id,
+            photo AS photo_url
+        FROM
+            shop_productpicture
+            INNER JOIN (
+                SELECT
+                    name AS product_type_name,
+                    id AS product_type_id,
+                    shop_product_id
+                FROM
+                    shop_producttype
+                    INNER JOIN (
+                        SELECT
+                            product_type_id,
+                            MAX(shop_product.id) AS shop_product_id
+                        FROM
+                            shop_product
+                        GROUP BY
+                            shop_product.product_type_id) AS sqy ON shop_producttype.id = sqy.product_type_id) AS sqyy 
+                            ON shop_productpicture.product_id = sqyy.shop_product_id
+        WHERE
+            shop_productpicture.is_main_image = TRUE;
+    """
 
-with connection.cursor() as cursor:
-    cursor.execute(product_types_sql)
-    desc = [d[0] for d in cursor.description]
-    all_data = cursor.fetchall()
+    with connection.cursor() as cursor:
+        cursor.execute(product_types_sql)
+        desc = [d[0] for d in cursor.description]
+        all_data = cursor.fetchall()
 
-for design_data in all_data:
-    fieldsdict = {k: v for k, v in zip(desc, design_data)}
-    photo_url = fieldsdict['photo_url']
-    fieldsdict['photo'] = models.ProductPicture(photo=photo_url).thumbnail_list
+    for design_data in all_data:
+        fieldsdict = {k: v for k, v in zip(desc, design_data)}
+        photo_url = fieldsdict['photo_url']
+        photo = models.ProductPicture(photo=photo_url).thumbnail_list
+        fieldsdict['photo'] = photo
+        fieldsdict['photo_url'] = photo.url
+        fieldsdict['photo_width'] = photo.width
+        fieldsdict['photo_height'] = photo.height
+        fieldsdict['view_more_url'] = reverse('shop_product_type_info', kwargs={'pk': fieldsdict['product_type_id']})
 
-    product_types.append(fieldsdict)
+        product_types.append(fieldsdict)
+    return product_types
+
+
+product_types = get_product_types()
 
 
 def view_product_types(request):
