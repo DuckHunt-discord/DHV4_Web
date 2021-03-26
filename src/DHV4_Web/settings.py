@@ -148,6 +148,8 @@ else:
         }
     }
 
+CONN_MAX_AGE = None
+
 # Cache
 # https://docs.djangoproject.com/en/3.1/ref/settings/#std:setting-CACHES
 if DEBUG:
