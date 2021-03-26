@@ -35,10 +35,10 @@ def view_product(request, product_id: int):
                .exclude(product_type=product.product_type)
                .values_list('pk', flat=True))
     random_ids = random.sample(pks, 4)
-    random_products = models.Product.objects\
-        .filter(pk__in=random_ids)\
-        .select_related('design', 'product_type')\
-        .prefetch_related('pictures')\
+    random_products = models.Product.objects \
+        .filter(pk__in=random_ids) \
+        .select_related('design', 'product_type') \
+        .prefetch_related('pictures') \
         .all()
 
     return render(request, "shop/product.jinja2", {"product": product,
@@ -68,92 +68,94 @@ def view_design(request, pk: int):
                                                   })
 
 
+designs = []
+designs_sql = """
+    SELECT
+        design_name,
+        design_id,
+        shop_product_id,
+        photo AS photo_url
+    FROM
+        shop_productpicture
+        INNER JOIN (
+            SELECT
+                name AS design_name,
+                id AS design_id,
+                shop_product_id
+            FROM
+                shop_design
+                INNER JOIN (
+                    SELECT
+                        design_id,
+                        MAX(shop_product.id) AS shop_product_id
+                    FROM
+                        shop_product
+                    GROUP BY
+                        shop_product.design_id) AS sqy ON shop_design.id = sqy.design_id) AS sqyy ON shop_productpicture.product_id = sqyy.shop_product_id
+    WHERE
+        shop_productpicture.is_main_image = TRUE;
+"""
+
+with connection.cursor() as cursor:
+    cursor.execute(designs_sql)
+    desc = [d[0] for d in cursor.description]
+    all_data = cursor.fetchall()
+
+for design_data in all_data:
+    fieldsdict = {k: v for k, v in zip(desc, design_data)}
+    photo_url = fieldsdict['photo_url']
+    fieldsdict['photo'] = models.ProductPicture(photo=photo_url).thumbnail_list
+
+    designs.append(fieldsdict)
+
+
 def view_designs(request):
-    designs = []
-    designs_sql = """
-        SELECT
-            design_name,
-            design_id,
-            shop_product_id,
-            photo AS photo_url
-        FROM
-            shop_productpicture
-            INNER JOIN (
-                SELECT
-                    name AS design_name,
-                    id AS design_id,
-                    shop_product_id
-                FROM
-                    shop_design
-                    INNER JOIN (
-                        SELECT
-                            design_id,
-                            MAX(shop_product.id) AS shop_product_id
-                        FROM
-                            shop_product
-                        GROUP BY
-                            shop_product.design_id) AS sqy ON shop_design.id = sqy.design_id) AS sqyy ON shop_productpicture.product_id = sqyy.shop_product_id
-        WHERE
-            shop_productpicture.is_main_image = TRUE;
-    """
-
-    with connection.cursor() as cursor:
-        cursor.execute(designs_sql)
-        desc = [d[0] for d in cursor.description]
-        all_data = cursor.fetchall()
-
-    for design_data in all_data:
-        fieldsdict = {k: v for k, v in zip(desc, design_data)}
-        photo_url = fieldsdict['photo_url']
-        fieldsdict['photo'] = models.ProductPicture(photo=photo_url).thumbnail_list
-
-        designs.append(fieldsdict)
-
     return render(request, "shop/designs.jinja2", {"designs": designs, })
 
 
+product_types = []
+product_types_sql = """
+    SELECT
+        product_type_name,
+        product_type_id,
+        shop_product_id,
+        photo AS photo_url
+    FROM
+        shop_productpicture
+        INNER JOIN (
+            SELECT
+                name AS product_type_name,
+                id AS product_type_id,
+                shop_product_id
+            FROM
+                shop_producttype
+                INNER JOIN (
+                    SELECT
+                        product_type_id,
+                        MAX(shop_product.id) AS shop_product_id
+                    FROM
+                        shop_product
+                    GROUP BY
+                        shop_product.product_type_id) AS sqy ON shop_producttype.id = sqy.product_type_id) AS sqyy 
+                        ON shop_productpicture.product_id = sqyy.shop_product_id
+    WHERE
+        shop_productpicture.is_main_image = TRUE;
+"""
+
+with connection.cursor() as cursor:
+    cursor.execute(product_types_sql)
+    desc = [d[0] for d in cursor.description]
+    all_data = cursor.fetchall()
+
+for design_data in all_data:
+    fieldsdict = {k: v for k, v in zip(desc, design_data)}
+    photo_url = fieldsdict['photo_url']
+    fieldsdict['photo'] = models.ProductPicture(photo=photo_url).thumbnail_list
+
+    product_types.append(fieldsdict)
+
+
 def view_product_types(request):
-    product_types = []
-    product_types_sql = """
-        SELECT
-            product_type_name,
-            product_type_id,
-            shop_product_id,
-            photo AS photo_url
-        FROM
-            shop_productpicture
-            INNER JOIN (
-                SELECT
-                    name AS product_type_name,
-                    id AS product_type_id,
-                    shop_product_id
-                FROM
-                    shop_producttype
-                    INNER JOIN (
-                        SELECT
-                            product_type_id,
-                            MAX(shop_product.id) AS shop_product_id
-                        FROM
-                            shop_product
-                        GROUP BY
-                            shop_product.product_type_id) AS sqy ON shop_producttype.id = sqy.product_type_id) AS sqyy 
-                            ON shop_productpicture.product_id = sqyy.shop_product_id
-        WHERE
-            shop_productpicture.is_main_image = TRUE;
-    """
-
-    with connection.cursor() as cursor:
-        cursor.execute(product_types_sql)
-        desc = [d[0] for d in cursor.description]
-        all_data = cursor.fetchall()
-
-    for design_data in all_data:
-        fieldsdict = {k: v for k, v in zip(desc, design_data)}
-        photo_url = fieldsdict['photo_url']
-        fieldsdict['photo'] = models.ProductPicture(photo=photo_url).thumbnail_list
-
-        product_types.append(fieldsdict)
-
     return render(request, "shop/product_types.jinja2", {"product_types": product_types, })
 
 
