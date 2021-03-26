@@ -1,11 +1,5 @@
-from typing import List, Optional
-
 from django.contrib.flatpages import sitemaps
 from django.urls import reverse
-
-from DHV4_Web import settings
-from public.views import get_from_api
-
 from . import models
 
 
