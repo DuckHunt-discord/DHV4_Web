@@ -2,7 +2,7 @@ import datetime
 from typing import Optional
 
 from django.core.cache import cache
-from django.http import Http404, HttpResponse, HttpResponsePermanentRedirect
+from django.http import Http404, HttpResponse, HttpResponsePermanentRedirect, HttpResponseRedirect
 from django.shortcuts import render
 from django.conf import settings
 from django.template import loader
@@ -257,3 +257,13 @@ def old_pages_and_weird_urls(request):
         return HttpResponsePermanentRedirect(reverse("bot_commands", kwargs={"command": "settings"}))
 
     return HttpResponsePermanentRedirect('/')
+
+
+def invite_bot(request):
+    redirect_url = "https://discord.com/api/oauth2/authorize?" \
+                   "client_id=187636051135823872&" \
+                   "permissions=741735489&" \
+                   "redirect_uri=https%3A%2F%2Fduckhunt.me%2Fdocs%2Fbot-administration%2Fadmin-quickstart&" \
+                   "scope=applications.commands%20bot"
+
+    return HttpResponseRedirect(redirect_url)
