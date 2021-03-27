@@ -7,6 +7,8 @@ urlpatterns = [
     path('', views.index, name="index"),
     path('invite', views.invite_bot, name="invite_bot"),
     path('invite_bot', views.invite_bot,),
+    path('support', views.support_server, name="support_server"),
+    path('support_server', views.invite_bot,),
     path('privacy_policy', views.privacy_policy, name="privacy_policy"),
     path('botlists', views.botlists, name="botlists"),
     path('robots.txt', views.robots_txt, name="robotstxt"),
