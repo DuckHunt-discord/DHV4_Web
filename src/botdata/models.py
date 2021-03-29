@@ -443,6 +443,9 @@ class Vote(models.Model):
     at = models.DateTimeField(auto_now_add=True)
     multiplicator = models.IntegerField(default=1)
 
+    def __str__(self):
+        return f"{self.user} vote on {self.bot_list}"
+
     class Meta:
         db_table = 'vote'
 
