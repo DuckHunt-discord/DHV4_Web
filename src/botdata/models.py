@@ -454,7 +454,7 @@ class Vote(models.Model):
 class SupportTicket(models.Model):
     user = models.ForeignKey(DiscordUser, models.CASCADE, related_name="support_tickets", db_index=True)
 
-    opened_at = models.DateTimeField(auto_now_add=True, editable=True)
+    opened_at = models.DateTimeField(auto_now_add=True)
 
     closed = models.BooleanField(default=False)
     closed_at = models.DateTimeField(null=True, blank=True)
