@@ -99,13 +99,16 @@ admin.site.register(models.BotList, BotListAdmin)
 class VoteAdmin(DynamicRawIDMixin, admin.ModelAdmin):
     dynamic_raw_id_fields = ["user"]
 
+    list_display = ["user", "bot_list", "at"]
+    ordering = ["-at"]
+
 
 admin.site.register(models.Vote, VoteAdmin)
 
 
 class SupportTicketAdmin(DynamicRawIDMixin, admin.ModelAdmin):
     list_display = ["user", "opened_at", "closed"]
-    ordering = ["opened_at"]
+    ordering = ["-opened_at"]
 
     dynamic_raw_id_fields = ["user", "closed_by"]
 

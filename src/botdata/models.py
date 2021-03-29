@@ -465,7 +465,7 @@ class SupportTicket(models.Model):
 
     class Meta:
         db_table = 'supportticket'
-        ordering = ["opened_at"]
+        ordering = ["-opened_at"]
 
 
 
