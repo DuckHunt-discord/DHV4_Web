@@ -183,8 +183,6 @@ class DiscordUser(models.Model):
     language = models.CharField(max_length=6, default="en")
     first_use = models.BooleanField(default=True)
 
-    opened_support_tickets = models.IntegerField(default=0)
-
     access_level_override = EnumField(AccessLevel, default=AccessLevel.DEFAULT)
 
     boss_kills = models.IntegerField(default=0)
@@ -447,3 +445,20 @@ class Vote(models.Model):
 
     class Meta:
         db_table = 'vote'
+
+
+class SupportTicket(models.Model):
+    user = models.ForeignKey(DiscordUser, models.CASCADE, related_name="support_tickets", db_index=True)
+
+    opened_at = models.DateTimeField(auto_now_add=True)
+
+    closed = models.BooleanField(default=False)
+    closed_at = models.DateTimeField(null=True, blank=True)
+    closed_by = models.ForeignKey(DiscordUser, models.SET_NULL, db_index=False, null=True)
+    close_reason = models.TextField(blank=True)
+
+    class Meta:
+        db_table = 'supportticket'
+        ordering = ["opened_at"]
+
+
