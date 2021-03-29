@@ -454,7 +454,7 @@ class Vote(models.Model):
 class SupportTicket(models.Model):
     user = models.ForeignKey(DiscordUser, models.CASCADE, related_name="support_tickets", db_index=True)
 
-    opened_at = models.DateTimeField(auto_now_add=True)
+    opened_at = models.DateTimeField(auto_now_add=True, editable=True)
 
     closed = models.BooleanField(default=False)
     closed_at = models.DateTimeField(null=True, blank=True)
@@ -463,9 +463,9 @@ class SupportTicket(models.Model):
 
     def opened_for(self) -> datetime.timedelta:
         if self.closed:
-            return self.opened_at - self.closed_at
+            return self.closed_at - self.opened_at
         else:
-            return self.opened_at - timezone.now()
+            return timezone.now() - self.opened_at
 
     def __str__(self):
         if self.closed:
