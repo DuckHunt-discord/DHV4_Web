@@ -1,11 +1,14 @@
 {% extends "base.jinja2" %}
 
 {% block metadesc %}
-    <meta name="description" content="DuckHunt settings for #{{ channel.name }}.">
+    <meta name="description"
+          content="{% trans channel_name=channel.name %}DuckHunt settings for #{{ channel_name }}.{% endtrans %}">
 {% endblock %}
 
 {% block title %}
-    DuckHunt V4 - Settings for #{{ channel.name }}
+    {% trans channel_name=channel.name %}
+        DuckHunt V4 - Settings for #{{ channel_name }}
+    {% endtrans %}
 {% endblock %}
 
 {% block head %}
@@ -13,8 +16,7 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Settings for #{{ channel.name }}</h1>
-
+    <h1>{% trans channel_name=channel.name %}Settings for #{{ channel_name }}{% endtrans %}</h1>
 
     <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>'" class="background-grey rounded">
         <ol class="breadcrumb p-2" itemscope itemtype="https://schema.org/BreadcrumbList">
