@@ -455,7 +455,7 @@ class SupportTicket(models.Model):
     closed = models.BooleanField(default=False)
     closed_at = models.DateTimeField(null=True, blank=True)
     closed_by = models.ForeignKey(DiscordUser, models.SET_NULL, db_index=False, null=True)
-    close_reason = models.TextField(blank=True)
+    close_reason = models.TextField(blank=True, default="")
 
     class Meta:
         db_table = 'supportticket'
