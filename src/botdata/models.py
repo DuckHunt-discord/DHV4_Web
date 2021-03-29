@@ -457,6 +457,12 @@ class SupportTicket(models.Model):
     closed_by = models.ForeignKey(DiscordUser, models.SET_NULL, db_index=False, null=True)
     close_reason = models.TextField(blank=True, default="")
 
+    def __str__(self):
+        if self.closed:
+            return f"{self.user} closed ticket"
+        else:
+            return f"{self.user} latest ticket"
+
     class Meta:
         db_table = 'supportticket'
         ordering = ["opened_at"]
