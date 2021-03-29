@@ -12,6 +12,7 @@ import typing
 from enum import unique
 
 import pytz
+from django.utils import timezone
 from django_enumfield.enum import EnumField, Enum
 
 from django.core.validators import MinValueValidator, MaxValueValidator
@@ -459,6 +460,12 @@ class SupportTicket(models.Model):
     closed_at = models.DateTimeField(null=True, blank=True)
     closed_by = models.ForeignKey(DiscordUser, models.SET_NULL, db_index=False, null=True)
     close_reason = models.TextField(blank=True, default="")
+
+    def opened_for(self) -> datetime.timedelta:
+        if self.closed:
+            return self.opened_at - self.closed_at
+        else:
+            return self.opened_at - timezone.now()
 
     def __str__(self):
         if self.closed:
