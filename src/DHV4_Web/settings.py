@@ -45,7 +45,8 @@ else:
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    # https://docs.djangoproject.com/en/3.1/ref/contrib/admin/#overriding-the-default-admin-site
+    'DHV4_Web.apps.DHAdminConfig',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
