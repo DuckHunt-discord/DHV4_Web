@@ -101,3 +101,14 @@ class VoteAdmin(DynamicRawIDMixin, admin.ModelAdmin):
 
 
 admin.site.register(models.Vote, VoteAdmin)
+
+
+class SupportTicketAdmin(DynamicRawIDMixin, admin.ModelAdmin):
+    list_display = ["user", "created_at", "closed"]
+    ordering = ["created_at"]
+
+    dynamic_raw_id_fields = ["user", "closed_by"]
+
+
+admin.site.register(models.SupportTicket, SupportTicketAdmin)
+
