@@ -467,8 +467,7 @@ class SupportTicket(models.Model):
         else:
             td = timezone.now() - self.opened_at
 
-        td.microsecond = 0
-        return td
+        return datetime.timedelta(seconds=int(td.total_seconds()))
 
     def __str__(self):
         if self.closed:
