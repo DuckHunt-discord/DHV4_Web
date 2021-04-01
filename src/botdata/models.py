@@ -5,6 +5,7 @@
 #   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
+
 import collections
 import datetime
 import time
@@ -20,6 +21,8 @@ from django.db import models
 
 # https://www.colorschemer.com/color-picker/
 from botdata.coats import Coats
+
+from django.utils.translation import gettext_lazy as _
 
 DUCKS_COLORS = {
     "normal": "#55C8CE",
@@ -167,6 +170,17 @@ class AccessLevel(Enum):
     ADMIN = 300
     BOT_MODERATOR = 500
     BOT_OWNER = 600
+
+    __labels__ = {
+        BANNED: _("Banned"),
+        DEFAULT: _("Default"),
+        TRUSTED: _("Trusted"),
+        MODERATOR: _("Moderator"),
+        ADMIN: _("Admin"),
+        BOT_MODERATOR: _("Bot moderator"),
+        BOT_OWNER: _("Bot owner"),
+    }
+
 
 
 class DiscordUser(models.Model):
