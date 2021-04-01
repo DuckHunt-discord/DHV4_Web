@@ -6,6 +6,16 @@ from . import models
 
 # Register your models here.
 
+class DiscordMemberInline(DynamicRawIDMixin, admin.TabularInline):
+    dynamic_raw_id_fields = ["guild"]
+    model = models.DiscordMember
+    extra = 0
+
+
+class DiscordChannelInline(admin.StackedInline):
+    model = models.DiscordChannel
+    extra = 0
+
 
 class DiscordChannelAdmin(DynamicRawIDMixin, admin.ModelAdmin):
     dynamic_raw_id_fields = ["guild"]
@@ -15,7 +25,9 @@ admin.site.register(models.DiscordChannel, DiscordChannelAdmin)
 
 
 class DiscordGuildAdmin(admin.ModelAdmin):
-    pass
+    inlines = [
+        DiscordChannelInline,
+    ]
 
 
 admin.site.register(models.DiscordGuild, DiscordGuildAdmin)
@@ -40,7 +52,9 @@ admin.site.register(models.Player, PlayerAdmin)
 
 
 class DiscordUserAdmin(admin.ModelAdmin):
-    pass
+    inlines = [
+        DiscordMemberInline,
+    ]
 
 
 admin.site.register(models.DiscordUser, DiscordUserAdmin)
