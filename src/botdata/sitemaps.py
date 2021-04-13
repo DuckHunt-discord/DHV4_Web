@@ -1,16 +1,11 @@
 import collections
 import string
 
-from django.contrib import sitemaps
-
 from django.urls import reverse
 
+from DHV4_Web.sitemaps_classes import PaginatedSitemap
 from botdata.models import Player, DiscordChannel, DiscordGuild
 from botdata.views import get_guilds_list
-
-
-class PaginatedSitemap(sitemaps.Sitemap):
-    limit = 1000  # Limit can be set up to 50000
 
 
 class PlayersPagesSitemap(PaginatedSitemap):
@@ -74,13 +69,13 @@ class GuildListSitemap(PaginatedSitemap):
             else:
                 by_first_letter["others"] += 1
 
-        urls = [guilds_reverse + "?page=" + str(p) for p in range(int(len(guilds)/100) + 1)]
+        urls = [guilds_reverse + "?page=" + str(p) for p in range(int(len(guilds) / 100) + 1)]
 
         for first_letter, count in by_first_letter.most_common():
-            urls.extend([guilds_reverse + "?page=" + str(p) + "&sw=" + first_letter for p in range(int(count/100) + 1)])
+            urls.extend(
+                [guilds_reverse + "?page=" + str(p) + "&sw=" + first_letter for p in range(int(count / 100) + 1)])
 
         return urls
 
     def location(self, item):
         return item
-

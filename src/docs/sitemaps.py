@@ -1,10 +1,10 @@
-from django.contrib import sitemaps
 from django.urls import reverse
 
+from DHV4_Web.sitemaps_classes import Sitemap
 from docs.views import MARKDOWN_FILES
 
 
-class DocsSitemap(sitemaps.Sitemap):
+class DocsSitemap(Sitemap):
     changefreq = 'weekly'
     protocol = 'https'
 

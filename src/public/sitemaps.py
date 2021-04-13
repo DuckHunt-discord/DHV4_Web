@@ -1,11 +1,11 @@
-from django.contrib import sitemaps
 from django.urls import reverse
 
 from DHV4_Web import settings
+from DHV4_Web.sitemaps_classes import Sitemap
 from public.views import get_from_api
 
 
-class BasePagesSitemap(sitemaps.Sitemap):
+class BasePagesSitemap(Sitemap):
     changefreq = 'daily'
     protocol = 'https'
 
@@ -16,7 +16,7 @@ class BasePagesSitemap(sitemaps.Sitemap):
         return reverse(item)
 
 
-class CommandsSitemap(sitemaps.Sitemap):
+class CommandsSitemap(Sitemap):
     changefreq = 'weekly'
     protocol = 'https'
 
@@ -56,7 +56,7 @@ class CommandsSitemap(sitemaps.Sitemap):
         return reverse('bot_commands', kwargs={'command': item})
 
 
-class ShardStatusSitemap(sitemaps.Sitemap):
+class ShardStatusSitemap(Sitemap):
     changefreq = 'always'
     protocol = 'https'
 

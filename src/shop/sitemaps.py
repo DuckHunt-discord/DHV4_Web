@@ -1,9 +1,10 @@
-from django.contrib import sitemaps
 from django.urls import reverse
+
+from DHV4_Web.sitemaps_classes import Sitemap
 from . import models
 
 
-class ProductPagesSitemap(sitemaps.Sitemap):
+class ProductPagesSitemap(Sitemap):
     changefreq = 'daily'
     protocol = 'https'
 
@@ -14,7 +15,7 @@ class ProductPagesSitemap(sitemaps.Sitemap):
         return reverse('shop_product_info', kwargs={'product_id': item.pk})
 
 
-class DesignPagesSitemap(sitemaps.Sitemap):
+class DesignPagesSitemap(Sitemap):
     changefreq = 'daily'
     protocol = 'https'
 
@@ -25,7 +26,7 @@ class DesignPagesSitemap(sitemaps.Sitemap):
         return reverse('shop_design_info', kwargs={'pk': item.pk})
 
 
-class ProductTypePagesSitemap(sitemaps.Sitemap):
+class ProductTypePagesSitemap(Sitemap):
     changefreq = 'daily'
     protocol = 'https'
 
@@ -34,13 +35,5 @@ class ProductTypePagesSitemap(sitemaps.Sitemap):
 
     def location(self, item):
         return reverse('shop_product_type_info', kwargs={'pk': item.pk})
-
-    def _urls(self, *args, **kwargs):
-        urls = super()._urls(*args, **kwargs)
-
-        for url_info in urls:
-            url_info['alternates'] = []
-
-        return urls
 
 
