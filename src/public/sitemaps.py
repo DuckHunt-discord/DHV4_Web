@@ -1,6 +1,4 @@
-from typing import List, Optional
-
-from django.contrib.flatpages import sitemaps
+from django.contrib import sitemaps
 from django.urls import reverse
 
 from DHV4_Web import settings

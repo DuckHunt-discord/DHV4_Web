@@ -1,4 +1,4 @@
-from django.contrib.flatpages import sitemaps
+from django.contrib import sitemaps
 from django.urls import reverse
 
 from docs.views import MARKDOWN_FILES
