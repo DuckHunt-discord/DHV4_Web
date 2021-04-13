@@ -26,10 +26,6 @@ class DesignPagesSitemap(sitemaps.Sitemap):
 
 
 class ProductTypePagesSitemap(sitemaps.Sitemap):
-    i18n = True
-    alternates = True
-    x_default = True
-
     changefreq = 'daily'
     protocol = 'https'
 
@@ -38,3 +34,13 @@ class ProductTypePagesSitemap(sitemaps.Sitemap):
 
     def location(self, item):
         return reverse('shop_product_type_info', kwargs={'pk': item.pk})
+
+    def _urls(self, *args, **kwargs):
+        urls = super()._urls(*args, **kwargs)
+
+        for url_info in urls:
+            url_info['alternates'] = []
+
+        return urls
+
+
