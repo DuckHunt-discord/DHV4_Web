@@ -1,7 +1,8 @@
 import collections
 import string
 
-from django.contrib.flatpages import sitemaps
+from django.contrib import sitemaps
+
 from django.urls import reverse
 
 from botdata.models import Player, DiscordChannel, DiscordGuild
