@@ -26,6 +26,10 @@ class DesignPagesSitemap(sitemaps.Sitemap):
 
 
 class ProductTypePagesSitemap(sitemaps.Sitemap):
+    i18n = True
+    alternates = True
+    x_default = True
+
     changefreq = 'daily'
     protocol = 'https'
 
