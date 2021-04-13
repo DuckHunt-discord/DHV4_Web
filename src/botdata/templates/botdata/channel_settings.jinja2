@@ -24,7 +24,7 @@
                 itemtype="https://schema.org/ListItem">
                 <a itemtype="https://schema.org/WebPage" class="text-decoration-none"
                    itemprop="item" href="{{ canonical_domain_uri }}{{ url("guilds") }}">
-                    <span itemprop="name" class="text-blurple">Guilds</span></a>
+                    <span itemprop="name" class="text-blurple">{{ _('Guilds') }}</span></a>
                 <meta itemprop="position" content="1"/>
             </li>
             <li class="breadcrumb-item" itemprop="itemListElement" itemscope
@@ -43,48 +43,52 @@
             </li>
             <li class="breadcrumb-item active" itemprop="itemListElement" itemscope
                 itemtype="https://schema.org/ListItem">
-                <span itemprop="name" class="text-light text-decoration-none">Settings</span>
+                <span itemprop="name" class="text-light text-decoration-none">{{ _('Settings') }}</span>
                 <meta itemprop="position" content="4"/>
             </li>
         </ol>
     </nav>
 
     <p>
-        The channel is currently {% if channel.enabled %}enabled{% else %}disabled{% endif %}
+        {% if channel.enabled %}
+            {{ _('The channel is currently enabled') }}
+        {% else %}
+            {{ _('The channel is currently disabled') }}
+        {% endif %}
     </p>
     <h2>General settings</h2>
 
     <table class="table table-dark">
         <thead>
         <tr>
-            <td>Setting</td>
-            <td>Value</td>
+            <td>{{ _('Setting') }}</td>
+            <td>{{ _('Value') }}</td>
         </tr>
         </thead>
         <tbody>
         <tr>
-            <td>Ducks per day</td>
+            <td>{{ _('Ducks per day') }}</td>
             <td>{{ channel.ducks_per_day }}</td>
         </tr>
         <tr>
-            <td>Use webhooks</td>
+            <td>{{ _('Use webhooks') }}</td>
             <td>{{ format_settings_value(channel.use_webhooks) }}</td>
         </tr>
         <tr>
-            <td>Use emojis</td>
+            <td>{{ _('Use emojis') }}</td>
             <td>{{ format_settings_value(channel.use_emojis) }}</td>
         </tr>
         <tr>
-            <td>Inventory use</td>
+            <td>{{ _('Inventory use') }}</td>
             <td>{{ format_settings_value(channel.allow_global_items) }}</td>
         </tr>
         <tr>
-            <td>Mentions on kill</td>
+            <td>{{ _('Mentions on kill') }}</td>
             <td>{{ format_settings_value(channel.mentions_when_killed) }}</td>
         </tr>
         <tr>
-            <td>Ducks stay for</td>
-            <td>{{ channel.ducks_time_to_live }} seconds</td>
+            <td>{{ _('Ducks stay for') }}</td>
+            <td>{{ _('%(time_to_live)s seconds', time_to_live=channel.ducks_time_to_live) }}</td>
         </tr>
         </tbody>
     </table>
@@ -93,33 +97,36 @@
     <table class="table table-dark">
         <thead>
         <tr>
-            <td>Setting</td>
-            <td>Value</td>
+            <td>{{ _('Setting') }}</td>
+            <td>{{ _('Value') }}</td>
         </tr>
         </thead>
         <tbody>
         <tr>
-            <td>Normal duck experience</td>
-            <td>{{ channel.base_duck_exp }} exp</td>
+            <td>{{ _('Normal duck experience') }}</td>
+            <td>{% trans base_duck_exp=channel.base_duck_exp %}{{ base_duck_exp }} exp{% endtrans %}</td>
         </tr>
         <tr>
-            <td>Clover experience range</td>
-            <td>{{ channel.clover_min_experience }} to {{ channel.clover_max_experience }} exp</td>
+            <td>{{ _('Clover experience range') }}</td>
+            <td>{% trans clover_min_experience=channel.clover_min_experience, clover_max_experience=channel.clover_max_experience %}
+                {{ clover_min_experience }} to {{ clover_max_experience }} exp{% endtrans %}
+            </td>
         </tr>
         <tr>
-            <td>Additional experience for every life the duck has</td>
+            <td>{{ _('Additional experience for every life the duck has' ) }}</td>
             <td>{{ channel.per_life_exp }} exp</td>
         </tr>
         <tr>
-            <td>Super ducks lives</td>
-            <td>{{ channel.super_ducks_min_life }} to {{ channel.super_ducks_max_life }} lives</td>
+            <td>{{ _('Super ducks lives') }}</td>
+            <td>{% trans super_ducks_min_life=channel.super_ducks_min_life, super_ducks_max_life=channel.super_ducks_max_life %}
+                {{ super_ducks_min_life }} to {{ super_ducks_max_life }} lives{% endtrans %}</td>
         </tr>
         <tr>
-            <td>Ducks lives shown</td>
+            <td>{{ _('Ducks lives shown') }}</td>
             <td>{{ format_settings_value(channel.show_duck_lives) }}</td>
         </tr>
         <tr>
-            <td>Tax on experience transactions</td>
+            <td>{{ _('Tax on experience transactions') }}</td>
             <td>
                 <div class="progress position-relative">
                     <div class="progress-bar" role="progressbar" style="width: {{ channel.tax_on_user_send }}%"
@@ -130,7 +137,7 @@
             </td>
         </tr>
         <tr>
-            <td>Chance to kill on miss</td>
+            <td>{{ _('Chance to kill on miss') }}</td>
             <td>
                 <div class="progress position-relative">
                     <div class="progress-bar" role="progressbar" style="width: {{ channel.kill_on_miss_chance }}%"
@@ -141,7 +148,7 @@
             </td>
         </tr>
         <tr>
-            <td>Chance to frighten ducks</td>
+            <td>{{ _('Chance to frighten ducks') }}</td>
             <td>
                 <div class="progress position-relative">
                     <div class="progress-bar" role="progressbar" style="width: {{ channel.duck_frighten_chance }}%"
@@ -153,7 +160,7 @@
         </tr>
         </tbody>
     </table>
-    <h2>Ducks weights</h2>
+    <h2>{{ _('Ducks weights') }}</h2>
 
     <div class="container">
         <div class="row row-cols-1 row-cols-md-1 g-4">
@@ -167,7 +174,7 @@
                         },
 
                         title: {
-                            text: '{% if channel.night_start_at != channel.night_end_at %}During the day{% endif %}'
+                            text: {% if channel.night_start_at != channel.night_end_at %}gettext('During the day'){% else %}''{% endif %}
                         },
 
                         subtitle: {
@@ -175,11 +182,11 @@
                         },
 
                         legend: {
-                            labelFormat: '{name} <span style="opacity: 0.4">{y}</span>'
+                            labelFormat: gettext('{name} <span style="opacity: 0.4">{y}</span>')
                         },
 
                         series: [{
-                            name: 'Representatives',
+                            name: gettext('Representatives'),
                             keys: ['name', 'y', 'color',],
                             data: {{ parliament_day_data|tojson }},
                             dataLabels: {
@@ -207,7 +214,7 @@
                             },
 
                             title: {
-                                text: 'During the night'
+                                text: gettext('During the night')
                             },
 
                             subtitle: {
@@ -215,11 +222,11 @@
                             },
 
                             legend: {
-                                labelFormat: '{name} <span style="opacity: 0.4">{y}</span>'
+                                labelFormat: gettext('{name} <span style="opacity: 0.4">{y}</span>')
                             },
 
                             series: [{
-                                name: 'Representatives',
+                                name: gettext('Representatives'),
                                 keys: ['name', 'y', 'color',],
                                 data: {{ parliament_night_data|tojson }},
                                 dataLabels: {
@@ -241,7 +248,9 @@
     </div>
     {% if channel.night_start_at != channel.night_end_at %}
         {% set ns, ne = channel.get_night_times() %}
-        <p>Night starts at {{ ns|time }} UTC and ends at {{ ne|time }} UTC</p>
+        {% trans ns=ns|time, ne=ne|time %}
+            <p>Night starts at {{ ns }} UTC and ends at {{ ne }} UTC</p>
+        {% endtrans %}
     {% endif %}
 
 
