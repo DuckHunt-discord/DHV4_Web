@@ -1,11 +1,14 @@
 {% extends "base.jinja2" %}
 
 {% block metadesc %}
-    <meta name="description" content="DuckHunt top scores for {{ players|length }} players on #{{ channel.name }}.">
+    <meta name="description"
+          content="{{ _('DuckHunt top scores for %(players)s players on #%(channel_name)s.', players=paginator.count, channel_name=channel.name) }}">
 {% endblock %}
 
 {% block title %}
-    DuckHunt V4 - Top Scores for #{{ channel.name }}
+    {% trans channel_name=channel.name %}
+        DuckHunt V4 - Top Scores for #{{ channel_name }}
+    {% endtrans %}
 {% endblock %}
 
 {% block head %}
@@ -16,7 +19,9 @@
 {% block container %}
     <div class="container text-light" itemscope itemtype="https://schema.org/Game">
 
-        <h1><span itemprop="numberOfPlayers">{{ paginator.count }}</span> players on #{{ channel.name }}</h1>
+        <h1>{% trans players_count=paginator.count, channel_name=channel.name %}
+            <span itemprop="numberOfPlayers">{{ players_count }}</span> players on #{{ channel_name }}{% endtrans %}
+        </h1>
 
         <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>'" class="background-grey rounded">
             <ol class="breadcrumb p-2" itemscope itemtype="https://schema.org/BreadcrumbList">
@@ -24,7 +29,7 @@
                     itemtype="https://schema.org/ListItem">
                     <a itemtype="https://schema.org/WebPage" class="text-decoration-none"
                        itemprop="item" href="{{ canonical_domain_uri }}{{ url("guilds") }}">
-                        <span itemprop="name" class="text-blurple">Guilds</span></a>
+                        <span itemprop="name" class="text-blurple">{{ _('Guilds') }}</span></a>
                     <meta itemprop="position" content="1"/>
                 </li>
                 <li class="breadcrumb-item" itemprop="itemListElement" itemscope
@@ -42,22 +47,22 @@
                 <li class="breadcrumb-item">
                     <a class="text-decoration-none"
                        href="{{ canonical_domain_uri }}{{ url("channel_settings", pk=channel.pk) }}">
-                        <span class="text-blurple text-decoration-none">Settings</span></a>
+                        <span class="text-blurple text-decoration-none">{{ _('Settings') }}</span></a>
                 </li>
             </ol>
         </nav>
 
         {# Graphs #}
         {% if chart_best_players_data_experience %}
-            <div class="h2">Best players</div>
+            <div class="h2">{{ _('Best players') }}</div>
             <div id="chart-best-players"></div>
         {% endif %}
 
-        <div class="h2">Where do bullets go ?</div>
+        <div class="h2">{{ _('Where do bullets go ?') }}</div>
         <div id="chart-shots"></div>
 
         {% if global_best_times %}
-            <div class="h2">Fastest hunters in the west</div>
+            <div class="h2">{{ _('Fastest hunters in the west') }}</div>
             <div id="chart-best-times"></div>
         {% endif %}
 
@@ -69,9 +74,9 @@
             <thead>
             <tr>
                 <th class="background-green" scope="col">#</th>
-                <th class="background-green" scope="col">Name</th>
-                <th class="text-end background-green" scope="col">Experience</th>
-                <th class="text-end background-green" scope="col">Ducks killed</th>
+                <th class="background-green" scope="col">{{ _('Name') }}</th>
+                <th class="text-end background-green" scope="col">{{ _('Experience') }}</th>
+                <th class="text-end background-green" scope="col">{{ _('Ducks killed') }}</th>
             </tr>
             </thead>
             <tbody>
@@ -115,7 +120,7 @@
             {% if chart_best_players_data_experience %}
                 Highcharts.chart('chart-best-players', {
                     tooltip: {
-                        pointFormat: 'Exp: {point.y}'
+                        pointFormat: gettext('Exp: {point.y}')
                     },
                     legend: {
                         enabled: true
@@ -129,7 +134,7 @@
                     yAxis: {
                         type: 'logarithmic',
                         title: {
-                            text: 'Experience',
+                            text: gettext('Experience'),
                         },
                     },
                     xAxis: {
@@ -137,7 +142,7 @@
                             enabled: true,
                         },
                         title: {
-                            text: 'Rank',
+                            text: gettext('Rank'),
                         },
                     },
                     {# This force the graph to only show one serie at a time #}
@@ -161,7 +166,7 @@
                     },
                     series: [
                         {
-                            name: 'Experience',
+                            name: gettext('Experience'),
                             colorByPoint: false,
                             data: {{ chart_best_players_data_experience|tojson }},
                         },
@@ -179,11 +184,11 @@
                     type: 'bar'
                 },
                 title: {
-                    text: 'Shots...'
+                    text: gettext('Shots...')
                 },
                 yAxis: {
                     title: {
-                        text: 'Count',
+                        text: gettext('Count'),
                         align: 'high'
                     },
                 },
@@ -203,12 +208,12 @@
                     enabled: false
                 },
                 series: [{
-                    name: 'Shoots',
+                    name: gettext('Shoots'),
                     colorByPoint: true,
                     data: {{ shots_chart_data|tojson }},
                     dataLabels: {
                         enabled: true,
-                        format: '{point.name}: {point.y} shots'
+                        format: gettext('{point.name}: {point.y} shots')
                     },
                 }]
             });
@@ -222,7 +227,7 @@
                     },
                     yAxis: {
                         title: {
-                            text: 'Time to kill (seconds)',
+                            text: gettext('Time to kill (seconds)'),
                             align: 'high'
                         },
                     },
@@ -232,7 +237,7 @@
                         }
                     },
                     tooltip: {
-                        valueSuffix: ' seconds'
+                        valueSuffix: gettext(' seconds')
                     },
                     plotOptions: {
                         bar: {
@@ -245,7 +250,7 @@
                         enabled: false
                     },
                     series: [{
-                        name: 'Best Times',
+                        name: gettext('Best Times'),
                         colorByPoint: true,
                         data: {{ chart_best_time|tojson }},
                         dataLabels: {
@@ -259,7 +264,10 @@
 
         </script>
 
-    Back to <a href="{{ url("guild", pk=channel.guild_id) }}" itemprop="gameLocation">{{ channel.guild.name }}</a>
+        {% trans link=url("guild", pk=channel.guild_id),guild_name=channel.guild.name %}
+            Back to <a href="{{ link }}" itemprop="gameLocation">{{ guild_name }}</a>
+        {% endtrans %}
+
     </div>
 
 

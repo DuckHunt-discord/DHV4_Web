@@ -19,6 +19,7 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 
 from django.contrib.sitemaps import views as sitemap_views
+from django.views.i18n import JavaScriptCatalog
 from django.views.static import serve
 
 from .sitemaps import sitemaps
@@ -31,6 +32,7 @@ urlpatterns = [
     path('shop/', include('shop.urls')),
     path('admin/', admin.site.urls),
     path('admin/dynamic_raw_id/', include('dynamic_raw_id.urls')),
+    path('jsi18n', JavaScriptCatalog.as_view(), name='javascript-catalog'),
     path('__debug__/', include(debug_toolbar.urls)),
     path('sitemap.xml', sitemap_views.index, {'sitemaps': sitemaps}),
     path('sitemap-<section>.xml', sitemap_views.sitemap, {'sitemaps': sitemaps},
