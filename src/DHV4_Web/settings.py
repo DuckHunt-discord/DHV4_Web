@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 import sys
 from pathlib import Path
+
+from django.db.models import BigAutoField
 from django_jinja.builtins import DEFAULT_EXTENSIONS
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -300,3 +302,9 @@ PIPELINE = {
 }
 
 IMAGEKIT_DEFAULT_CACHEFILE_STRATEGY = 'imagekit.cachefiles.strategies.Optimistic'
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+LOCALE_PATHS = [
+    BASE_DIR / "locales"
+]
