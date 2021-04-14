@@ -351,7 +351,9 @@ class Player(models.Model):
 
     class Meta:
         db_table = 'players'
-        unique_together = [["member", "channel"]]
+        constraints = [
+            models.UniqueConstraint(fields=["member", "channel"], name='a_member_per_channel_only'),
+        ]
 
 
 class BotList(models.Model):
