@@ -351,6 +351,7 @@ class Player(models.Model):
 
     class Meta:
         db_table = 'players'
+        unique_together = [["member", "channel"]]
 
 
 class BotList(models.Model):
