@@ -10,11 +10,19 @@ from docs.md_processors.hints import HintExtension
 from docs.md_processors.remove_md_links_extension import get_extension
 from django.shortcuts import redirect
 
-MARKDOWN_FILES = pathlib.Path(__file__).parent.absolute() / "markdown_files/"
+MARKDOWN_FILES = pathlib.Path(__file__).parent.absolute() / "docs_markdown/"
+
+
+def get_markdown_files_directory(request):
+    lang = request.LANGUAGE_CODE.lower()
+    if lang.startswith('fr'):
+        return MARKDOWN_FILES / "french/"
+    else:
+        return MARKDOWN_FILES / "english/"
 
 
 def parse_summary(request):
-    summary_file = MARKDOWN_FILES / "SUMMARY.md"
+    summary_file = get_markdown_files_directory(request) / "SUMMARY.md"
     absolute_path = request.build_absolute_uri(reverse('docs:index'))
 
     if "localhost" not in absolute_path and "127.0.0.1" not in absolute_path:
@@ -35,7 +43,7 @@ def parse_summary(request):
 
 # Create your views here.
 def summary(request):
-    summary_file = MARKDOWN_FILES / "SUMMARY.md"
+    summary_file = get_markdown_files_directory(request) / "SUMMARY.md"
 
     gh_file = "https://github.com/DuckHunt-discord/duckhunt.me-docs/blob/master/SUMMARY.md"
 
@@ -58,7 +66,7 @@ def display_page(request, path, ctx=None):
 
     gh_file = "https://github.com/DuckHunt-discord/duckhunt.me-docs/blob/master/" + file
 
-    file = MARKDOWN_FILES / file
+    file = get_markdown_files_directory(request) / file
 
     if not file.exists():
         return redirect(reverse('docs:index'), permanent=True)
@@ -83,7 +91,7 @@ def display_page(request, path, ctx=None):
 
 def assets(request, file):
     try:
-        return FileResponse(open(MARKDOWN_FILES / '.gitbook/assets' / file, "rb"))
+        return FileResponse(open(get_markdown_files_directory(request) / '.gitbook/assets' / file, "rb"))
     except FileNotFoundError:
         raise Http404("Unknown asset")
 

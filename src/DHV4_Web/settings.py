@@ -13,6 +13,8 @@ import os
 import sys
 from pathlib import Path
 
+from django.utils.translation import gettext_lazy as _
+
 from django.db.models import BigAutoField
 from django_jinja.builtins import DEFAULT_EXTENSIONS
 
@@ -220,7 +222,6 @@ STATICFILES_FINDERS = (
     'pipeline.finders.PipelineFinder',
 )
 
-
 DH_API_KEY = os.environ.get("DH_API_KEY", "")
 DH_API_URL = os.environ.get("DH_API_URL", "http://duckhunt.me/api")
 
@@ -274,11 +275,11 @@ PIPELINE = {
     'JAVASCRIPT': {
         'highcharts': {
             'source_filenames': (
-              'public/js/highcharts.js',
-              'public/js/highcharts-more.js',
-              'public/js/modules/item-series.js',
-              'public/js/themes/high-contrast-dark.js',
-              'public/js/hcinit.js',
+                'public/js/highcharts.js',
+                'public/js/highcharts-more.js',
+                'public/js/modules/item-series.js',
+                'public/js/themes/high-contrast-dark.js',
+                'public/js/hcinit.js',
             ),
             'output_filename': 'js/highcharts_pip.js',
         },
@@ -304,6 +305,10 @@ PIPELINE = {
 IMAGEKIT_DEFAULT_CACHEFILE_STRATEGY = 'imagekit.cachefiles.strategies.Optimistic'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+LANGUAGES = [
+    ("en", _("English")),
+    ("fr", _("French")),
+]
 
 LOCALE_PATHS = [
     BASE_DIR / "locales"
