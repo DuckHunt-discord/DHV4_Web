@@ -478,6 +478,8 @@ class SupportTicket(models.Model):
     closed_by = models.ForeignKey(DiscordUser, models.SET_NULL, db_index=False, null=True)
     close_reason = models.TextField(blank=True, default="")
 
+    last_tag_used = models.ForeignKey('tags.Tag', models.SET_NULL, db_index=False, null=True)
+
     def opened_for(self) -> datetime.timedelta:
         if self.closed:
             td = self.closed_at - self.opened_at

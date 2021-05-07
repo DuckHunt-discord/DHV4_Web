@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-14 16:38+0000\n"
+"POT-Creation-Date: 2021-05-07 08:50+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,6 +24,14 @@ msgstr ""
 
 #: DHV4_Web/admin.py:9
 msgid "DuckHunt Website Administration"
+msgstr ""
+
+#: DHV4_Web/settings.py:309
+msgid "English"
+msgstr ""
+
+#: DHV4_Web/settings.py:310
+msgid "French"
 msgstr ""
 
 #: botdata/achievements.py:7
