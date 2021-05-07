@@ -125,7 +125,7 @@ def get_guilds_list(language=None):
         ],
         key=lambda tup: -(tup[1][0]["players_count"] + tup[1][0]["guild_vip_status"] * 100000)
     ))  # And then sort guilds by most players, but VIP first.
-    cache.set('guilds_list_custom_sql', res, 12 * HOUR)
+    # cache.set('guilds_list_custom_sql', res, 12 * HOUR)
     return res
 
 
