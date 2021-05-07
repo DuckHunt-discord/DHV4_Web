@@ -4,14 +4,10 @@ from django.contrib import sitemaps
 class Sitemap(sitemaps.Sitemap):
     """
     Fixes the very annoying Exception while resolving variable 'alternates' in template 'sitemap.xml'
+
+    This is not needed anymore since my fix was added into Django.
     """
-    def _urls(self, *args, **kwargs):
-        urls = super()._urls(*args, **kwargs)
-
-        for url_info in urls:
-            url_info['alternates'] = []
-
-        return urls
+    pass
 
 
 class PaginatedSitemap(Sitemap):
