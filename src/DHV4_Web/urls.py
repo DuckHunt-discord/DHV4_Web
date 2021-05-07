@@ -45,10 +45,10 @@ urlpatterns += i18n_patterns(
 )
 
 # Paths where a non-prefixed URL is assumed to be in english
-#urlpatterns += i18n_patterns(
-#   path('docs/', include('docs.urls'), ),
-#    prefix_default_language=False,
-#)
+# urlpatterns += i18n_patterns(
+#     path('docs/', include('docs.urls'), ),
+#     prefix_default_language=False,
+# )
 
 if settings.DEBUG:
     urlpatterns += [

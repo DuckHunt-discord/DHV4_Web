@@ -2,6 +2,7 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/src/docs/markdown_files" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/docs/docs_markdown/english" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/docs/docs_markdown/french" vcs="Git" />
   </component>
 </project>
