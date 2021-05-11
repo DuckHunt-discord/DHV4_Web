@@ -1,11 +1,16 @@
 def _(message):
     return message
 
+
 trophys = \
     {
         "v3_player": {
             "name": _("V3 Player"),
             "description": _("They even played on the previous version. What a champ!")
+        },
+        "no_more_updates": {
+            "name": _("No More Updates"),
+            "description": _("They killed the bot developer! There won't be more updates to the bot anymore.")
         },
         "translator": {
             "name": _("Translator"),
