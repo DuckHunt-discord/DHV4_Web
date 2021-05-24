@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-07 08:50+0000\n"
+"POT-Creation-Date: 2021-05-24 12:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,210 +34,220 @@ msgstr ""
 msgid "French"
 msgstr ""
 
-#: botdata/achievements.py:7
+#: botdata/achievements.py:8
 msgid "V3 Player"
 msgstr ""
 
-#: botdata/achievements.py:8
+#: botdata/achievements.py:9
 msgid "They even played on the previous version. What a champ!"
 msgstr ""
 
-#: botdata/achievements.py:11
-msgid "Translator"
-msgstr ""
-
 #: botdata/achievements.py:12
-msgid "That person is helping translate the bot."
+msgid "No More Updates"
 msgstr ""
 
-#: botdata/achievements.py:15
-msgid "Bug hunter"
+#: botdata/achievements.py:13
+msgid ""
+"They killed the bot developer! There won't be more updates to the bot "
+"anymore."
 msgstr ""
 
 #: botdata/achievements.py:16
-msgid "That person found a bug in the bot."
+msgid "Translator"
 msgstr ""
 
-#: botdata/achievements.py:19 botdata/models.py:178
-msgid "Moderator"
+#: botdata/achievements.py:17
+msgid "That person is helping translate the bot."
 msgstr ""
 
 #: botdata/achievements.py:20
+msgid "Bug hunter"
+msgstr ""
+
+#: botdata/achievements.py:21
+msgid "That person found a bug in the bot."
+msgstr ""
+
+#: botdata/achievements.py:24 botdata/models.py:180
+msgid "Moderator"
+msgstr ""
+
+#: botdata/achievements.py:25
 msgid "That person helps moderating everything related to the bot."
 msgstr ""
 
-#: botdata/achievements.py:23
+#: botdata/achievements.py:28
 msgid "Maker"
 msgstr ""
 
-#: botdata/achievements.py:24
+#: botdata/achievements.py:29
 msgid "That person made the bot."
 msgstr ""
 
-#: botdata/achievements.py:27
+#: botdata/achievements.py:32
 msgid "Beta Tester"
 msgstr ""
 
-#: botdata/achievements.py:28
+#: botdata/achievements.py:33
 msgid "That person helped me test V4 before the release."
 msgstr ""
 
-#: botdata/achievements.py:31
+#: botdata/achievements.py:36
 msgid "Donator"
 msgstr ""
 
-#: botdata/achievements.py:32
+#: botdata/achievements.py:37
 msgid "That person donated towards the development of the bot 💸."
 msgstr ""
 
-#: botdata/achievements.py:35
+#: botdata/achievements.py:40
 msgid "Artist"
 msgstr ""
 
-#: botdata/achievements.py:36
+#: botdata/achievements.py:41
 msgid "That person made some art for the bot 🎨."
 msgstr ""
 
-#: botdata/achievements.py:44
+#: botdata/achievements.py:49
 msgid "Murderer"
 msgstr ""
 
-#: botdata/achievements.py:45
+#: botdata/achievements.py:50
 msgid "Kill another hunter."
 msgstr ""
 
-#: botdata/achievements.py:48
+#: botdata/achievements.py:53
 msgid "Big spender"
 msgstr ""
 
-#: botdata/achievements.py:49
+#: botdata/achievements.py:54
 msgid "Spend more than 2000 experience."
 msgstr ""
 
-#: botdata/achievements.py:52
+#: botdata/achievements.py:57
 msgid "A hunter joined the chat"
 msgstr ""
 
-#: botdata/achievements.py:53
+#: botdata/achievements.py:58
 msgid "Play for more than a week."
 msgstr ""
 
-#: botdata/achievements.py:56
+#: botdata/achievements.py:61
 msgid "We are starting to know each other"
 msgstr ""
 
-#: botdata/achievements.py:57
+#: botdata/achievements.py:62
 msgid "Play for more than a month."
 msgstr ""
 
-#: botdata/achievements.py:60
+#: botdata/achievements.py:65
 msgid "Wanna be friends ?"
 msgstr ""
 
-#: botdata/achievements.py:61
+#: botdata/achievements.py:66
 msgid "Play for more than a year."
 msgstr ""
 
-#: botdata/achievements.py:64
+#: botdata/achievements.py:69
 msgid "I don't want your damn bullets!"
 msgstr ""
 
-#: botdata/achievements.py:65
+#: botdata/achievements.py:70
 msgid "Leave a bullet you found in the bushes."
 msgstr ""
 
-#: botdata/achievements.py:68
+#: botdata/achievements.py:73
 msgid "Mommy is crying"
 msgstr ""
 
-#: botdata/achievements.py:69
+#: botdata/achievements.py:74
 msgid "Kill a few baby ducks."
 msgstr ""
 
-#: botdata/achievements.py:72
+#: botdata/achievements.py:77
 msgid "MATHS 101"
 msgstr ""
 
-#: botdata/achievements.py:73
+#: botdata/achievements.py:78
 msgid "Solve equations given by the Pr. Duck."
 msgstr ""
 
-#: botdata/achievements.py:76
+#: botdata/achievements.py:81
 msgid "BRAAAAAINS!"
 msgstr ""
 
-#: botdata/achievements.py:77
+#: botdata/achievements.py:82
 msgid "Eat some brains and come back to life."
 msgstr ""
 
-#: botdata/achievements.py:80
+#: botdata/achievements.py:85
 msgid "Sentry gun"
 msgstr ""
 
-#: botdata/achievements.py:81
+#: botdata/achievements.py:86
 msgid "Use more than 1000 bullets."
 msgstr ""
 
-#: botdata/achievements.py:84
+#: botdata/achievements.py:89
 msgid "Homing kills (you)"
 msgstr ""
 
-#: botdata/achievements.py:85
+#: botdata/achievements.py:90
 msgid "Use the homing projectiles."
 msgstr ""
 
-#: botdata/achievements.py:90
+#: botdata/achievements.py:95
 msgid "You monster"
 msgstr ""
 
-#: botdata/achievements.py:91
+#: botdata/achievements.py:96
 msgid "Kill a MOAD that spawns a baby duck."
 msgstr ""
 
-#: botdata/achievements.py:94
+#: botdata/achievements.py:99
 msgid "Gun insurer"
 msgstr ""
 
-#: botdata/achievements.py:95
+#: botdata/achievements.py:100
 msgid "Give at least 30 exp to an hunter that lost his gun."
 msgstr ""
 
-#: botdata/achievements.py:98
+#: botdata/achievements.py:103
 msgid "Short memory"
 msgstr ""
 
-#: botdata/achievements.py:99
+#: botdata/achievements.py:104
 msgid "Shoot at your own mechanical duck."
 msgstr ""
 
-#: botdata/achievements.py:102
+#: botdata/achievements.py:107
 msgid "An ounce of prevention is worth a pound of cure"
 msgstr ""
 
-#: botdata/achievements.py:103
+#: botdata/achievements.py:108
 msgid "Sabotage the gun of someone that planned to shoot at you."
 msgstr ""
 
-#: botdata/models.py:175
+#: botdata/models.py:177
 msgid "Banned"
 msgstr ""
 
-#: botdata/models.py:176
+#: botdata/models.py:178
 msgid "Default"
 msgstr ""
 
-#: botdata/models.py:177
+#: botdata/models.py:179
 msgid "Trusted"
 msgstr ""
 
-#: botdata/models.py:179
+#: botdata/models.py:181
 msgid "Admin"
 msgstr ""
 
-#: botdata/models.py:180
+#: botdata/models.py:182
 msgid "Bot moderator"
 msgstr ""
 
-#: botdata/models.py:181
+#: botdata/models.py:183
 msgid "Bot owner"
 msgstr ""
