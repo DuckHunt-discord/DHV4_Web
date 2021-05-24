@@ -144,7 +144,8 @@ class DiscordChannel(models.Model):
     super_ducks_min_life = models.SmallIntegerField(default=2)
     super_ducks_max_life = models.SmallIntegerField(default=7)
 
-    levels_to_roles_ids_mapping = models.JSONField(default=dict, blank=True)
+    levels_to_roles_ids_mapping   = models.JSONField(default=dict, blank=True)
+    prestige_to_roles_ids_mapping = models.JSONField(default=dict, blank=True)
 
     def get_night_times(self):
         now = datetime.datetime.now(tz=pytz.utc)
