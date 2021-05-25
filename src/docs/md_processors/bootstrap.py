@@ -34,6 +34,12 @@ class FakeTitlesTreeprocessor(Treeprocessor):
                     element.tag = 'div'
 
                 if element.text:
+                    if "wzxhzdk:" in element.text:
+                        # WTF I don't even know what is going on in the markdown proc.
+                        # Anyway, stupid links IDs are replaced by this, so let's delete the parts with wzxhzdk in them.
+                        # https://stackoverflow.com/a/58906542/3738545
+                        element.text = element.text.split("wzxhzdk", 1)[0]
+
                     element.set('id', element.text.replace('?', '').strip().replace(' ', '-').lower())
             if element.tag == "img":
                 src = element.get('src')
