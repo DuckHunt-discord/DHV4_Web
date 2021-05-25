@@ -14,7 +14,7 @@ COPY requirements.txt /
 
 RUN pip install --use-deprecated=legacy-resolver -U -r requirements.txt
 
-COPY src/ /web
+COPY / /web
 
 ENV DOMAIN="duckhunt.me"
 ENV SECRET_KEY=""
@@ -29,7 +29,7 @@ ENV DH_API_URL=""
 
 COPY docker_run.sh /run.sh
 
-WORKDIR /web/
+WORKDIR /web/src/
 
 ENTRYPOINT ["sh"]
 CMD ["/run.sh"]
