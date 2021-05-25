@@ -1,0 +1,8 @@
+[submodule "src/docs/docs_markdown/english"]
+	path = src/docs/docs_markdown/english
+	url = https://github.com/DuckHunt-discord/duckhunt.me-docs
+	branch = english
+[submodule "src/docs/docs_markdown/french"]
+	path = src/docs/docs_markdown/french
+	url = https://github.com/DuckHunt-discord/duckhunt.me-docs
+	branch = french
