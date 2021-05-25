@@ -1,6 +1,0 @@
-[submodule "src/docs/markdown_files"]
-	path = src/docs/docs_markdown/english
-	url = https://github.com/DuckHunt-discord/duckhunt.me-docs
-[submodule "src/docs/docs_markdown/duckhunt.me-docs"]
-	path = src/docs/docs_markdown/french
-	url = https://github.com/DuckHunt-discord/duckhunt.me-docs.git
