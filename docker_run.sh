@@ -1,3 +1,5 @@
+git pull --recurse-submodules
+
 python manage.py collectstatic --clear --no-input
 python manage.py migrate --no-input --skip-checks
 
