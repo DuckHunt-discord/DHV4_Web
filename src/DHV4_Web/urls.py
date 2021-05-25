@@ -36,19 +36,20 @@ urlpatterns = [
     path('sitemap-<section>.xml', sitemap_views.sitemap, {'sitemaps': sitemaps},
          name='django.contrib.sitemaps.views.sitemap'),
     path('jsi18n', JavaScriptCatalog.as_view(), name='javascript-catalog'),
-    path('docs/', include('docs.urls'), ),
+    # path('docs/', include('docs.urls'), ),
 ]
 
 # Paths with automatic language detection
 urlpatterns += i18n_patterns(
     path('admin/', admin.site.urls),
+    path('docs/', include('docs.urls'), ),
 )
 
 # Paths where a non-prefixed URL is assumed to be in english
 # urlpatterns += i18n_patterns(
 #     path('docs/', include('docs.urls'), ),
 #     prefix_default_language=False,
-# )
+#     )
 
 if settings.DEBUG:
     urlpatterns += [
