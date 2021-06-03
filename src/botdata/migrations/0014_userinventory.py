@@ -16,7 +16,7 @@ def move_inventories_to_new_table(apps, schema_editor):
                     inventory.lootbox_welcome_left += item_data.get("uses", 1)
                 elif item_data['action'] in ["foie_gras", "fois_gras"]:
                     inventory.lootbox_boss_left += item_data.get("uses", 1)
-                elif item_data['action'] == "i_voted":
+                elif item_data['action'] == "vote":
                     inventory.lootbox_vote_left += item_data.get("uses", 1)
                 else:
                     raise TypeError(f"Unknown lootbox type in {user} inventory: {item_data}.")
