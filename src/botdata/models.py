@@ -212,6 +212,32 @@ class DiscordUser(models.Model):
         db_table = 'users'
 
 
+class UserInventory(models.Model):
+    user = models.OneToOneField(DiscordUser, on_delete=models.CASCADE, primary_key=True)
+
+    # Boxes
+    lootbox_welcome_left = models.IntegerField(default=1)
+    lootbox_boss_left    = models.IntegerField(default=0)
+    lootbox_vote_left    = models.IntegerField(default=0)
+
+    # Unobtainable items
+    item_vip_card_left = models.IntegerField(default=0)
+
+    # Loot
+    item_mini_exp_boost_left   = models.IntegerField(default=0)
+    item_norm_exp_boost_left   = models.IntegerField(default=0)
+    item_maxi_exp_boost_left   = models.IntegerField(default=0)
+    item_one_bullet_left       = models.IntegerField(default=0)
+    item_spawn_ducks_left      = models.IntegerField(default=0)
+    item_refill_magazines_left = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.user} inventory"
+
+    class Meta:
+        db_table = 'inventories'
+
+
 class DiscordMember(models.Model):
     access_level = EnumField(AccessLevel, default=AccessLevel.DEFAULT)
 
