@@ -185,7 +185,6 @@ class AccessLevel(Enum):
     }
 
 
-
 class DiscordUser(models.Model):
     discord_id = models.BigAutoField(primary_key=True)
     first_seen = models.DateTimeField(auto_now_add=True)
@@ -193,7 +192,6 @@ class DiscordUser(models.Model):
     name = models.TextField()
     discriminator = models.CharField(max_length=4)
 
-    inventory = models.JSONField(default=list, blank=True)
     trophys = models.JSONField(default=dict, blank=True)
 
     ping_friendly = models.BooleanField(default=True)
@@ -213,7 +211,7 @@ class DiscordUser(models.Model):
 
 
 class UserInventory(models.Model):
-    user = models.OneToOneField(DiscordUser, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(DiscordUser, related_name='inventory', on_delete=models.CASCADE, primary_key=True)
 
     # Boxes
     lootbox_welcome_left = models.IntegerField(default=1)
