@@ -14,7 +14,7 @@ def move_inventories_to_new_table(apps, schema_editor):
             if item_data['type'] == "lootbox":
                 if item_data['action'] == "welcome":
                     inventory.lootbox_welcome_left += item_data.get("uses", 1)
-                elif item_data['action'] == "foie_gras":
+                elif item_data['action'] in ["foie_gras", "fois_gras"]:
                     inventory.lootbox_boss_left += item_data.get("uses", 1)
                 elif item_data['action'] == "i_voted":
                     inventory.lootbox_vote_left += item_data.get("uses", 1)
