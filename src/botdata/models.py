@@ -108,6 +108,7 @@ class DiscordChannel(models.Model):
     enabled = models.BooleanField(default=False, db_index=True)
 
     allow_global_items = models.BooleanField(default=True)
+    anti_trigger_wording = models.BooleanField(default=False)
 
     tax_on_user_send = models.SmallIntegerField(default=5, validators=[MinValueValidator(0), MaxValueValidator(100)])
     mentions_when_killed = models.BooleanField(default=True)

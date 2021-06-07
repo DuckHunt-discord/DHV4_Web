@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-03 15:14+0000\n"
+"POT-Creation-Date: 2021-06-07 10:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -68,7 +68,7 @@ msgstr ""
 msgid "That person found a bug in the bot."
 msgstr ""
 
-#: botdata/achievements.py:24 botdata/models.py:181
+#: botdata/achievements.py:24 botdata/models.py:182
 msgid "Moderator"
 msgstr ""
 
@@ -228,26 +228,26 @@ msgstr ""
 msgid "Sabotage the gun of someone that planned to shoot at you."
 msgstr ""
 
-#: botdata/models.py:178
+#: botdata/models.py:179
 msgid "Banned"
 msgstr ""
 
-#: botdata/models.py:179
+#: botdata/models.py:180
 msgid "Default"
 msgstr ""
 
-#: botdata/models.py:180
+#: botdata/models.py:181
 msgid "Trusted"
 msgstr ""
 
-#: botdata/models.py:182
+#: botdata/models.py:183
 msgid "Admin"
 msgstr ""
 
-#: botdata/models.py:183
+#: botdata/models.py:184
 msgid "Bot moderator"
 msgstr ""
 
-#: botdata/models.py:184
+#: botdata/models.py:185
 msgid "Bot owner"
 msgstr ""

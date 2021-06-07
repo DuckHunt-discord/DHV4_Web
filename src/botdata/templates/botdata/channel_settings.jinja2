@@ -90,6 +90,10 @@
             <td>{{ _('Ducks stay for') }}</td>
             <td>{{ _('%(time_to_live)s seconds', time_to_live=channel.ducks_time_to_live) }}</td>
         </tr>
+        <tr>
+            <td>{{ _('Anti triggers') }}</td>
+            <td>{{ format_settings_value(channel.anti_trigger_wording) }}</td>
+        </tr>
         </tbody>
     </table>
 
