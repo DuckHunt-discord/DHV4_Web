@@ -145,7 +145,7 @@ class DiscordChannel(models.Model):
     super_ducks_min_life = models.SmallIntegerField(default=2)
     super_ducks_max_life = models.SmallIntegerField(default=7)
 
-    levels_to_roles_ids_mapping   = models.JSONField(default=dict, blank=True)
+    levels_to_roles_ids_mapping = models.JSONField(default=dict, blank=True)
     prestige_to_roles_ids_mapping = models.JSONField(default=dict, blank=True)
 
     def get_night_times(self):
@@ -211,23 +211,80 @@ class DiscordUser(models.Model):
         db_table = 'users'
 
 
+class Event2021UserData(models.Model):
+    user = models.OneToOneField(DiscordUser, related_name='event2021data', on_delete=models.CASCADE, primary_key=True)
+
+    # General statistics
+    first_played = models.DateTimeField(auto_now_add=True)
+    last_seen = models.DateTimeField(auto_now_add=True)
+    messages_sent = models.IntegerField(default=0)
+    words_sent = models.IntegerField(default=0)
+    points_recovered = models.IntegerField(default=0) # By defusing
+    points_acquired = models.IntegerField(default=0)  # By talking
+    points_current = models.IntegerField(default=0)   # Sum of everything
+    points_exploded = models.IntegerField(default=0)  # By saying a bad word
+    points_spent = models.IntegerField(default=0)     # By using the shop
+
+    # Inventory
+
+    ## Landmines
+    landmines_in_inventory = models.IntegerField(default=0)
+
+    ## Safes
+    safes_in_inventory = models.IntegerField(default=0)
+
+    ## Electricity
+    electricity_in_inventory = models.IntegerField(default=0)
+
+    ## Defuse kits
+    defuse_kits_bought = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.user} 2021 event data"
+
+    class Meta:
+        db_table = 'event2021userdata'
+
+
+class Event2021Landmines(models.Model):
+    placed_by = models.ForeignKey(Event2021UserData, related_name='landmines_bought', on_delete=models.CASCADE)
+    placed = models.DateTimeField(auto_now_add=True)
+    word = models.CharField(max_length=50)
+
+    value = models.IntegerField()
+    exploded = models.IntegerField(null=True, blank=True)
+
+    tripped = models.BooleanField(default=False)
+    disarmed = models.BooleanField(default=False)
+
+    stopped_by = models.ForeignKey(Event2021UserData, null=True, blank=True, on_delete=models.SET_NULL,
+                                   related_name='landmines_stopped')
+    stopped_at = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.userdata.user} 2021 event landmine on {self.word} for {self.value}"
+
+    class Meta:
+        db_table = 'event2021landmines'
+
+
 class UserInventory(models.Model):
     user = models.OneToOneField(DiscordUser, related_name='inventory', on_delete=models.CASCADE, primary_key=True)
 
     # Boxes
     lootbox_welcome_left = models.IntegerField(default=1)
-    lootbox_boss_left    = models.IntegerField(default=0)
-    lootbox_vote_left    = models.IntegerField(default=0)
+    lootbox_boss_left = models.IntegerField(default=0)
+    lootbox_vote_left = models.IntegerField(default=0)
 
     # Unobtainable items
     item_vip_card_left = models.IntegerField(default=0)
 
     # Loot
-    item_mini_exp_boost_left   = models.IntegerField(default=0)
-    item_norm_exp_boost_left   = models.IntegerField(default=0)
-    item_maxi_exp_boost_left   = models.IntegerField(default=0)
-    item_one_bullet_left       = models.IntegerField(default=0)
-    item_spawn_ducks_left      = models.IntegerField(default=0)
+    item_mini_exp_boost_left = models.IntegerField(default=0)
+    item_norm_exp_boost_left = models.IntegerField(default=0)
+    item_maxi_exp_boost_left = models.IntegerField(default=0)
+    item_one_bullet_left = models.IntegerField(default=0)
+    item_spawn_ducks_left = models.IntegerField(default=0)
     item_refill_magazines_left = models.IntegerField(default=0)
 
     def __str__(self):
@@ -419,8 +476,9 @@ class BotList(models.Model):
                                       blank=True,
                                       max_length=128)
 
-    check_vote_negate = models.BooleanField(help_text="Does the boolean says if the user has voted (True) or if he can vote (False) ?",
-                                            default=True)
+    check_vote_negate = models.BooleanField(
+        help_text="Does the boolean says if the user has voted (True) or if he can vote (False) ?",
+        default=True)
 
     webhook_handler = models.CharField(help_text="What is the function that'll receive the request from the vote hooks",
                                        choices=(("generic", "generic"),
@@ -429,18 +487,20 @@ class BotList(models.Model):
                                        default="generic",
                                        max_length=20)
 
-    webhook_authorization_header = models.CharField(help_text="Name of the header used to authenticate webhooks requests",
-                                                    default="Authorization",
-                                                    blank=True,
-                                                    max_length=20)
+    webhook_authorization_header = models.CharField(
+        help_text="Name of the header used to authenticate webhooks requests",
+        default="Authorization",
+        blank=True,
+        max_length=20)
 
     webhook_user_id_json_field = models.CharField(help_text="Key that gives the user ID in the provided JSON",
                                                   default="id",
                                                   blank=True,
                                                   max_length=20)
 
-    webhook_auth = models.TextField(help_text="Secret used for authentication of the webhooks messages if not the same the auth token",
-                                    blank=True)
+    webhook_auth = models.TextField(
+        help_text="Secret used for authentication of the webhooks messages if not the same the auth token",
+        blank=True)
 
     # **Statistics**
 
@@ -525,6 +585,3 @@ class SupportTicket(models.Model):
     class Meta:
         db_table = 'supportticket'
         ordering = ["-opened_at"]
-
-
-

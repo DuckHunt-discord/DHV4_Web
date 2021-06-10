@@ -60,6 +60,28 @@ class DiscordUserAdmin(admin.ModelAdmin):
 admin.site.register(models.DiscordUser, DiscordUserAdmin)
 
 
+class UserInventoryAdmin(DynamicRawIDMixin, admin.ModelAdmin):
+    dynamic_raw_id_fields = ["user"]
+
+
+admin.site.register(models.UserInventory, UserInventoryAdmin)
+
+
+class Event2021UserDataAdmin(DynamicRawIDMixin, admin.ModelAdmin):
+    dynamic_raw_id_fields = ["user"]
+
+
+admin.site.register(models.Event2021UserData, Event2021UserDataAdmin)
+
+
+class Event2021LandminesAdmin(DynamicRawIDMixin, admin.ModelAdmin):
+    dynamic_raw_id_fields = ["userdata"]
+
+
+admin.site.register(models.Event2021Landmines, Event2021LandminesAdmin)
+
+
+
 class BotListAdmin(admin.ModelAdmin):
 
     list_display = ["name", "can_vote", "webhook_handler", "post_stats_method", "bot_verified", "bot_certified"]
