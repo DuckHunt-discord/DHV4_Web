@@ -251,6 +251,7 @@ class Event2021Landmines(models.Model):
     placed_by = models.ForeignKey(Event2021UserData, related_name='landmines_bought', on_delete=models.CASCADE)
     placed = models.DateTimeField(auto_now_add=True)
     word = models.CharField(max_length=50)
+    message = models.CharField(blank=True, default="", max_length=2000)
 
     value = models.IntegerField()
     exploded = models.IntegerField(null=True, blank=True)
