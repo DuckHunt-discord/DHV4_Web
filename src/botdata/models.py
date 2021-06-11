@@ -236,6 +236,7 @@ class Event2021UserData(models.Model):
 
     ## Electricity
     electricity_in_inventory = models.IntegerField(default=0)
+    gloves_in_inventory      = models.IntegerField(default=0)
 
     ## Defuse kits
     defuse_kits_bought = models.IntegerField(default=0)
