@@ -225,6 +225,12 @@ class Event2021UserData(models.Model):
     points_current = models.IntegerField(default=0)   # Sum of everything
     points_exploded = models.IntegerField(default=0)  # By saying a bad word
     points_spent = models.IntegerField(default=0)     # By using the shop
+    points_shocked = models.IntegerField(default=0)   # To nail breaker
+    points_found = models.IntegerField(default=0)     # From nail breaker
+
+    shocked_times = models.IntegerField(default=0)
+    found_times = models.IntegerField(default=0)
+    shocks_prevented = models.IntegerField(default=0)
 
     # Inventory
 
@@ -237,6 +243,7 @@ class Event2021UserData(models.Model):
     ## Electricity
     electricity_in_inventory = models.IntegerField(default=0)
     gloves_in_inventory      = models.IntegerField(default=0)
+    gloves_bought      = models.IntegerField(default=0)
 
     ## Defuse kits
     defuse_kits_bought = models.IntegerField(default=0)
