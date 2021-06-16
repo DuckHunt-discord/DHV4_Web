@@ -5,20 +5,20 @@
 {% endblock %}
 
 {% block title %}
-    DuckHunt V4 - Status
+    {{ _("DuckHunt V4 - Status") }}
 {% endblock %}
 
 {% block content %}
-    <h1>DuckHunt live status</h1>
+    <h1>{{ _("DuckHunt live status") }}</h1>
     <p>
-        This page shows the bot shards status. If some shards show errors, you might want to check the
-        <a href="https://discordstatus.com/">discord status page</a> to make sure discord isn't having hiccups.
+        {{ _("This page shows the bot shards status. If some shards show errors, you might want to check the
+        <a href=\"https://discordstatus.com/\">discord status page</a> to make sure discord isn't having hiccups.
 
         If discord seems fine, please come and tell us about the problem on the
-        <a href="https://duckhunt.me/support">support server</a>.
+        <a href=\"https://duckhunt.me/support\">support server</a>.") }}
     </p>
     <p>
-        The current bot-wide latency to discord is {{ status['bot_latency'] }} seconds.
+        {{ _("The current bot-wide latency to discord is %(status__bot_latency__)s seconds.", status__bot_latency__=status['bot_latency']) }}
     </p>
 
     <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
@@ -27,14 +27,14 @@
                 <div class="card background-normal h-100">
                     <div class="card-body">
                         <div class="d-flex">
-                            <div class="h5 card-title flex-grow-1">Shard n°{{ shard['shard_id'] }}{% if shard['ready'] %} (ready){% endif %}</div>
+                            <div class="h5 card-title flex-grow-1">{{ _("Shard n°%(shard__shard_id__)s", shard__shard_id__=shard['shard_id']) }}{% if shard['ready'] %} {{ _("(ready)") }}{% endif %}</div>
                         </div>
-                        <p>Shard latency: {{ shard['latency'] }}s</p>
+                        <p>{{ _("Shard latency: %(shard__latency__)ss", shard__latency__=shard['latency']) }}</p>
                     </div>
 
                     {% if shard["guilds"] %}
                         <div class="card-footer">
-                            This shard is connected to {{ shard["guilds"]|length }} guilds. To see the list, click <a href="{{ url('bot_shard_status', shard_id=shard['shard_id']) }}">here</a>.
+                            {{ _("This shard is connected to %(shard__guilds__)s guilds. To see the list, click <a href=\"%(url)s\">here</a>.", url=url('bot_shard_status', shard_id=shard['shard_id']), shard__guilds__=shard["guilds"]|length) }}
                         </div>
                     {% endif %}
                 </div>

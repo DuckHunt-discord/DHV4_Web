@@ -1,11 +1,11 @@
 {% extends "base.jinja2" %}
 
 {% block metadesc %}
-    <meta name="description" content="Join the {{ guild.name }} server on Discord and play with DuckHunt.">
+    <meta name="description" content="{{ _("Join the %(guild_name)s server on Discord and play with DuckHunt.", guild_name=guild.name) }}">
 {% endblock %}
 
 {% block title %}
-    DuckHunt V4 - {{ guild.name }}
+    {{ _("DuckHunt V4 - %(guild_name)s", guild_name=guild.name) }}
 {% endblock %}
 
 {% block head %}
@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block content %}
-    <h1>{{ guild.name }} on Discord</h1>
+    <h1>{{ _("%(guild_name)s on Discord", guild_name=guild.name) }}</h1>
 
     <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>'" class="background-grey rounded">
         <ol class="breadcrumb p-2" itemscope itemtype="https://schema.org/BreadcrumbList">
@@ -21,7 +21,7 @@
                 itemtype="https://schema.org/ListItem">
                 <a itemtype="https://schema.org/WebPage" class="text-decoration-none"
                    itemprop="item" href="{{ canonical_domain_uri }}{{ url("guilds") }}">
-                    <span itemprop="name" class="text-blurple">Guilds</span></a>
+                    <span itemprop="name" class="text-blurple">{{ _("Guilds") }}</span></a>
                 <meta itemprop="position" content="1"/>
             </li>
             <li class="breadcrumb-item" itemprop="itemListElement" itemscope
@@ -34,8 +34,8 @@
 
     <div class="card background-normal h-100">
         <div class="card-body">
-            <div class="h4 card-title flex-grow-1 text-white-75">{% if guild.vip %}<span class="badge text-danger background-golden float-end ">VIP</span>{% endif %}<span class="guild-name">{{ guild.name }}</span>
-                <span class="widget-info d-none"> (<span class="online-member-count"></span> members online)</span>
+            <div class="h4 card-title flex-grow-1 text-white-75">{% if guild.vip %}<span class="badge text-danger background-golden float-end ">{{ _("VIP") }}</span>{% endif %}{{ _("<span class=\"guild-name\">%(guild_name)s</span>
+                <span class=\"widget-info d-none\"> (<span class=\"online-member-count\"></span> members online)</span>", guild_name=guild.name) }}
             </div>
         </div>
         <ul class="list-group list-group-flush">
@@ -50,11 +50,11 @@
 
                         <a href="{{ url('channel', pk=channel.pk) }}" class="text-blurple col-3">
                             <div>
-                                <span class="badge bg-dark text-white-75">{{ channel.player_count }} players</span>
+                                <span class="badge bg-dark text-white-75">{{ _("%(channel_player_count)s players", channel_player_count=channel.player_count) }}</span>
                             </div>
                         </a>
                         <a href="{{ url('channel_settings', pk=channel.pk) }}"
-                           class="text-decoration-none col-1" title="Settings">
+                           class="text-decoration-none col-1" title="{{ _("Settings") }}">
                             <div>
                                 ⚙️
                             </div>
@@ -64,10 +64,10 @@
             {% endfor %}
         </ul>
         <div class="card-footer text-muted">
-            This server uses the <code>{{ guild.prefix }}</code> prefix. Currently, the language used on all channels is
-            <a href="{{ url("guilds", language=guild.language) }}">{{ guild.language }}</a>.
+            {{ _("This server uses the <code>%(guild_prefix)s</code> prefix. Currently, the language used on all channels is
+            <a href=\"%(url)s\">%(guild_language)s</a>.", url=url("guilds", language=guild.language), guild_language=guild.language, guild_prefix=guild.prefix) }}
             <span class="widget-info d-none">
-                <a href="" class="btn btn-sm btn-success invite-link float-end">Invitation to join this server</a>
+                <a href="" class="btn btn-sm btn-success invite-link float-end">{{ _("Invitation to join this server") }}</a>
             </span>
         </div>
     </div>

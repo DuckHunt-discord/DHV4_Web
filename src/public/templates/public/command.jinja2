@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block title %}
-    DuckHunt V4 - {{ command_to_see }}{% if command['name'] != command_to_see %} ({{ command['name'] }}){% endif %}
+    {{ _("DuckHunt V4 - %(command_to_see)s", command_to_see=command_to_see) }}{% if command['name'] != command_to_see %} ({{ command['name'] }}){% endif %}
 {% endblock %}
 
 {% block content %}
@@ -24,7 +24,7 @@
                 itemtype="https://schema.org/ListItem">
                 <a itemtype="https://schema.org/WebPage" class="text-decoration-none"
                    itemprop="item" href="{{ canonical_domain_uri }}{{ url("bot_commands") }}">
-                    <span itemprop="name" class="text-blurple">Commands</span></a>
+                    <span itemprop="name" class="text-blurple">{{ _("Commands") }}</span></a>
                 <meta itemprop="position" content="1"/>
             </li>
             {% set position = namespace(value=1) %}
@@ -54,7 +54,7 @@
             <h5 class="card-title flex-grow-1">{{ command['name'] }} {% if command.get('access_name') %}
                 <span class="badge bg-danger">{{ command.get('access_name') }}</span>{% endif %}</h5>
             {% if command['aliases'] %}
-                <h6 class="card-subtitle mb-2 text-muted">Aliases:
+                <h6 class="card-subtitle mb-2 text-muted">{{ _("Aliases:") }}
 
                     {% for alias in command['aliases'] %}
                         {% if parent_name %}
@@ -70,14 +70,14 @@
                 </h6>
             {% endif %}
             <p>{{ command['help']|nl2br }}</p>
-            Invoke with:
+            {{ _("Invoke with:") }}
             <pre>{{ prefix }}{{ command['invoke_with'] }}</pre>
 
         </div>
 
         {% if command.get('subcommands', []) %}
             <div class="card-footer">
-            This command has some subcommands: <br/>
+            {{ _("This command has some subcommands:") }} <br/>
             <div class="row row-cols-2">
                 {% for subcommand_name, subcommand in command['subcommands'].items() %}
 

@@ -5,11 +5,11 @@
 {% endblock %}
 
 {% block title %}
-    DuckHunt V4 - Servers{% if language %} in {{ language }}{% endif %}
+    {{ _("DuckHunt V4 - Servers") }}{% if language %} {{ _("in %(language)s", language=language) }}{% endif %}
 {% endblock %}
 
 {% block content %}
-    <h1>DuckHunt servers{% if language %} in {{ language }}{% endif %}</h1>
+    <h1>{{ _("DuckHunt servers") }}{% if language %} {{ _("in %(language)s", language=language) }}{% endif %}</h1>
 
     {% if filters %}
     <div class="container d-none d-lg-block pb-3">
@@ -36,7 +36,7 @@
                 <div class="card {% if channels[0]['guild_vip_status'] %}background-golden{% else %}background-normal{% endif %} h-100 nice-card-borders">
                     <div class="card-body">
                         <a href="{{ guild_url }}{{ guild }}" class="text-decoration-none">
-                            <div class="h4 card-title flex-grow-1 {% if channels[0]['guild_vip_status'] %}text-black-75{% else %}text-white-75{% endif %}">{{ channels[0]['guild_name'] }}{% if channels[0]['guild_vip_status'] %}<span class="badge text-danger border-dark border-1 border me-3 float-end ">VIP</span>{% endif %}</div>
+                            <div class="h4 card-title flex-grow-1 {% if channels[0]['guild_vip_status'] %}text-black-75{% else %}text-white-75{% endif %}">{{ channels[0]['guild_name'] }}{% if channels[0]['guild_vip_status'] %}<span class="badge text-danger border-dark border-1 border me-3 float-end ">{{ _("VIP") }}</span>{% endif %}</div>
                         </a>
                     </div>
                     <ul class="list-group list-group-flush">
@@ -53,10 +53,10 @@
 
                                     <a href="{{ this_channel_url }}" class="text-blurple col-3">
                                         <div>
-                                            <span class="badge bg-dark text-white-75">{{ channel['players_count'] }} players</span>
+                                            <span class="badge bg-dark text-white-75">{{ _("%(channel_players_count)s players", channel_players_count=channel['players_count']) }}</span>
                                         </div>
                                     </a>
-                                    <a href="{{ this_channel_url }}/settings" class="text-decoration-none col-1" title="Settings">
+                                    <a href="{{ this_channel_url }}/settings" class="text-decoration-none col-1" title="{{ _("Settings") }}">
                                         <div>
                                             ⚙️
                                         </div>
@@ -74,11 +74,11 @@
         <nav aria-label="Page navigation" class="d-none d-lg-block" style="margin-top: 1em;">
             <ul class="pagination pagination-sm">
                 {% if guilds.has_previous() %}
-                    <li class="page-item"><a href="{{ request.path }}?page=1{% if sw %}&sw={{ sw }}{% endif %}" class="page-link">First</a>
+                    <li class="page-item"><a href="{{ request.path }}?page=1{% if sw %}&sw={{ sw }}{% endif %}" class="page-link">{{ _("First") }}</a>
                     </li>
                 {% else %}
                     <li class="page-item disabled"><a href="#" class="page-link" tabindex="-1"
-                                                      aria-disabled="true">First</a>
+                                                      aria-disabled="true">{{ _("First") }}</a>
                     </li>
                 {% endif %}
 
@@ -94,11 +94,11 @@
                 {% endfor %}
 
                 {% if guilds.has_next() %}
-                    <li class="page-item"><a href="{{ request.path }}?page={{ guilds.paginator.num_pages }}{% if sw %}&sw={{ sw }}{% endif %}" class="page-link">Last</a>
+                    <li class="page-item"><a href="{{ request.path }}?page={{ guilds.paginator.num_pages }}{% if sw %}&sw={{ sw }}{% endif %}" class="page-link">{{ _("Last") }}</a>
                     </li>
                 {% else %}
                     <li class="page-item disabled"><a href="#" class="page-link" tabindex="-1"
-                                                      aria-disabled="true">Last</a></li>
+                                                      aria-disabled="true">{{ _("Last") }}</a></li>
                 {% endif %}
             </ul>
         </nav>
@@ -106,14 +106,14 @@
             <ul class="pagination pagination">
                 {% if guilds.has_previous() %}
                     <li class="page-item"><a href="{{ request.path }}?page=1{% if sw %}&sw={{ sw }}{% endif %}"
-                                             class="page-link">First</a>
+                                             class="page-link">{{ _("First") }}</a>
                     </li>
                     <li class="page-item"><a href="{{ request.path }}?page={{ guilds.previous_page_number() }}{% if sw %}&sw={{ sw }}{% endif %}"
                                              class="page-link">{{ guilds.previous_page_number() }}</a>
                     </li>
                 {% else %}
                     <li class="page-item disabled"><a href="#" class="page-link" tabindex="-1"
-                                                      aria-disabled="true">First</a>
+                                                      aria-disabled="true">{{ _("First") }}</a>
                     </li>
                 {% endif %}
 
@@ -125,11 +125,11 @@
                     <li class="page-item"><a href="{{ request.path }}?page={{ guilds.next_page_number() }}{% if sw %}&sw={{ sw }}{% endif %}"
                                              class="page-link">{{ guilds.next_page_number() }}</a>
                     </li>
-                    <li class="page-item"><a href="{{ request.path }}?page={{ guilds.paginator.num_pages }}{% if sw %}&sw={{ sw }}{% endif %}" class="page-link">Last</a>
+                    <li class="page-item"><a href="{{ request.path }}?page={{ guilds.paginator.num_pages }}{% if sw %}&sw={{ sw }}{% endif %}" class="page-link">{{ _("Last") }}</a>
                     </li>
                 {% else %}
                     <li class="page-item disabled"><a href="#" class="page-link" tabindex="-1"
-                                                      aria-disabled="true">Last</a></li>
+                                                      aria-disabled="true">{{ _("Last") }}</a></li>
                 {% endif %}
             </ul>
         </nav>

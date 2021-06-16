@@ -15,7 +15,7 @@
 {% endblock %}
 
 {% block title %}
-    DuckHunt Discord - {{ current_user.name }}#{{ current_user.discriminator }} : #{{ channel.name }}
+    {{ _("DuckHunt Discord - %(current_user_name)s#%(current_user_discriminator)s : #%(channel_name)s", channel_name=channel.name, current_user_name=current_user.name, current_user_discriminator=current_user.discriminator) }}
 {% endblock %}
 
 {% block metadesc %}
@@ -31,7 +31,7 @@
 {% block container %}
     <div class="container text-light" itemscope itemtype="https://schema.org/Person">
 
-        <h1>{{ current_user.name }}#{{ current_user.discriminator }} on Duck Hunt</h1>
+        <h1>{{ _("%(current_user_name)s#%(current_user_discriminator)s on Duck Hunt", current_user_name=current_user.name, current_user_discriminator=current_user.discriminator) }}</h1>
 
         <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>'" class="background-grey rounded">
             <ol class="breadcrumb p-2" itemscope itemtype="https://schema.org/BreadcrumbList">
@@ -39,7 +39,7 @@
                     itemtype="https://schema.org/ListItem">
                     <a itemtype="https://schema.org/WebPage" class="text-decoration-none"
                        itemprop="item" href="{{ canonical_domain_uri }}{{ url("guilds") }}">
-                        <span itemprop="name" class="text-blurple">Guilds</span></a>
+                        <span itemprop="name" class="text-blurple">{{ _("Guilds") }}</span></a>
                     <meta itemprop="position" content="1"/>
                 </li>
                 <li class="breadcrumb-item" itemprop="itemListElement" itemscope
@@ -65,49 +65,50 @@
             </ol>
         </nav>
 
-        <div class="h2">📈 General statistics</div>
+        <div class="h2">📈 {{ _("General statistics") }}</div>
 
         <p itemprop="description">
-            <span class="statistic">{{ player.givebacks + 1 }}</span> days played,
-            <span class="statistic">{{ intcomma(player.experience) }}</span> experience points.
-            {{ intcomma(player.total_ducks_killed) }} ducks killed.
+            {% trans player_givebacks=player.givebacks + 1, player_experience=intcomma(player.experience), total_ducks_killed=intcomma(player.total_ducks_killed) %}
+                <span class="statistic">{{ player_givebacks }}</span> days played,
+                <span class="statistic">{{ player_experience }}</span> experience points. ({{ total_ducks_killed }} ducks killed.)
+            {% endtrans %}
         </p>
 
         {% if current_user.trophys|length %}
-            <div class="h2">🏆️ Trophies</div>
+            <div class="h2">🏆️ {{ _("Trophies") }}</div>
             <ul>
                 {% for trophy, unlocked in current_user.trophys.items() %}
                     {% if unlocked %}
-                        <li itemprop="award">{{ trophys[trophy]['name'] }}: {{ trophys[trophy]['description'] }}</li>
+                        <li itemprop="award">{{ _(trophys[trophy]['name']) }}: {{ _(trophys[trophy]['description']) }}</li>
                     {% endif %}
                 {% endfor %}
             </ul>
         {% endif %}
 
         {% if player.unlocked_achievements|length %}
-            <div class="h2">✨ Achievements</div>
+            <div class="h2">✨ {{ _("Achievements") }}</div>
 
             <ul>
                 {% for achievement in player.unlocked_achievements %}
-                    <li itemprop="award">{{ achievements[achievement]['name'] }}: {{ achievements[achievement]['description'] }}</li>
+                    <li itemprop="award">{{ _(achievements[achievement]['name']) }}: {{ _(achievements[achievement]['description']) }}</li>
                 {% endfor %}
             </ul>
         {% endif %}
 
         {% if player.prestige >= 1 %}
-            <div class="h2">💠 Prestige</div>
-            You've got to prestige level {{ player.prestige }}, and claimed {{ player.prestige_dailies }} prestige
-            dailies
+            <div class="h2">💠 {{ _("Prestige") }}</div>
+            {{ _("You've got to prestige level %(player_prestige)s, and claimed %(player_prestige_dailies)s prestige
+            dailies", player_prestige_dailies=player.prestige_dailies, player_prestige=player.prestige) }}
         {% endif %}
 
 
         {% if player.killed|length %}
-            <h2>🦆 Ducks killed</h2>
+            <h2>🦆 {{ _("Ducks killed") }}</h2>
             <div id="chart-ducks-killed"></div>
         {% endif %}
 
         {% if player.best_times|length %}
-            <div class="h2">🔫 Shooting range</div>
+            <div class="h2">🔫 {{ _("Shooting range") }}</div>
             <div id="chart-best-times"></div>
         {% endif %}
 
@@ -115,21 +116,21 @@
 
             {% if player.hugged|length %}
                 <div class="col">
-                    <div class="h2">🤗 Ducks hugged</div>
+                    <div class="h2">🤗 {{ _("Ducks hugged") }}</div>
                     <div id="chart-ducks-hugged"></div>
                 </div>
             {% endif %}
 
             {% if player.hurted|length %}
                 <div class="col">
-                    <div class="h2">🚑️ Ducks hurt</div>
+                    <div class="h2">🚑️ {{ _("Ducks hurt") }}</div>
                     <div id="chart-ducks-hurt"></div>
                 </div>
             {% endif %}
 
             {% if player.frightened|length %}
                 <div class="col">
-                    <h2>😱 Ducks frightened</h2>
+                    <h2>😱 {{ _("Ducks frightened") }}</h2>
                     <div id="chart-ducks-frightened"></div>
                 </div>
             {% endif %}
@@ -137,7 +138,7 @@
 
         {% set powerups = player.get_only_active_powerups() %}
         {% if powerups|length or player.bought_items|length or player.found_items|length %}
-            <div class="h2">🎒 Backpack</div>
+            <div class="h2">🎒 {{ _("Backpack") }}</div>
 
             <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 justify-content-around">
                 {% if powerups|length %}
@@ -146,111 +147,112 @@
                             <table class="table">
                                 <thead>
                                 <tr style="border-bottom: hidden;">
-                                    <th colspan="2"><h2 class="text-center">Duck Hunt Shop</h2><br/><br/></th>
+                                    <th colspan="2"><h2 class="text-center">{{ _("Duck Hunt Shop") }}</h2><br/><br/>
+                                    </th>
                                 </tr>
                                 <tr>
                                     <th>
-                                        <span class="text-muted fw-lighter">Invoice No.</span><br/>
+                                        <span class="text-muted fw-lighter">{{ _("Invoice No.") }}</span><br/>
                                         <span class="fw-lighter fs-6" itemprop="identifier">{{ current_user.pk }}</span><br/><br/>
                                     </th>
                                     <th class="text-end">
-                                        <span class="text-muted fw-lighter">Payment Date.</span><br/>
-                                        <span class="fw-lighter fs-6">{{ player.last_giveback|date }}</span><br/><br/>
+                                        <span class="text-muted fw-lighter">{{ _("Payment Date.") }}</span><br/>
+                                        <span class="fw-lighter fs-6">{{ player_last_giveback }}</span><br/><br/>
                                     </th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {% if powerups.get('ap_ammo', False) %}
                                     <tr>
-                                        <td>Armor Piercing ammo</td>
-                                        <td class="text-end">{{ show_timestamp(powerups['ap_ammo']) }} left</td>
+                                        <td>{{ _("Armor Piercing ammo") }}</td>
+                                        <td class="text-end">{{ _("%(show_timestamp)s left", show_timestamp=show_timestamp(powerups['ap_ammo'])) }}</td>
                                     </tr>
                                 {% endif %}
                                 {% if powerups.get('explosive_ammo', False) %}
                                     <tr>
-                                        <td>Explosive ammo</td>
-                                        <td class="text-end">{{ show_timestamp(powerups['explosive_ammo']) }} left</td>
+                                        <td>{{ _("Explosive ammo") }}</td>
+                                        <td class="text-end">{{ _("%(show_timestamp)s left", show_timestamp=show_timestamp(powerups['explosive_ammo'])) }}</td>
                                     </tr>
                                 {% endif %}
                                 {% if powerups.get('grease', False) %}
                                     <tr>
-                                        <td>Gun grease</td>
-                                        <td class="text-end">{{ show_timestamp(powerups['grease']) }} left</td>
+                                        <td>{{ _("Gun grease") }}</td>
+                                        <td class="text-end">{{ _("%(show_timestamp)s left", show_timestamp=show_timestamp(powerups['grease'])) }}</td>
                                     </tr>
                                 {% endif %}
                                 {% if powerups.get('sight', False) %}
                                     <tr>
-                                        <td>Sight</td>
-                                        <td class="text-end">{{ powerups['sight'] }} shots</td>
+                                        <td>{{ _("Sight") }}</td>
+                                        <td class="text-end">{{ _("%(powerups__sight__)s shots", powerups__sight__=powerups['sight']) }}</td>
                                     </tr>
                                 {% endif %}
                                 {% if powerups.get('detector', False) %}
                                     <tr>
-                                        <td>Infrared detector</td>
-                                        <td class="text-end">{{ powerups['detector'] }} misses</td>
+                                        <td>{{ _("Infrared detector") }}</td>
+                                        <td class="text-end">{{ _("%(powerups__detector__)s misses", powerups__detector__=powerups['detector']) }}</td>
                                     </tr>
                                 {% endif %}
                                 {% if powerups.get('silencer', False) %}
                                     <tr>
-                                        <td>Silencer</td>
-                                        <td class="text-end">{{ show_timestamp(powerups['silencer']) }} left</td>
+                                        <td>{{ _("Silencer") }}</td>
+                                        <td class="text-end">{{ _("%(show_timestamp)s left", show_timestamp=show_timestamp(powerups['silencer'])) }}</td>
                                     </tr>
                                 {% endif %}
                                 {% if powerups.get('clover', False) %}
                                     <tr>
-                                        <td>Clover: {{ player.active_powerups['clover_exp'] }} exp</td>
-                                        <td class="text-end">{{ show_timestamp(powerups['clover']) }} left</td>
+                                        <td>{{ _("Clover: %(player_active_powerups__clover_exp__)s exp", player_active_powerups__clover_exp__=player.active_powerups['clover_exp']) }}</td>
+                                        <td class="text-end">{{ _("%(show_timestamp)s left", show_timestamp=show_timestamp(powerups['clover'])) }}</td>
                                     </tr>
                                 {% endif %}
                                 {% if powerups.get('sunglasses', False) %}
                                     <tr>
-                                        <td>Sunglasses</td>
-                                        <td class="text-end">{{ show_timestamp(powerups['sunglasses']) }} left</td>
+                                        <td>{{ _("Sunglasses") }}</td>
+                                        <td class="text-end">{{ _("%(show_timestamp)s left", show_timestamp=show_timestamp(powerups['sunglasses'])) }}</td>
                                     </tr>
                                 {% endif %}
                                 {% if powerups.get('coat', False) %}
                                     <tr>
-                                        <td>{{ player.get_current_coat_color().value[0] }} rain coat</td>
-                                        <td class="text-end">{{ show_timestamp(powerups['coat']) }} left</td>
+                                        <td>{{ _("%(player_get_current_coat_color)s rain coat", player_get_current_coat_color=player.get_current_coat_color().value[0]) }}</td>
+                                        <td class="text-end">{{ _("%(show_timestamp)s left", show_timestamp=show_timestamp(powerups['coat'])) }}</td>
                                     </tr>
                                 {% endif %}
                                 {% if powerups.get('licence', False) %}
                                     <tr>
-                                        <td>Licence to kill</td>
-                                        <td class="text-end">{{ show_timestamp(powerups['licence']) }} left</td>
+                                        <td>{{ _("Licence to kill") }}</td>
+                                        <td class="text-end">{{ _("%(show_timestamp)s left", show_timestamp=show_timestamp(powerups['licence'])) }}</td>
                                     </tr>
                                 {% endif %}
                                 {% if powerups.get('reloader', False) %}
                                     <tr>
-                                        <td>Automatic reloader</td>
-                                        <td class="text-end">{{ show_timestamp(powerups['reloader']) }} left</td>
+                                        <td>{{ _("Automatic reloader") }}</td>
+                                        <td class="text-end">{{ _("%(show_timestamp)s left", show_timestamp=show_timestamp(powerups['reloader'])) }}</td>
                                     </tr>
                                 {% endif %}
                                 {% if powerups.get('kill_licence', False) %}
                                     <tr>
-                                        <td>Licence to kill</td>
-                                        <td class="text-end">{{ show_timestamp(powerups['kill_licence']) }} left</td>
+                                        <td>{{ _("Licence to kill") }}</td>
+                                        <td class="text-end">{{ _("%(show_timestamp)s left", show_timestamp=show_timestamp(powerups['kill_licence'])) }}</td>
                                     </tr>
                                 {% endif %}
                                 {% if powerups.get('homing_bullets', False) %}
                                     <tr>
-                                        <td>Homing bullets</td>
+                                        <td>{{ _("Homing bullets") }}</td>
                                         <td class="text-end">{{ powerups['homing_bullets'] }} ✨</td>
                                     </tr>
                                 {% endif %}
                                 </tbody>
                                 <tfoot>
                                 <tr style="border-bottom: hidden;">
-                                    <td class="text-end">Total:</td>
-                                    <td class="text-end fw-bolder">{{ powerups|length }} items</td>
+                                    <td class="text-end">{{ _("Total:") }}</td>
+                                    <td class="text-end fw-bolder">{{ _("%(powerups)s items", powerups=powerups|length) }}</td>
                                 </tr>
                                 <tr style="border-bottom: hidden;">
                                     <td class="text-center" colspan="2">
                                         <br/><br/>
-                                        Thanks for buying in the shop.<br/>
+                                        {{ _("Thanks for buying in the shop.<br/>
                                         We hope to see you soon.<br/>
-                                        Thanks for spending {{ intcomma(player.spent_experience) }} exp in
-                                        there<br/><br/><br/>
+                                        Thanks for spending %(intcomma)s exp in
+                                        there", intcomma=intcomma(player.spent_experience)) }}<br/><br/><br/>
 
                                         <svg class="barcode"
                                              jsbarcode-format="auto"
@@ -269,7 +271,7 @@
                 {% endif %}
                 <div class="col align-self-center">
                     {% if player.bought_items|length %}
-                        <div class="h5">Purchased and used...</div>
+                        <div class="h5">{{ _("Purchased and used...") }}</div>
                         <ul>
                             {% for item, qty in player.bought_items.items() %}
                                 <li>{{ qty }} {{ item.replace('_', ' ').capitalize() }}</li>
@@ -279,7 +281,7 @@
                     {% endif %}
                     {% if player.found_items|length %}
                         {% if player.get_found_trash()|length %}
-                            <div class="h5">Trash found in bushes</div>
+                            <div class="h5">{{ _("Trash found in bushes") }}</div>
                             <ul>
                                 {% for item, qty in player.get_found_trash().items() %}
                                     <li>{{ qty }} {{ item.replace('took_trash', '').replace('_', ' ').capitalize() }}</li>
@@ -287,7 +289,7 @@
                             </ul>
                         {% endif %}
                         {% if player.get_found_useful(left=False)|length %}
-                            <div class="h5">Items took from bushes</div>
+                            <div class="h5">{{ _("Items took from bushes") }}</div>
                             <ul>
                                 {% for item, qty in player.get_found_useful(left=False).items() %}
                                     <li>{{ qty }} {{ item.replace('took_', '').replace('_', ' ').capitalize() }}</li>
@@ -295,7 +297,7 @@
                             </ul>
                         {% endif %}
                         {% if player.get_found_useful(left=True)|length %}
-                            <div class="h5">Items left in bushes</div>
+                            <div class="h5">{{ _("Items left in bushes") }}</div>
                             <ul>
                                 {% for item, qty in player.get_found_useful(left=True).items() %}
                                     <li>{{ qty }} {{ item.replace('left_', '').replace('_', ' ').capitalize() }}</li>
@@ -309,84 +311,76 @@
         {% endif %}
 
 
-        <div class="h2">🎯 Shooting stats</div>
+        <div class="h2">🎯 {{ _("Shooting stats") }}</div>
         <div id="chart-shots"></div>
 
         {% if player.shooting_stats.get('thrown_clovers', 0) > 0 or player.shooting_stats.get('cops_seen', 0) > 0 %}
-            <div class="h2">👮 Cops and fines</div>
+            <div class="h2">👮 {{ _("Cops and fines") }}</div>
             {% if player.shooting_stats.get('thrown_clovers', 0) > 0 %}
                 <p>
-                    {{ current_user.name }} threw {{ player.shooting_stats.get('thrown_clovers', 0) }} clovers on the
+                    {{ _("%(current_user_name)s threw %(thrown_clovers)s clovers on the
                     ground...
                     In front of a cop, getting fined a total
-                    of {{ 13 * player.shooting_stats.get('thrown_clovers', 0) }}
-                    exp in
-                    total for littering.
+                    of %(thrown_clovers_exp)s exp in
+                    total for littering.", thrown_clovers_exp=13 * player.shooting_stats.get('thrown_clovers', 0), current_user_name=current_user.name, thrown_clovers=player.shooting_stats.get('thrown_clovers', 0)) }}
                 </p>
             {% endif %}
             {% if player.shooting_stats.get('cops_seen', 0) > 0 %}
                 <p>
-                    When getting ready to throw a clover on the ground, {{ current_user.name }} saw a cop farther down
-                    the
-                    street.
-                    They chickened out and left without getting a fine {{ player.shooting_stats.get('cops_seen', 0) }}
-                    times.
+                    {{ _("When getting ready to throw a clover on the ground, %(current_user_name)s saw a cop farther down
+                    the street.
+                    They chickened out and left without getting a fine %(cops_seen)s
+                    times.", current_user_name=current_user.name, cops_seen=player.shooting_stats.get('cops_seen', 0)) }}
                 </p>
             {% endif %}
         {% endif %}
 
-        <div class="h2">🛸 Misc</div>
+        <div class="h2">🛸 {{ _("Misc") }}</div>
         <p>
-            <span itemprop="name">{{ current_user.name }}#{{ current_user.discriminator }}</span> used {{ player.shooting_stats.get('bullets_used', 0) }} bullets
-            {% if player.shooting_stats.get('homing_kills', 0) %}(of which
-                {{ player.shooting_stats.get('homing_kills', 0) }} were homing){% endif %}
-            and {{ player.shooting_stats.get('reloads', 0) }}
-            magazines. They missed their target {{ player.shooting_stats.get('missed', 0) }} times, killed someone
-            {{ player.shooting_stats.get('killed', 0) }} times, and
-            murdered {{ player.shooting_stats.get('murders', 0) }}
-            players.
+            {{ _("<span itemprop=\"name\">%(current_user_name)s#%(current_user_discriminator)s</span> used %(player_shooting_stats_get)s bullets", current_user_name=current_user.name, current_user_discriminator=current_user.discriminator, player_shooting_stats_get=player.shooting_stats.get('bullets_used', 0)) }}
+            {% if player.shooting_stats.get('homing_kills', 0) %}{{ _("(of which
+                %(homing_kills)s were homing)", homing_kills=player.shooting_stats.get('homing_kills', 0)) }}{% endif %}
+            {% trans reloads=player.shooting_stats.get('reloads', 0), missed=player.shooting_stats.get('missed', 0), killed=player.shooting_stats.get('killed', 0), murdered=player.shooting_stats.get('murders', 0) %}
+                and {{ reloads }} magazines. They missed their target {{ missed }} times, killed someone {{ killed }}
+                times, and murdered {{ murdered }} players.)
+            {% endtrans %}
         </p>
 
         {% if player.shooting_stats.get('suicides', 0) %}
             <p>
-                They killed themselves {{ player.shooting_stats.get('suicides', 0) }} times.
+                {{ _("They killed themselves %(suicides)s times.", suicides=player.shooting_stats.get('suicides', 0)) }}
             </p>
         {% endif %}
 
         {% if player.shooting_stats.get('got_killed', 0) %}
             <p>
-                They got killed {{ player.shooting_stats.get('got_killed', 0) }} times
-                {% if player.shooting_stats.get('brains_eaten', 0) %}, and had to eat
-                    {{ player.shooting_stats.get('brains_eaten', 0) }}
-                    brains to revive themselves ({{ player.shooting_stats.get('revives', 0) }} times). They were really
-                    hungry once when they
-                    ate {{ player.shooting_stats.get('max_brains_eaten_at_once', 0) }} brains at once{% endif %}.
+                {{ _("They got killed %(got_killed)s times", got_killed=player.shooting_stats.get('got_killed', 0)) }}
+                {% if player.shooting_stats.get('brains_eaten', 0) %},
+                    {% trans eaten=player.shooting_stats.get('brains_eaten', 0), revives=player.shooting_stats.get('revives', 0), max_brains_eaten_at_once=player.shooting_stats.get('max_brains_eaten_at_once', 0) %}
+                        and had to eat {{ eaten }} brains to revive themselves ({{ revives }} times). They were really
+                        hungry once when they ate {{ max_brains_eaten_at_once }} brains at once)
+                    {% endtrans %}
+                {% endif %}.
             </p>
         {% endif %}
 
         {% if player.shooting_stats.get('useless_revives', 0) %}
             <p>
-                They also tried reviving themselves {{ player.shooting_stats.get('useless_revives', 0) }} times, but
-                they
-                were
-                already alive.
+                {{ _("They also tried reviving themselves %(useless_revives)s times, but
+                they were already alive.", useless_revives=player.shooting_stats.get('useless_revives', 0)) }}
             </p>
         {% endif %}
 
         {% if player.shooting_stats.get('autoreloads', 0) or player.shooting_stats.get('failed_autoreloads', 0) %}
             <p>
-                {{ current_user.name }}'s gun was reloaded
-                automatically {{ player.shooting_stats.get('autoreloads', 0) }}
-                times
-                (and the autoreloader failed {{ player.shooting_stats.get('failed_autoreloads', 0) }} times, because
-                they
-                had no
-                more magazines.)
+                {% trans current_user_name=current_user.name, autoreloads=player.shooting_stats.get('autoreloads', 0), failed_autoreloads=player.shooting_stats.get('failed_autoreloads', 0) %}
+                    {{ current_user_name }}'s gun was reloaded automatically {{ autoreloads }} times
+                    (and the autoreloader failed {{ failed_autoreloads }} times, because they had no more magazines.))
+                {% endtrans %}
             </p>
         {% endif %}
 
-        They have {{ player.bullets }} bullets in their gun, and {{ player.magazines }} magazines in their backpack.
-
+        {{ _("They have %(player_bullets)s bullets in their gun, and %(player_magazines)s magazines in their backpack.", player_magazines=player.magazines, player_bullets=player.bullets) }}
 
         <script>
             Highcharts.setOptions({
@@ -577,6 +571,6 @@
 
         </script>
         <script>JsBarcode(".barcode").init();</script>
-        <h2>Back to <a href="{{ url("channel", pk=channel.pk) }}">the #{{ channel.name }} discord chanel</a></h2>
+        <h2>{{ _("Back to <a href=\"%(url)s\">the #%(channel_name)s discord chanel</a>", url=url("channel", pk=channel.pk), channel_name=channel.name) }}</h2>
     </div>
 {% endblock %}

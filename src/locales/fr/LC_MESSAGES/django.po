@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-07 10:18+0000\n"
+"POT-Creation-Date: 2021-06-16 14:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,11 +26,11 @@ msgstr ""
 msgid "DuckHunt Website Administration"
 msgstr ""
 
-#: DHV4_Web/settings.py:309
+#: DHV4_Web/settings.py:312
 msgid "English"
 msgstr ""
 
-#: DHV4_Web/settings.py:310
+#: DHV4_Web/settings.py:313
 msgid "French"
 msgstr ""
 
@@ -250,4 +250,975 @@ msgstr ""
 
 #: botdata/models.py:185
 msgid "Bot owner"
+msgstr ""
+
+#: botdata/templates/botdata/channel.jinja2:5
+#, python-format
+msgid "DuckHunt top scores for %(players)s players on #%(channel_name)s."
+msgstr ""
+
+#: botdata/templates/botdata/channel.jinja2:9
+#, python-format
+msgid ""
+"\n"
+"        DuckHunt V4 - Top Scores for #%(channel_name)s\n"
+"    "
+msgstr ""
+
+#: botdata/templates/botdata/channel.jinja2:22
+#, python-format
+msgid ""
+"\n"
+"            <span itemprop=\\\"numberOfPlayers\\\">%(players_count)s</span> "
+"players on #%(channel_name)s"
+msgstr ""
+
+#: botdata/templates/botdata/channel.jinja2:32
+#: botdata/templates/botdata/channel_settings.jinja2:27
+#: botdata/templates/botdata/guild.jinja2:24
+#: botdata/templates/botdata/player.jinja2:42
+msgid "Guilds"
+msgstr ""
+
+#: botdata/templates/botdata/channel.jinja2:50
+#: botdata/templates/botdata/channel_settings.jinja2:46
+#: botdata/templates/botdata/guild.jinja2:57
+#: botdata/templates/botdata/guilds.jinja2:59
+msgid "Settings"
+msgstr ""
+
+#: botdata/templates/botdata/channel.jinja2:57
+msgid "Best players"
+msgstr ""
+
+#: botdata/templates/botdata/channel.jinja2:61
+msgid "Where do bullets go ?"
+msgstr ""
+
+#: botdata/templates/botdata/channel.jinja2:65
+msgid "Fastest hunters in the west"
+msgstr ""
+
+#: botdata/templates/botdata/channel.jinja2:71
+msgid "Top scores"
+msgstr ""
+
+#: botdata/templates/botdata/channel.jinja2:77
+#: public/templates/public/shard_status.jinja2:31
+msgid "Name"
+msgstr ""
+
+#: botdata/templates/botdata/channel.jinja2:78
+msgid "Experience"
+msgstr ""
+
+#: botdata/templates/botdata/channel.jinja2:79
+#: botdata/templates/botdata/player.jinja2:106
+msgid "Ducks killed"
+msgstr ""
+
+#: botdata/templates/botdata/channel.jinja2:267
+#, python-format
+msgid ""
+"\n"
+"            Back to <a href=\"%(link)s\" itemprop=\"gameLocation\">"
+"%(guild_name)s</a>\n"
+"        "
+msgstr ""
+
+#: botdata/templates/botdata/channel_settings.jinja2:5
+#, python-format
+msgid "DuckHunt settings for #%(channel_name)s."
+msgstr ""
+
+#: botdata/templates/botdata/channel_settings.jinja2:9
+#, python-format
+msgid ""
+"\n"
+"        DuckHunt V4 - Settings for #%(channel_name)s\n"
+"    "
+msgstr ""
+
+#: botdata/templates/botdata/channel_settings.jinja2:19
+#, python-format
+msgid "Settings for #%(channel_name)s"
+msgstr ""
+
+#: botdata/templates/botdata/channel_settings.jinja2:54
+msgid "The channel is currently enabled"
+msgstr ""
+
+#: botdata/templates/botdata/channel_settings.jinja2:56
+msgid "The channel is currently disabled"
+msgstr ""
+
+#: botdata/templates/botdata/channel_settings.jinja2:59
+msgid "General settings"
+msgstr ""
+
+#: botdata/templates/botdata/channel_settings.jinja2:64
+#: botdata/templates/botdata/channel_settings.jinja2:104
+msgid "Setting"
+msgstr ""
+
+#: botdata/templates/botdata/channel_settings.jinja2:65
+#: botdata/templates/botdata/channel_settings.jinja2:105
+msgid "Value"
+msgstr ""
+
+#: botdata/templates/botdata/channel_settings.jinja2:70
+msgid "Ducks per day"
+msgstr ""
+
+#: botdata/templates/botdata/channel_settings.jinja2:74
+msgid "Use webhooks"
+msgstr ""
+
+#: botdata/templates/botdata/channel_settings.jinja2:78
+msgid "Use emojis"
+msgstr ""
+
+#: botdata/templates/botdata/channel_settings.jinja2:82
+msgid "Inventory use"
+msgstr ""
+
+#: botdata/templates/botdata/channel_settings.jinja2:86
+msgid "Mentions on kill"
+msgstr ""
+
+#: botdata/templates/botdata/channel_settings.jinja2:90
+msgid "Ducks stay for"
+msgstr ""
+
+#: botdata/templates/botdata/channel_settings.jinja2:91
+#, python-format
+msgid "%(time_to_live)s seconds"
+msgstr ""
+
+#: botdata/templates/botdata/channel_settings.jinja2:94
+msgid "Anti triggers"
+msgstr ""
+
+#: botdata/templates/botdata/channel_settings.jinja2:100
+msgid "Experience settings"
+msgstr ""
+
+#: botdata/templates/botdata/channel_settings.jinja2:110
+msgid "Normal duck experience"
+msgstr ""
+
+#: botdata/templates/botdata/channel_settings.jinja2:111
+#, python-format
+msgid "%(base_duck_exp)s exp"
+msgstr ""
+
+#: botdata/templates/botdata/channel_settings.jinja2:114
+msgid "Clover experience range"
+msgstr ""
+
+#: botdata/templates/botdata/channel_settings.jinja2:115
+#, python-format
+msgid ""
+"\n"
+"                %(clover_min_experience)s to %(clover_max_experience)s exp\n"
+"            "
+msgstr ""
+
+#: botdata/templates/botdata/channel_settings.jinja2:120
+msgid "Additional experience for every life the duck has"
+msgstr ""
+
+#: botdata/templates/botdata/channel_settings.jinja2:121
+#, python-format
+msgid "%(channel_per_life_exp)s exp"
+msgstr ""
+
+#: botdata/templates/botdata/channel_settings.jinja2:124
+msgid "Super ducks lives"
+msgstr ""
+
+#: botdata/templates/botdata/channel_settings.jinja2:125
+#, python-format
+msgid ""
+"\n"
+"                %(super_ducks_min_life)s to %(super_ducks_max_life)s lives"
+msgstr ""
+
+#: botdata/templates/botdata/channel_settings.jinja2:129
+msgid "Ducks lives shown"
+msgstr ""
+
+#: botdata/templates/botdata/channel_settings.jinja2:133
+msgid "Tax on experience transactions"
+msgstr ""
+
+#: botdata/templates/botdata/channel_settings.jinja2:144
+msgid "Chance to kill on miss"
+msgstr ""
+
+#: botdata/templates/botdata/channel_settings.jinja2:155
+msgid "Chance to frighten ducks"
+msgstr ""
+
+#: botdata/templates/botdata/channel_settings.jinja2:167
+msgid "Ducks weights"
+msgstr ""
+
+#: botdata/templates/botdata/channel_settings.jinja2:255
+#, python-format
+msgid ""
+"\n"
+"            <p> Night starts at %(ns)s UTC and ends at %(ne)s UTC\"</p>\n"
+"        "
+msgstr ""
+
+#: botdata/templates/botdata/guild.jinja2:4
+#, python-format
+msgid "Join the %(guild_name)s server on Discord and play with DuckHunt."
+msgstr ""
+
+#: botdata/templates/botdata/guild.jinja2:8
+#, python-format
+msgid "DuckHunt V4 - %(guild_name)s"
+msgstr ""
+
+#: botdata/templates/botdata/guild.jinja2:16
+#, python-format
+msgid "%(guild_name)s on Discord"
+msgstr ""
+
+#: botdata/templates/botdata/guild.jinja2:37
+#: botdata/templates/botdata/guilds.jinja2:39
+msgid "VIP"
+msgstr ""
+
+#: botdata/templates/botdata/guild.jinja2:53
+#, python-format
+msgid "%(channel_player_count)s players"
+msgstr ""
+
+#: botdata/templates/botdata/guild.jinja2:70
+msgid "Invitation to join this server"
+msgstr ""
+
+#: botdata/templates/botdata/guilds.jinja2:8
+msgid "DuckHunt V4 - Servers"
+msgstr ""
+
+#: botdata/templates/botdata/guilds.jinja2:8
+#: botdata/templates/botdata/guilds.jinja2:12
+#, python-format
+msgid "in %(language)s"
+msgstr ""
+
+#: botdata/templates/botdata/guilds.jinja2:12
+msgid "DuckHunt servers"
+msgstr ""
+
+#: botdata/templates/botdata/guilds.jinja2:56
+#, python-format
+msgid "%(channel_players_count)s players"
+msgstr ""
+
+#: botdata/templates/botdata/guilds.jinja2:77
+#: botdata/templates/botdata/guilds.jinja2:81
+#: botdata/templates/botdata/guilds.jinja2:109
+#: botdata/templates/botdata/guilds.jinja2:116
+msgid "First"
+msgstr ""
+
+#: botdata/templates/botdata/guilds.jinja2:97
+#: botdata/templates/botdata/guilds.jinja2:101
+#: botdata/templates/botdata/guilds.jinja2:128
+#: botdata/templates/botdata/guilds.jinja2:132
+msgid "Last"
+msgstr ""
+
+#: botdata/templates/botdata/no_guild.jinja2:21
+msgid "DuckHunt V4 - Configure that server"
+msgstr ""
+
+#: botdata/templates/botdata/no_guild.jinja2:26
+msgid "This guild does not exist"
+msgstr ""
+
+#: botdata/templates/botdata/no_guild.jinja2:28
+#, python-format
+msgid "Guild not configured: %(guild_name)s"
+msgstr ""
+
+#: botdata/templates/botdata/no_guild.jinja2:30
+msgid "If you are a member on this server"
+msgstr ""
+
+#: botdata/templates/botdata/no_guild.jinja2:31
+msgid ""
+"Please tell the admins to configure one or more channels for ducks to spawn."
+msgstr ""
+
+#: botdata/templates/botdata/no_guild.jinja2:33
+msgid "If you are an admin on this server"
+msgstr ""
+
+#: botdata/templates/botdata/no_guild.jinja2:34
+msgid "Welcome and thanks for installing DuckHunt! 🎉"
+msgstr ""
+
+#: botdata/templates/botdata/no_guild.jinja2:42
+msgid ""
+"DuckHunt is made with love by Eyesofcreeper#0001, and translated by many "
+"volunteers."
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:18
+#, python-format
+msgid ""
+"DuckHunt Discord - %(current_user_name)s#%(current_user_discriminator)s : #"
+"%(channel_name)s"
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:34
+#, python-format
+msgid "%(current_user_name)s#%(current_user_discriminator)s on Duck Hunt"
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:68
+msgid "General statistics"
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:71
+#, python-format
+msgid ""
+"\n"
+"                <span class=\"statistic\">%(player_givebacks)s</span> days "
+"played,\n"
+"                <span class=\"statistic\">%(player_experience)s</span> "
+"experience points. (%(total_ducks_killed)s ducks killed.)\n"
+"            "
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:78
+msgid "Trophies"
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:89
+msgid "Achievements"
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:99
+msgid "Prestige"
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:111
+msgid "Shooting range"
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:119
+msgid "Ducks hugged"
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:126
+msgid "Ducks hurt"
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:133
+msgid "Ducks frightened"
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:141
+msgid "Backpack"
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:150
+msgid "Duck Hunt Shop"
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:155
+msgid "Invoice No."
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:159
+msgid "Payment Date."
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:167
+msgid "Armor Piercing ammo"
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:168
+#: botdata/templates/botdata/player.jinja2:174
+#: botdata/templates/botdata/player.jinja2:180
+#: botdata/templates/botdata/player.jinja2:198
+#: botdata/templates/botdata/player.jinja2:204
+#: botdata/templates/botdata/player.jinja2:210
+#: botdata/templates/botdata/player.jinja2:216
+#: botdata/templates/botdata/player.jinja2:222
+#: botdata/templates/botdata/player.jinja2:228
+#: botdata/templates/botdata/player.jinja2:234
+#, python-format
+msgid "%(show_timestamp)s left"
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:173
+msgid "Explosive ammo"
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:179
+msgid "Gun grease"
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:185
+msgid "Sight"
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:186
+#, python-format
+msgid "%(powerups__sight__)s shots"
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:191
+msgid "Infrared detector"
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:192
+#, python-format
+msgid "%(powerups__detector__)s misses"
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:197
+msgid "Silencer"
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:203
+#, python-format
+msgid "Clover: %(player_active_powerups__clover_exp__)s exp"
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:209
+msgid "Sunglasses"
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:215
+#, python-format
+msgid "%(player_get_current_coat_color)s rain coat"
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:221
+#: botdata/templates/botdata/player.jinja2:233
+msgid "Licence to kill"
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:227
+msgid "Automatic reloader"
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:239
+msgid "Homing bullets"
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:246
+msgid "Total:"
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:274
+msgid "Purchased and used..."
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:284
+msgid "Trash found in bushes"
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:292
+msgid "Items took from bushes"
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:300
+msgid "Items left in bushes"
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:314
+msgid "Shooting stats"
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:318
+msgid "Cops and fines"
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:338
+msgid "Misc"
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:340
+#, python-format
+msgid ""
+"<span itemprop=\"name\">%(current_user_name)s#"
+"%(current_user_discriminator)s</span> used %(player_shooting_stats_get)s "
+"bullets"
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:343
+#, python-format
+msgid ""
+"\n"
+"                and %(reloads)s magazines. They missed their target "
+"%(missed)s times, killed someone %(killed)s\n"
+"                times, and murdered %(murdered)s players.)\n"
+"            "
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:351
+#, python-format
+msgid "They killed themselves %(suicides)s times."
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:357
+#, python-format
+msgid "They got killed %(got_killed)s times"
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:359
+#, python-format
+msgid ""
+"\n"
+"                        and had to eat %(eaten)s brains to revive themselves "
+"(%(revives)s times). They were really\n"
+"                        hungry once when they ate "
+"%(max_brains_eaten_at_once)s brains at once)\n"
+"                    "
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:376
+#, python-format
+msgid ""
+"\n"
+"                    %(current_user_name)s's gun was reloaded automatically "
+"%(autoreloads)s times\n"
+"                    (and the autoreloader failed %(failed_autoreloads)s "
+"times, because they had no more magazines.))\n"
+"                "
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:383
+#, python-format
+msgid ""
+"They have %(player_bullets)s bullets in their gun, and %(player_magazines)s "
+"magazines in their backpack."
+msgstr ""
+
+#: botdata/templates/botdata/player.jinja2:574
+#, python-format
+msgid "Back to <a href=\"%(url)s\">the #%(channel_name)s discord chanel</a>"
+msgstr ""
+
+#: public/templates/public/404.jinja2:42
+msgid "Page not found (404)"
+msgstr ""
+
+#: public/templates/public/404.jinja2:43
+msgid ""
+"You found an unknown page... If you list all of them, maybe we could take "
+"some time to publish an article ?"
+msgstr ""
+
+#: public/templates/public/404.jinja2:45
+msgid "What is DuckHunt"
+msgstr ""
+
+#: public/templates/public/404.jinja2:47
+msgid "Learn more"
+msgstr ""
+
+#: public/templates/public/bot_commands.jinja2:4
+#: public/templates/public/commands_api_error.jinja2:4
+msgid "List of all the commands on the DuckHunt Discord bot"
+msgstr ""
+
+#: public/templates/public/bot_commands.jinja2:8
+#: public/templates/public/commands_api_error.jinja2:8
+msgid "DuckHunt V4 - Commands list"
+msgstr ""
+
+#: public/templates/public/bot_commands.jinja2:12
+#: public/templates/public/commands_api_error.jinja2:12
+msgid "DuckHunt Discord V4: Commands list"
+msgstr ""
+
+#: public/templates/public/bot_commands.jinja2:23
+#: public/templates/public/command.jinja2:57
+msgid "Aliases:"
+msgstr ""
+
+#: public/templates/public/bot_commands.jinja2:32
+#: public/templates/public/command.jinja2:73
+msgid "Invoke with:"
+msgstr ""
+
+#: public/templates/public/botlists.jinja2:4
+msgid "DuckHunt is listed on many bot lists. Here are some of them"
+msgstr ""
+
+#: public/templates/public/botlists.jinja2:8
+msgid "DuckHunt V4 - On different bot lists"
+msgstr ""
+
+#: public/templates/public/botlists.jinja2:16
+msgid "DuckHunt on bot lists"
+msgstr ""
+
+#: public/templates/public/command.jinja2:13
+#, python-format
+msgid "DuckHunt V4 - %(command_to_see)s"
+msgstr ""
+
+#: public/templates/public/command.jinja2:27 templates/base.jinja2:122
+msgid "Commands"
+msgstr ""
+
+#: public/templates/public/command.jinja2:80
+msgid "This command has some subcommands:"
+msgstr ""
+
+#: public/templates/public/commands_api_error.jinja2:14
+msgid "DuckHunt is currently unavailable."
+msgstr ""
+
+#: public/templates/public/index.jinja2:8
+msgid "DuckHunt, the best game bot on Discord"
+msgstr ""
+
+#: public/templates/public/index.jinja2:12
+msgid "DuckHunt V4"
+msgstr ""
+
+#: public/templates/public/index.jinja2:21
+msgid "DuckHunt"
+msgstr ""
+
+#: public/templates/public/index.jinja2:23
+msgid ""
+"Entertain your members with the best <span itemprop=\"applicationCategory\" "
+"content=\"GameApplication\">game</span> on <span itemprop=\"operatingSystem"
+"\">Discord</span>."
+msgstr ""
+
+#: public/templates/public/index.jinja2:30
+msgid "Discord logo"
+msgstr ""
+
+#: public/templates/public/index.jinja2:31
+msgid "Invite DuckHunt now"
+msgstr ""
+
+#: public/templates/public/index.jinja2:92
+msgid "The best game bot on Discord"
+msgstr ""
+
+#: public/templates/public/index.jinja2:93
+msgid ""
+"Players will be able to kill ducks and earn experience, while trying not to "
+"hurt babies."
+msgstr ""
+
+#: public/templates/public/index.jinja2:98
+msgid "Shooting ducks"
+msgstr ""
+
+#: public/templates/public/index.jinja2:106
+msgid "Parliament in settings"
+msgstr ""
+
+#: public/templates/public/index.jinja2:110
+msgid "Easy and powerful setup"
+msgstr ""
+
+#: public/templates/public/index.jinja2:119
+msgid "Loads of statistics"
+msgstr ""
+
+#: public/templates/public/index.jinja2:130
+msgid "Faster than ya"
+msgstr ""
+
+#: public/templates/public/index.jinja2:136
+msgid "The big bang theory"
+msgstr ""
+
+#: public/templates/public/privacy_policy.jinja2:8
+msgid "DuckHunt V4 - Privacy Policy"
+msgstr ""
+
+#: public/templates/public/privacy_policy.jinja2:12
+msgid "DuckHunt Privacy Policy"
+msgstr ""
+
+#: public/templates/public/privacy_policy.jinja2:17
+msgid "What data does DuckHunt collects ?"
+msgstr ""
+
+#: public/templates/public/privacy_policy.jinja2:18
+msgid "DuckHunt collects data only when you interact with it."
+msgstr ""
+
+#: public/templates/public/privacy_policy.jinja2:20
+msgid ""
+"Commands are logged for debugging purposes, and invocations are deleted from "
+"the logs after a month, but usually earlier (2-3 hours)"
+msgstr ""
+
+#: public/templates/public/privacy_policy.jinja2:21
+msgid "Statistics for hunters are stored and displayed on the website"
+msgstr ""
+
+#: public/templates/public/privacy_policy.jinja2:24
+msgid "Why does DuckHunt needs the data ?"
+msgstr ""
+
+#: public/templates/public/privacy_policy.jinja2:25
+msgid ""
+"DuckHunt uses the data collected only to store scores and statistics. There "
+"is no analytics or AI training or anything going on behind the scenes."
+msgstr ""
+
+#: public/templates/public/privacy_policy.jinja2:27
+msgid "How does DuckHunt uses the data ?"
+msgstr ""
+
+#: public/templates/public/privacy_policy.jinja2:28
+msgid "DuckHunt only uses the data in the game contexts."
+msgstr ""
+
+#: public/templates/public/privacy_policy.jinja2:30
+msgid "Who does DuckHunt shares data with ?"
+msgstr ""
+
+#: public/templates/public/privacy_policy.jinja2:37
+msgid ""
+"How can I contact you if I have concerns about the bot or to remove my data ?"
+msgstr ""
+
+#: public/templates/public/privacy_policy.jinja2:38
+msgid "The best way would be to contact Eyesofcreeper#0001 on Discord."
+msgstr ""
+
+#: public/templates/public/shard_status.jinja2:8
+#, python-format
+msgid "DuckHunt V4 - Discord Status of shard n°%(shard__shard_id__)s"
+msgstr ""
+
+#: public/templates/public/shard_status.jinja2:13
+#, python-format
+msgid "Status of shard n°%(shard__shard_id__)s"
+msgstr ""
+
+#: public/templates/public/shard_status.jinja2:19
+#: public/templates/public/status.jinja2:30
+#, python-format
+msgid "Shard n°%(shard__shard_id__)s"
+msgstr ""
+
+#: public/templates/public/shard_status.jinja2:21
+#: public/templates/public/status.jinja2:30
+msgid "(ready)"
+msgstr ""
+
+#: public/templates/public/shard_status.jinja2:23
+#, python-format
+msgid "Shard latency: %(shard__latency__)sms"
+msgstr ""
+
+#: public/templates/public/shard_status.jinja2:25
+msgid "Guilds belonging to this shard:"
+msgstr ""
+
+#: public/templates/public/shard_status.jinja2:32
+msgid "Members"
+msgstr ""
+
+#: public/templates/public/shard_status.jinja2:57
+msgid "Shard disconnected"
+msgstr ""
+
+#: public/templates/public/status.jinja2:8
+msgid "DuckHunt V4 - Status"
+msgstr ""
+
+#: public/templates/public/status.jinja2:12
+msgid "DuckHunt live status"
+msgstr ""
+
+#: public/templates/public/status.jinja2:21
+#, python-format
+msgid ""
+"The current bot-wide latency to discord is %(status__bot_latency__)s seconds."
+msgstr ""
+
+#: public/templates/public/status.jinja2:32
+#, python-format
+msgid "Shard latency: %(shard__latency__)ss"
+msgstr ""
+
+#: public/templates/public/status.jinja2:37
+#, python-format
+msgid ""
+"This shard is connected to %(shard__guilds__)s guilds. To see the list, "
+"click <a href=\"%(url)s\">here</a>."
+msgstr ""
+
+#: shop/templates/shop/design.jinja2:9
+#: shop/templates/shop/product_type.jinja2:9
+#, python-format
+msgid "DuckHunt V4 Shop - %(category)s"
+msgstr ""
+
+#: shop/templates/shop/design.jinja2:32
+#, python-format
+msgid "%(product)s image"
+msgstr ""
+
+#: shop/templates/shop/design.jinja2:39
+#: shop/templates/shop/product_type.jinja2:37
+msgid "View product"
+msgstr ""
+
+#: shop/templates/shop/designs.jinja2:8 shop/templates/shop/index.jinja2:8
+#: shop/templates/shop/product_types.jinja2:8
+msgid "DuckHunt V4 Shop"
+msgstr ""
+
+#: shop/templates/shop/designs.jinja2:16
+#: shop/templates/shop/product_types.jinja2:16
+msgid "DuckHunt shop designs"
+msgstr ""
+
+#: shop/templates/shop/designs.jinja2:33
+#, python-format
+msgid "%(design_info__design_name__)s image"
+msgstr ""
+
+#: shop/templates/shop/designs.jinja2:40
+#: shop/templates/shop/product_types.jinja2:40
+msgid "View more"
+msgstr ""
+
+#: shop/templates/shop/index.jinja2:16
+msgid "DuckHunt shop"
+msgstr ""
+
+#: shop/templates/shop/product.jinja2:28
+#, python-format
+msgid "DuckHunt V4 Shop - %(product_product_type)s"
+msgstr ""
+
+#: shop/templates/shop/product.jinja2:52
+#, python-format
+msgid "%(product)s alternative image %(loop_index0)s"
+msgstr ""
+
+#: shop/templates/shop/product.jinja2:91
+msgid "Available sizes:"
+msgstr ""
+
+#: shop/templates/shop/product.jinja2:110
+#, python-format
+msgid "Buy for %(product_price)s + shipping"
+msgstr ""
+
+#: shop/templates/shop/product.jinja2:115
+msgid "You might also like..."
+msgstr ""
+
+#: shop/templates/shop/product.jinja2:137
+msgid "View more of the same design"
+msgstr ""
+
+#: shop/templates/shop/product.jinja2:142
+msgid "Try different designs on the same product"
+msgstr ""
+
+#: shop/templates/shop/product_type.jinja2:30
+#, python-format
+msgid "%(product__product_name__)s image"
+msgstr ""
+
+#: shop/templates/shop/product_types.jinja2:33
+#, python-format
+msgid "%(product_type_info__product_type_name__)s image"
+msgstr ""
+
+#: tags/templates/tags/index.jinja2:8 tags/templates/tags/tag.jinja2:12
+msgid "DuckHunt V4 - Tags"
+msgstr ""
+
+#: tags/templates/tags/index.jinja2:12
+msgid "Say hello to tags."
+msgstr ""
+
+#: tags/templates/tags/tag.jinja2:22
+msgid "View raw tag data"
+msgstr ""
+
+#: templates/base.jinja2:23
+msgid "DuckHunt Discord V4"
+msgstr ""
+
+#: templates/base.jinja2:25
+msgid "DuckHunt V4 is the next version of the popular DuckHunt Discord Bot."
+msgstr ""
+
+#: templates/base.jinja2:66
+msgid "DuckHunt Discord"
+msgstr ""
+
+#: templates/base.jinja2:75
+msgid "Entertain your members with the best game on Discord."
+msgstr ""
+
+#: templates/base.jinja2:96
+msgid "logo"
+msgstr ""
+
+#: templates/base.jinja2:114
+msgid "Documentation"
+msgstr ""
+
+#: templates/base.jinja2:118
+msgid "Servers"
+msgstr ""
+
+#: templates/base.jinja2:128
+msgid "Invite the bot"
+msgstr ""
+
+#: templates/base.jinja2:134
+msgid "Support server"
+msgstr ""
+
+#: templates/base.jinja2:138
+msgid "Status"
+msgstr ""
+
+#: templates/base.jinja2:147
+msgid "Shop"
+msgstr ""
+
+#: templates/base.jinja2:160
+msgid "By duck"
+msgstr ""
+
+#: templates/base.jinja2:168
+msgid "See all ducks..."
+msgstr ""
+
+#: templates/base.jinja2:172
+msgid "By product"
+msgstr ""
+
+#: templates/base.jinja2:179
+msgid "See all product types..."
+msgstr ""
+
+#: templates/base.jinja2:193
+msgid ""
+"DuckHunt Discord V4 made with ❤️ in Paris. If you like it, consider <a href="
+"\"https://www.patreon.com/duckhunt\">donating</a>."
 msgstr ""

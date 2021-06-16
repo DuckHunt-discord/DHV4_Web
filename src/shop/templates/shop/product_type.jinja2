@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block title %}
-    DuckHunt V4 Shop - {{ category }}
+    {{ _("DuckHunt V4 Shop - %(category)s", category=category) }}
 {% endblock %}
 
 {% block content %}
@@ -27,14 +27,14 @@
                     <img src="{{ product["photo_url"] }}"
                          width="{{ product["photo_width"] }}" height="{{ product["photo_height"] }}"
                          class="card-img-top img-fluid"
-                         alt="{{ product["product_name"] }} image">
+                         alt="{{ _("%(product__product_name__)s image", product__product_name__=product["product_name"]) }}">
                     <div class="card-footer">
                         <div class="row">
                             <div class="col">
                                 <a href="{{ product_url }}{{ product["product_id"] }}"
                                    type="button"
                                    class="btn btn-outline-secondary">
-                                    View product
+                                    {{ _("View product") }}
                                 </a>
                             </div>
                             <div class="col text-end">

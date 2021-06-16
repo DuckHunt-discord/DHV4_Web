@@ -25,7 +25,7 @@
 {% endblock %}
 
 {% block title %}
-    DuckHunt V4 Shop - {{ product.product_type }}
+    {{ _("DuckHunt V4 Shop - %(product_product_type)s", product_product_type=product.product_type) }}
 {% endblock %}
 
 {% block content %}
@@ -49,7 +49,7 @@
                                 <div class="col col-lg-3 mt-2 mb-2">
                                     <img src="{{ image_.photo.url }}"
                                          class="img-fluid img-thumbnail script-thumbnail"
-                                         alt="{{ product }} alternative image {{ loop.index0 }}">
+                                         alt="{{ _("%(product)s alternative image %(loop_index0)s", product=product, loop_index0=loop.index0) }}">
                                 </div>
                             {% endif %}
                         {% endfor %}
@@ -84,11 +84,11 @@
                             {{ product.product_type }}
                         </div>
 
-                        <p>By buying this {{ product.product_type }}, you contribute ${{ product.get_margin() }} to the
-                            project.</p>
+                        <p>{{ _("By buying this %(product_product_type)s, you contribute $%(product_get_margin)s to the
+                            project.", product_product_type=product.product_type, product_get_margin=product.get_margin()) }}</p>
 
                         {% if product.sizes_names %}
-                            <p>Available sizes: </p>
+                            <p>{{ _("Available sizes:") }} </p>
                             <div class="btn-group mb-2"
                                  role="group"
                                  aria-label="Sizes">
@@ -107,12 +107,12 @@
                                 {% csrf_token %}
                                 <button type="submit"
                                         class="btn btn-success">
-                                    Buy for {{ product.price }} + shipping
+                                    {{ _("Buy for %(product_price)s + shipping", product_price=product.price) }}
                                 </button>
                             </form>
                         </div>
 
-                        <div class="h4 mt-3">You might also like...</div>
+                        <div class="h4 mt-3">{{ _("You might also like...") }}</div>
                         <div class="row">
                             {% for random_product in random_products %}
                                 <div class="col-6 mb-2">
@@ -134,12 +134,12 @@
                             <div class="col-6 mb-2">
                                 <a href="{{ url('shop_design_info', pk=product.design.pk) }}"
                                    type="button"
-                                   class="btn btn-outline-secondary">View more of the same design</a>
+                                   class="btn btn-outline-secondary">{{ _("View more of the same design") }}</a>
                             </div>
                             <div class="col-6 mb-2">
                                 <a href="{{ url('shop_product_type_info', pk=product.product_type.pk) }}"
                                    type="button"
-                                   class="btn btn-outline-secondary">Try different designs on the same product</a>
+                                   class="btn btn-outline-secondary">{{ _("Try different designs on the same product") }}</a>
                             </div>
                         </div>
 

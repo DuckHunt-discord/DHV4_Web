@@ -7,7 +7,7 @@
 
 {% block title %}
     {% trans channel_name=channel.name %}
-        DuckHunt V4 - Top Scores for #{{ channel_name }}
+        DuckHunt V4 - Top Scores for #{{channel_name}}
     {% endtrans %}
 {% endblock %}
 
@@ -20,7 +20,7 @@
     <div class="container text-light" itemscope itemtype="https://schema.org/Game">
 
         <h1>{% trans players_count=paginator.count, channel_name=channel.name %}
-            <span itemprop="numberOfPlayers">{{ players_count }}</span> players on #{{ channel_name }}{% endtrans %}
+            <span itemprop=\"numberOfPlayers\">{{ players_count }}</span> players on #{{ channel_name }}{% endtrans %}
         </h1>
 
         <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>'" class="background-grey rounded">
@@ -68,7 +68,7 @@
 
         {# Top scores #}
 
-        <h2>Top scores</h2>
+        <h2>{{ _("Top scores") }}</h2>
 
         <table class="table table-dark table-hover sortable">
             <thead>

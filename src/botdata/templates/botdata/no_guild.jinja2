@@ -18,27 +18,27 @@
 {% endblock %}
 
 {% block title %}
-    DuckHunt V4 - Configure that server
+    {{ _("DuckHunt V4 - Configure that server") }}
 {% endblock %}
 
 {% block content %}
     {% if not guild %}
-        <h1>This guild does not exist</h1>
+        <h1>{{ _("This guild does not exist") }}</h1>
     {% else %}
-        <h1>Guild not configured: {{ guild.name }}</h1>
+        <h1>{{ _("Guild not configured: %(guild_name)s", guild_name=guild.name) }}</h1>
     {% endif %}
-    <h2>If you are a member on this server</h2>
-    <p>Please tell the admins to configure one or more channels for ducks to spawn.</p>
+    <h2>{{ _("If you are a member on this server") }}</h2>
+    <p>{{ _("Please tell the admins to configure one or more channels for ducks to spawn.") }}</p>
 
-    <h2>If you are an admin on this server</h2>
-    <p>Welcome and thanks for installing DuckHunt! 🎉</p>
-    <p>You might want to start by creating a specific channel for DuckHunt or enabling an existing one.
+    <h2>{{ _("If you are an admin on this server") }}</h2>
+    <p>{{ _("Welcome and thanks for installing DuckHunt! 🎉") }}</p>
+    <p>{{ _("You might want to start by creating a specific channel for DuckHunt or enabling an existing one.
         In that channel, type
-        <code>dhsettings enabled True</code>.
+        <code>dhsettings enabled True</code>.") }}
     </p>
-    <p>You'll now need to adjust some settings to make it the perfect duck-paradise. Check the settings page to find
-        what you can do to make DuckHunt even better.
+    <p>{{ _("You'll now need to adjust some settings to make it the perfect duck-paradise. Check the settings page to find
+        what you can do to make DuckHunt even better.") }}
     </p>
-    <p>DuckHunt is made with love by Eyesofcreeper#0001, and translated by many volunteers.</p>
+    <p>{{ _("DuckHunt is made with love by Eyesofcreeper#0001, and translated by many volunteers.") }}</p>
 
 {% endblock %}

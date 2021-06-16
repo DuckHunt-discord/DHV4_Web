@@ -5,31 +5,31 @@
 {% endblock %}
 
 {% block title %}
-    DuckHunt V4 - Discord Status of shard n°{{ shard['shard_id'] }}
+    {{ _("DuckHunt V4 - Discord Status of shard n°%(shard__shard_id__)s", shard__shard_id__=shard['shard_id']) }}
 {% endblock %}
 
 {% block content %}
 
-    <h1>Status of shard n°{{ shard['shard_id'] }}</h1>
+    <h1>{{ _("Status of shard n°%(shard__shard_id__)s", shard__shard_id__=shard['shard_id']) }}</h1>
 
     <div class="card background-normal mt-4">
         {% if shard %}
             <div class="card-body">
                 <div class="d-flex">
-                    <div class="h5 card-title flex-grow-1">Shard n°{{ shard['shard_id'] }}
+                    <div class="h5 card-title flex-grow-1">{{ _("Shard n°%(shard__shard_id__)s", shard__shard_id__=shard['shard_id']) }}
                         {% if shard['ready'] %}
-                            (ready){% endif %}</div>
+                            {{ _("(ready)") }}{% endif %}</div>
                 </div>
-                <p>Shard latency: {{ shard['latency'] }}ms</p>
+                <p>{{ _("Shard latency: %(shard__latency__)sms", shard__latency__=shard['latency']) }}</p>
 
-                Guilds belonging to this shard:
+                {{ _("Guilds belonging to this shard:") }}
                 <ul class="list-group list-group-flush background-normal">
                     <li class="list-group-item background-normal">
                         <table class="table table-sm table-dark table-striped">
                             <thead>
                             <tr>
-                                <th scope="col">Name</th>
-                                <th scope="col">Members</th>
+                                <th scope="col">{{ _("Name") }}</th>
+                                <th scope="col">{{ _("Members") }}</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -49,18 +49,18 @@
 
             {% if shard["guilds"] %}
                 <div class="card-footer">
-                    This shard host a total of {{ shard['guilds']|length }} guilds.
+                    {{ _("This shard host a total of %(shard__guilds__)s guilds.", shard__guilds__=shard['guilds']|length) }}
                 </div>
             {% endif %}
         {% else %}
             <div class="card-header">
-                Shard disconnected
+                {{ _("Shard disconnected") }}
             </div>
             <div class="card-body">
                 <p>
-                    Either the shard does not exist, is not (yet) connected, or is unavailable.
-                    You can check the shards list <a href="{{ url("bot_status") }}">here</a> to see all connected
-                    shards.
+                    {{ _("Either the shard does not exist, is not (yet) connected, or is unavailable.
+                    You can check the shards list <a href=\"%(url)s\">here</a> to see all connected
+                    shards.", url=url("bot_status")) }}
                 </p>
             </div>
         {% endif %}

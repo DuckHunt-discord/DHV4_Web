@@ -5,11 +5,11 @@
 {% endblock %}
 
 {% block metadesc %}
-    <meta name="description" content="DuckHunt, the best game bot on Discord">
+    <meta name="description" content="{{ _("DuckHunt, the best game bot on Discord") }}">
 {% endblock %}
 
 {% block title %}
-    DuckHunt V4
+    {{ _("DuckHunt V4") }}
 {% endblock %}
 
 {% block body_headers %}itemscope itemtype="https://schema.org/SoftwareApplication" class="background-light"{% endblock %}
@@ -18,22 +18,22 @@
     <div class="container-fluid text-light background-dark" >
         <div class="row justify-content-center" style="padding-top: 10vh; padding-bottom: 10vh;">
             <div class="col-xxl-6 col-xl-7 col-md-8 col-sm-9 col-xs-12">
-                <h1 class="text-center main-title" itemprop="name">DuckHunt
+                <h1 class="text-center main-title" itemprop="name">{{ _("DuckHunt") }}
                 </h1>
-                <p class="text-center text-white-75 lead">Entertain your members with the best <span itemprop="applicationCategory" content="GameApplication">game</span> on <span itemprop="operatingSystem">Discord</span>.</p>
+                <p class="text-center text-white-75 lead">{{ _("Entertain your members with the best <span itemprop=\"applicationCategory\" content=\"GameApplication\">game</span> on <span itemprop=\"operatingSystem\">Discord</span>.") }}</p>
 
                 <br/>
 
                 <div class="row justify-content-around">
                     <a href="https://duckhunt.me/invite"
                        class="col-5 col-xxl-4 btn background-blurple btn-large align-content-center align-middle hero-button">
-                        <img src="{{ static("public/img/Discord-Logo-White.svg") }}" height="30px" alt="Discord logo">
-                        Invite DuckHunt now
+                        <img src="{{ static("public/img/Discord-Logo-White.svg") }}" height="30px" alt="{{ _("Discord logo") }}">
+                        {{ _("Invite DuckHunt now") }}
                     </a>
 
                     <a href="{{ url("docs:index") }}"
-                       class="col-5 col-xxl-4 btn btn-secondary btn-large align-content-center align-middle hero-button">Learn
-                        more »</a>
+                       class="col-5 col-xxl-4 btn btn-secondary btn-large align-content-center align-middle hero-button">{{ _("Learn
+                        more »") }}</a>
 
                 </div>
             </div>
@@ -89,13 +89,13 @@
     <div class="container text-light" style="padding-top: 3em;">
         <div class="row pt-3">
             <div class="col-12 col-md-5 align-middle align-self-center order-2">
-                <h2 class="h2 text-center" itemprop="description">The best game bot on Discord</h2>
-                <p>Players will be able to kill ducks and earn experience, while trying not to hurt babies.</p>
+                <h2 class="h2 text-center" itemprop="description">{{ _("The best game bot on Discord") }}</h2>
+                <p>{{ _("Players will be able to kill ducks and earn experience, while trying not to hurt babies.") }}</p>
             </div>
             <div class="col-12 col-md-7 order-1 order-md-3">
                 <figure class="figure">
                     <img itemprop="screenshot" src="{{ static('public/img/DuckHunt_pan.png') }}" class="figure-img img-fluid rounded"
-                         alt="Shooting ducks">
+                         alt="{{ _("Shooting ducks") }}">
                 </figure>
             </div>
         </div>
@@ -103,39 +103,39 @@
             <div class="col-12 col-md-6">
                 <figure class="figure">
                     <img itemprop="screenshot" src="{{ static('public/img/Settings_parliment.png') }}" class="figure-img img-fluid rounded"
-                         alt="Parliament in settings">
+                         alt="{{ _("Parliament in settings") }}">
                 </figure>
             </div>
             <div class="col-12 col-md-6 align-middle align-self-center">
-                <div class="h2 text-center">Easy and powerful setup</div>
-                <p>You can setup the bot directly from discord using commands, and you can see them update in real time
-                    on the web interface.</p>
-                <p>We offer a complete and easy to understand <a href="{{ url('docs:index') }}">documentation</a>, to
-                    help you set everything perfectly.</p>
+                <div class="h2 text-center">{{ _("Easy and powerful setup") }}</div>
+                <p>{{ _("You can setup the bot directly from discord using commands, and you can see them update in real time
+                    on the web interface.") }}</p>
+                <p>{{ _("We offer a complete and easy to understand <a href=\"%(url)s\">documentation</a>, to
+                    help you set everything perfectly.", url=url('docs:index')) }}</p>
             </div>
         </div>
         <div class="row pt-3">
             <div class="col-12 col-md-4 align-middle align-self-center order-2">
-                <div class="h2 text-center">Loads of statistics</div>
-                <p>Best times, shots count, bullets, experience used and more are all logged by the bot and displayed in
-                    Discord and on the <span itemprop="alternateName">Duck Hunt</span> <span itemprop="version">V4</span> web interface.</p>
-                <p>Players can see exactly how they did so far, and get a <strong>personal webpage</strong> with all
+                <div class="h2 text-center">{{ _("Loads of statistics") }}</div>
+                <p>{{ _("Best times, shots count, bullets, experience used and more are all logged by the bot and displayed in
+                    Discord and on the <span itemprop=\"alternateName\">Duck Hunt</span> <span itemprop=\"version\">V4</span> web interface.") }}</p>
+                <p>{{ _("Players can see exactly how they did so far, and get a <strong>personal webpage</strong> with all
                     their statistics. They also get to see how far they got with an interactive <strong>channel
-                        leaderboard</strong>.
+                        leaderboard</strong>.") }}
                 </p>
             </div>
             <div class="col-12 col-md-8 order-1 order-md-3">
                 <figure class="figure">
                     <img itemprop="screenshot" src="{{ static('public/img/Best_times_graph.svg') }}" class="figure-img img-fluid rounded"
-                         alt="Faster than ya">
+                         alt="{{ _("Faster than ya") }}">
                 </figure>
             </div>
         </div>
         <div class="row pt-3">
             <div class="col-12 align-middle align-self-center">
-                <div class="h2 text-center">The big bang theory</div>
-                <p>After polling 2 hunters from my server, I can say for sure at least 635 of them loved the bot so much
-                    they wanted to have it too.</p>
+                <div class="h2 text-center">{{ _("The big bang theory") }}</div>
+                <p>{{ _("After polling 2 hunters from my server, I can say for sure at least 635 of them loved the bot so much
+                    they wanted to have it too.") }}</p>
             </div>
         </div>
     </div>

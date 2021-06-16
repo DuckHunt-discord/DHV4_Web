@@ -5,11 +5,11 @@
 {% endblock %}
 
 {% block title %}
-    DuckHunt V4 - Tags
+    {{ _("DuckHunt V4 - Tags") }}
 {% endblock %}
 
 {% block content %}
-    <h1>Say hello to tags.</h1>
+    <h1>{{ _("Say hello to tags.") }}</h1>
 
     <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
         {% for tag in tags %}
