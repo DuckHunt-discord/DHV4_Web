@@ -272,7 +272,7 @@ class Event2021Landmines(models.Model):
     stopped_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        return f"{self.userdata.user} 2021 event landmine on {self.word} for {self.value}"
+        return f"{self.placed_by.user} 2021 event landmine on {self.word} for {self.value}"
 
     class Meta:
         db_table = 'event2021landmines'
