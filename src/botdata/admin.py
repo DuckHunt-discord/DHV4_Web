@@ -75,7 +75,9 @@ admin.site.register(models.Event2021UserData, Event2021UserDataAdmin)
 
 
 class Event2021LandminesAdmin(DynamicRawIDMixin, admin.ModelAdmin):
-    dynamic_raw_id_fields = ["word", "placed_by", "stopped_by", "stopped_at"]
+    dynamic_raw_id_fields = ["placed_by", "stopped_by"]
+
+    list_display = ["word", "placed_by", "stopped_by", "stopped_at"]
     list_select_related = ["placed_by", "stopped_by"]
 
 
