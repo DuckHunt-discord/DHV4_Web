@@ -342,7 +342,7 @@
                 %(homing_kills)s were homing)", homing_kills=player.shooting_stats.get('homing_kills', 0)) }}{% endif %}
             {% trans reloads=player.shooting_stats.get('reloads', 0), missed=player.shooting_stats.get('missed', 0), killed=player.shooting_stats.get('killed', 0), murdered=player.shooting_stats.get('murders', 0) %}
                 and {{ reloads }} magazines. They missed their target {{ missed }} times, killed someone {{ killed }}
-                times, and murdered {{ murdered }} players.)
+                times, and murdered {{ murdered }} players.
             {% endtrans %}
         </p>
 
@@ -358,9 +358,9 @@
                 {% if player.shooting_stats.get('brains_eaten', 0) %},
                     {% trans eaten=player.shooting_stats.get('brains_eaten', 0), revives=player.shooting_stats.get('revives', 0), max_brains_eaten_at_once=player.shooting_stats.get('max_brains_eaten_at_once', 0) %}
                         and had to eat {{ eaten }} brains to revive themselves ({{ revives }} times). They were really
-                        hungry once when they ate {{ max_brains_eaten_at_once }} brains at once)
+                        hungry once when they ate {{ max_brains_eaten_at_once }} brains at once.
                     {% endtrans %}
-                {% endif %}.
+                {% endif %}
             </p>
         {% endif %}
 
@@ -375,7 +375,7 @@
             <p>
                 {% trans current_user_name=current_user.name, autoreloads=player.shooting_stats.get('autoreloads', 0), failed_autoreloads=player.shooting_stats.get('failed_autoreloads', 0) %}
                     {{ current_user_name }}'s gun was reloaded automatically {{ autoreloads }} times
-                    (and the autoreloader failed {{ failed_autoreloads }} times, because they had no more magazines.))
+                    (and the autoreloader failed {{ failed_autoreloads }} times, because they had no more magazines.)
                 {% endtrans %}
             </p>
         {% endif %}
