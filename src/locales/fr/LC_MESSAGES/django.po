@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-23 09:58+0000\n"
+"POT-Creation-Date: 2021-06-25 11:49+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -739,7 +739,7 @@ msgstr ""
 #, python-format
 msgid ""
 "and %(reloads)s magazines. They missed their target %(missed)s times, killed "
-"someone %(killed)s times, and murdered %(murdered)s players.)"
+"someone %(killed)s times, and murdered %(murdered)s players."
 msgstr ""
 
 #: botdata/templates/botdata/player.jinja2:351
@@ -757,7 +757,7 @@ msgstr ""
 msgid ""
 "and had to eat %(eaten)s brains to revive themselves (%(revives)s times). "
 "They were really hungry once when they ate %(max_brains_eaten_at_once)s "
-"brains at once)"
+"brains at once."
 msgstr ""
 
 #: botdata/templates/botdata/player.jinja2:376
@@ -765,7 +765,7 @@ msgstr ""
 msgid ""
 "%(current_user_name)s's gun was reloaded automatically %(autoreloads)s times "
 "(and the autoreloader failed %(failed_autoreloads)s times, because they had "
-"no more magazines.))"
+"no more magazines.)"
 msgstr ""
 
 #: botdata/templates/botdata/player.jinja2:383
