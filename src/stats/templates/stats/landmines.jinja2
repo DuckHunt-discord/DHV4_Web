@@ -81,13 +81,16 @@
                 }, {
                     name: 'Active landmines',
                     data: {{ active_landmines_over_time|tojson }}
+                },{
+                    name: 'Destroyed landmines',
+                    data: {{ destroyed_landmines_over_time|tojson }}
                 },
             ]
         });
 
         Highcharts.chart('chart_landmines_stopped_over_time', {
             title: {
-                text: 'How do landmines get removed'
+                text: 'How do landmines get destroyed'
             },
             yAxis: {
                 title: {

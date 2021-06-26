@@ -75,6 +75,9 @@ def landmines(request):
     active_landmines_over_time = []
     active_landmines_stack = 0
 
+    destroyed_landmines_over_time = []
+    destroyed_landmines_stack = 0
+
     disarmed_landmines_over_time = []
     disarmed_landmines_stack = 0
 
@@ -93,11 +96,15 @@ def landmines(request):
         elif event_type == LandmineEventType.DISARMED:
             active_landmines_stack -= 1
             disarmed_landmines_stack += 1
+            destroyed_landmines_stack += 1
             disarmed_landmines_over_time.append((event_time, disarmed_landmines_stack))
+            destroyed_landmines_over_time.append((event_time, destroyed_landmines_stack))
         elif event_type == LandmineEventType.TRIPPED:
             active_landmines_stack -= 1
             tripped_landmines_stack += 1
+            destroyed_landmines_stack += 1
             tripped_landmines_over_time.append((event_time, tripped_landmines_stack))
+            destroyed_landmines_over_time.append((event_time, destroyed_landmines_stack))
 
         active_landmines_over_time.append((event_time, active_landmines_stack))
 
@@ -106,6 +113,7 @@ def landmines(request):
         last_event_time = events[-1][0]
         disarmed_landmines_over_time.append((last_event_time, disarmed_landmines_stack))
         tripped_landmines_over_time.append((last_event_time, tripped_landmines_stack))
+        destroyed_landmines_over_time.append((last_event_time, destroyed_landmines_stack))
         total_mines_over_time.append((last_event_time, total_landmines_count))
 
     ctx = {
@@ -127,6 +135,7 @@ def landmines(request):
         "active_landmines_over_time": active_landmines_over_time,
         "disarmed_landmines_over_time": disarmed_landmines_over_time,
         "tripped_landmines_over_time": tripped_landmines_over_time,
+        "destroyed_landmines_over_time": destroyed_landmines_over_time,
     }
 
     return render(request, "stats/landmines.jinja2", ctx)
