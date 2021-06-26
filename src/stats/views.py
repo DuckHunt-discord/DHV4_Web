@@ -39,7 +39,7 @@ def landmines(request):
         total_points_spent += player.points_spent
 
     # Landmines
-    landmines_qs = models.Event2021Landmines.objects.all().order_by('placed')
+    landmines_qs = models.Event2021Landmines.objects.all().order_by('placed').prefetch_related('placed_by__user')
 
     words = Counter()
     total_landmines_count = 0
@@ -92,6 +92,9 @@ def landmines(request):
         disarmed_landmines_over_time.append((first_event_time, 0))
         tripped_landmines_over_time.append((first_event_time, 0))
 
+    streamgraph_series = []
+    steamgraph_default = []
+
     for event in events:
         event_time, event_type, event_landmine = event
         if event_type == LandmineEventType.PLACED:
@@ -110,6 +113,27 @@ def landmines(request):
             destroyed_landmines_over_time.append((event_time, destroyed_landmines_stack))
 
         active_landmines_over_time.append((event_time, active_landmines_stack))
+
+        # Streamgraph
+        placed_by = event_landmine.placed_by.user
+        data_added = False
+        for steamgraph in streamgraph_series:
+            change = 1 if LandmineEventType.PLACED else -1
+            if steamgraph["pk"] == placed_by.pk:
+                count = steamgraph["data"][-1][1] + change
+
+                steamgraph["data"].append((event_time, count))
+                data_added = True
+            else:
+                steamgraph["data"].append((event_time, steamgraph["data"][-1][1]))
+
+        if not data_added:
+            streamgraph_series.append({
+                "name": f"{placed_by}",
+                "pk": placed_by.pk,
+                "data": steamgraph_default.copy() + [(event_time, 1)],
+            })
+        steamgraph_default.append((event_time, 0))
 
     if events:
         # Fix to have the graph end at the same place.
@@ -140,6 +164,8 @@ def landmines(request):
         "disarmed_landmines_over_time": disarmed_landmines_over_time,
         "tripped_landmines_over_time": tripped_landmines_over_time,
         "destroyed_landmines_over_time": destroyed_landmines_over_time,
+
+        "streamgraph_series": streamgraph_series,
     }
 
     return render(request, "stats/landmines.jinja2", ctx)

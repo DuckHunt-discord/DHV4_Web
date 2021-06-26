@@ -13,6 +13,7 @@
 
 {% block head %}
     {% javascript 'highcharts' %}
+    <script src="{{ static('public/js/modules/streamgraph.js') }}"></script>
     <script src="{{ static('public/js/modules/exporting.js') }}"></script>
     <script src="{{ static('public/js/modules/offline-exporting.js') }}"></script>
     <script src="{{ static('public/js/modules/export-data.js') }}"></script>
@@ -57,6 +58,7 @@
     <h2>Over time...</h2>
     <div id="chart_landmines_active_over_time" class="mb-2"></div>
     <div id="chart_landmines_stopped_over_time" class="mb-2"></div>
+    <div id="chart_landmines_by_user_over_time" class="mb-2"></div>
     <script>
         Highcharts.chart('chart_landmines_wordcloud', {
             title: {
@@ -133,6 +135,16 @@
                     data: {{ tripped_landmines_over_time|tojson }}
                 },
             ]
+        });
+
+        Highcharts.chart('chart_landmines_by_user_over_time', {
+            chart: {
+                type: 'streamgraph',
+            },
+            title: {
+                text: 'Placed landmines by user'
+            },
+            series: {{ streamgraph_series|tojson }},
         });
 
     </script>
