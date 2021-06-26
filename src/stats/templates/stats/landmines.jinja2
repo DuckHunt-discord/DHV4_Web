@@ -13,6 +13,9 @@
 
 {% block head %}
     {% javascript 'highcharts' %}
+    <script src="{{ static('public/js/modules/exporting.js') }}"></script>
+    <script src="{{ static('public/js/modules/offline-exporting.js') }}"></script>
+    <script src="{{ static('public/js/modules/export-data.js') }}"></script>
     <script src="{{ static('public/js/sorttable.js') }}"></script>
 {% endblock %}
 
