@@ -118,7 +118,7 @@ def landmines(request):
         placed_by = event_landmine.placed_by.user
         data_added = False
         for steamgraph in streamgraph_series:
-            change = 1 if LandmineEventType.PLACED else -1
+            change = 1 if event_type == LandmineEventType.PLACED else -1
             if steamgraph["pk"] == placed_by.pk:
                 count = steamgraph["data"][-1][1] + change
 
