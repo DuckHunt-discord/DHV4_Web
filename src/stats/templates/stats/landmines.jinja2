@@ -55,6 +55,11 @@
             xAxis: {
                 type: 'datetime'
             },
+            plotOptions: {
+                line: {
+                    step: 'left'
+                }
+            }
         });
 
         Highcharts.chart('chart_landmines_active_over_time', {
