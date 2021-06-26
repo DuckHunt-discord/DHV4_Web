@@ -94,7 +94,7 @@ def landmines(request):
 
     if events:
         # Fix to have the graph end at the same place.
-        last_event_time = events[:-1][0]
+        last_event_time = events[-1][0]
 
         disarmed_landmines_over_time.append((last_event_time, disarmed_landmines_stack))
         tripped_landmines_over_time.append((last_event_time, tripped_landmines_stack))
