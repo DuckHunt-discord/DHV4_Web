@@ -276,7 +276,7 @@ PIPELINE = {
     'JAVASCRIPT': {
         'highcharts': {
             'source_filenames': (
-                'public/js/highcharts.js',
+                'public/js/highstock.js',
                 'public/js/highcharts-more.js',
                 'public/js/modules/item-series.js',
                 'public/js/modules/wordcloud.js',
