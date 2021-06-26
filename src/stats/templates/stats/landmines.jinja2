@@ -1,0 +1,102 @@
+{% extends "base.jinja2" %}
+
+{% block metadesc %}
+    <meta name="description"
+          content="{{ _('DuckHunt V4 - Statistics for the landmines event') }}">
+{% endblock %}
+
+{% block title %}
+    {% trans %}
+        DuckHunt V4 - Statistics for the landmines event
+    {% endtrans %}
+{% endblock %}
+
+{% block head %}
+    {% javascript 'highcharts' %}
+    <script src="{{ static('public/js/sorttable.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+    <h1>Landmines online wartracker</h1>
+
+    <h2>Our beloved moderators</h2>
+    <ul>
+        <li>Did send a total of {{ total_messages_sent }} messages</li>
+        <li>... made of {{ total_words_sent }} words in total</li>
+        <li>... and earning them {{ total_points_acquired }} points for talking</li>
+        <li>They recovered {{ total_points_recovered }} points by defusing active landmines</li>
+        <li>They earned {{ total_points_won }} points enforcing rules (and lost {{ total_points_exploded }} points being enforced)</li>
+        <li>They currently own {{ total_points_current }} points overall</li>
+        <li>They spent {{ total_points_spent }} points overall</li>
+    </ul>
+
+    <h2>Currently on the battlefield</h2>
+    <ul>
+        <li>{{ total_landmines_count }} total landmines</li>
+        <li>... of which {{ tripped_landmines_count }} exploded</li>
+        <li>... of which {{ disarmed_landmines_count }} were defused</li>
+        <li>... of which {{ active_landmines_count }} are still active</li>
+    </ul>
+
+    <h2>Over time...</h2>
+    <div id="chart_landmines_active_over_time" class="mb-2"></div>
+    <div id="chart_landmines_stopped_over_time" class="mb-2"></div>
+    <script>
+        Highcharts.setOptions({
+            chart: {
+                zoomType: 'x'
+            },
+            subtitle: {
+                text: document.ontouchstart === undefined ?
+                    'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
+            },
+            xAxis: {
+                type: 'datetime'
+            },
+        });
+
+        Highcharts.chart('chart_landmines_active_over_time', {
+            title: {
+                text: 'Landmines bought from the shop'
+            },
+            yAxis: {
+                title: {
+                    text: 'Landmines count'
+                }
+            },
+            series: [
+                {
+                    type: 'area',
+                    name: 'Total landmines',
+                    data: {{ total_mines_over_time|tojson }}
+                }, {
+                    type: 'area',
+                    name: 'Active landmines',
+                    data: {{ active_landmines_over_time|tojson }}
+                },
+            ]
+        });
+
+        Highcharts.chart('chart_landmines_stopped_over_time', {
+            title: {
+                text: 'How do landmines get removed'
+            },
+            yAxis: {
+                title: {
+                    text: 'Landmines count'
+                }
+            },
+            series: [
+                {
+                    type: 'area',
+                    name: 'Defused landmines',
+                    data: {{ disarmed_landmines_over_time|tojson }}
+                }, {
+                    type: 'area',
+                    name: 'Tripped landmines',
+                    data: {{ tripped_landmines_over_time|tojson }}
+                },
+            ]
+        });
+    </script>
+{% endblock %}

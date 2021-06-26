@@ -219,12 +219,12 @@ class Event2021UserData(models.Model):
     last_seen = models.DateTimeField(auto_now_add=True)
     messages_sent = models.IntegerField(default=0)
     words_sent = models.IntegerField(default=0)
-    points_won = models.IntegerField(default=0)       # By killing
-    points_recovered = models.IntegerField(default=0) # By defusing
-    points_acquired = models.IntegerField(default=0)  # By talking
-    points_current = models.IntegerField(default=0)   # Sum of everything
-    points_exploded = models.IntegerField(default=0)  # By saying a bad word
-    points_spent = models.IntegerField(default=0)     # By using the shop
+    points_won = models.IntegerField(default=0)        # By killing
+    points_recovered = models.IntegerField(default=0)  # By defusing
+    points_acquired = models.IntegerField(default=0)   # By talking
+    points_current = models.IntegerField(default=0)    # Sum of everything
+    points_exploded = models.IntegerField(default=0)   # By saying a bad word
+    points_spent = models.IntegerField(default=0)      # By using the shop
 
     # Inventory
 

@@ -30,6 +30,7 @@ urlpatterns = [
     path('data/', include('botdata.urls')),
     path('tags/', include('tags.urls')),
     path('shop/', include('shop.urls')),
+    path('stats/', include('stats.urls')),
     path('admin/dynamic_raw_id/', include('dynamic_raw_id.urls')),
     path('__debug__/', include(debug_toolbar.urls)),
     path('sitemap.xml', sitemap_views.index, {'sitemaps': sitemaps}),
