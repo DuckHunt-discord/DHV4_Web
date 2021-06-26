@@ -1,7 +1,7 @@
 /**
- * @license Highcharts JS v8.2.2 (2020-10-22)
+ * @license Highcharts JS v9.1.2 (2021-06-16)
  *
- * (c) 2009-2019 Torstein Honsi
+ * (c) 2009-2021 Torstein Honsi
  *
  * License: www.highcharts.com/license
  */
@@ -26,10 +26,10 @@
             obj[path] = fn.apply(null, args);
         }
     }
-    _registerModule(_modules, 'Extensions/Themes/SandSignika.js', [_modules['Core/Globals.js'], _modules['Core/Utilities.js']], function (Highcharts, U) {
+    _registerModule(_modules, 'Extensions/Themes/SandSignika.js', [_modules['Core/Globals.js'], _modules['Core/DefaultOptions.js'], _modules['Core/Utilities.js']], function (Highcharts, D, U) {
         /* *
          *
-         *  (c) 2010-2020 Torstein Honsi
+         *  (c) 2010-2021 Torstein Honsi
          *
          *  License: www.highcharts.com/license
          *
@@ -39,15 +39,17 @@
          *
          * */
         /* global document */
-        var setOptions = U.setOptions;
+        var setOptions = D.setOptions;
+        var addEvent = U.addEvent,
+            createElement = U.createElement;
         // Load the fonts
-        Highcharts.createElement('link', {
+        createElement('link', {
             href: 'https://fonts.googleapis.com/css?family=Signika:400,700',
             rel: 'stylesheet',
             type: 'text/css'
         }, null, document.getElementsByTagName('head')[0]);
         // Add the background image to the container
-        Highcharts.addEvent(Highcharts.Chart, 'afterGetContainer', function () {
+        addEvent(Highcharts.Chart, 'afterGetContainer', function () {
             // eslint-disable-next-line no-invalid-this
             this.container.style.background =
                 'url(https://www.highcharts.com/samples/graphics/sand.png)';
@@ -113,7 +115,7 @@
                     shadow: false
                 }
             },
-            // Highstock specific
+            // Highcharts Stock specific
             navigator: {
                 xAxis: {
                     gridLineColor: '#D0D0D8'

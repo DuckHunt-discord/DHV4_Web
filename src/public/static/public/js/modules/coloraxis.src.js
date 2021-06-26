@@ -1,9 +1,9 @@
 /**
- * @license Highcharts JS v8.2.2 (2020-10-22)
+ * @license Highcharts JS v9.1.2 (2021-06-16)
  *
  * ColorAxis module
  *
- * (c) 2012-2019 Pawel Potaczek
+ * (c) 2012-2021 Pawel Potaczek
  *
  * License: www.highcharts.com/license
  */
@@ -31,7 +31,7 @@
     _registerModule(_modules, 'Mixins/ColorSeries.js', [], function () {
         /* *
          *
-         *  (c) 2010-2020 Torstein Honsi
+         *  (c) 2010-2021 Torstein Honsi
          *
          *  License: www.highcharts.com/license
          *
@@ -116,10 +116,10 @@
 
         return exports;
     });
-    _registerModule(_modules, 'Core/Axis/ColorAxis.js', [_modules['Core/Axis/Axis.js'], _modules['Core/Chart/Chart.js'], _modules['Core/Color/Color.js'], _modules['Mixins/ColorSeries.js'], _modules['Core/Animation/Fx.js'], _modules['Core/Globals.js'], _modules['Core/Legend.js'], _modules['Mixins/LegendSymbol.js'], _modules['Series/LineSeries.js'], _modules['Core/Series/Point.js'], _modules['Core/Utilities.js']], function (Axis, Chart, Color, ColorSeriesModule, Fx, H, Legend, LegendSymbolMixin, LineSeries, Point, U) {
+    _registerModule(_modules, 'Core/Axis/ColorAxis.js', [_modules['Core/Axis/Axis.js'], _modules['Core/Chart/Chart.js'], _modules['Core/Color/Color.js'], _modules['Mixins/ColorSeries.js'], _modules['Core/Animation/Fx.js'], _modules['Core/Globals.js'], _modules['Core/Legend.js'], _modules['Mixins/LegendSymbol.js'], _modules['Core/Color/Palette.js'], _modules['Core/Series/Point.js'], _modules['Core/Series/Series.js'], _modules['Core/Utilities.js']], function (Axis, Chart, Color, ColorSeriesModule, Fx, H, Legend, LegendSymbolMixin, palette, Point, Series, U) {
         /* *
          *
-         *  (c) 2010-2020 Torstein Honsi
+         *  (c) 2010-2021 Torstein Honsi
          *
          *  License: www.highcharts.com/license
          *
@@ -159,7 +159,7 @@
          * @typedef {"linear"|"logarithmic"} Highcharts.ColorAxisTypeValue
          */
         ''; // detach doclet above
-        extend(LineSeries.prototype, colorSeriesMixin);
+        extend(Series.prototype, colorSeriesMixin);
         extend(Point.prototype, colorPointMixin);
         Chart.prototype.collectionsWithUpdate.push('colorAxis');
         Chart.prototype.collectionsWithInit.colorAxis = [Chart.prototype.addColorAxis];
@@ -206,31 +206,6 @@
             }
             /* *
              *
-             *  Static Functions
-             *
-             * */
-            /**
-             * Build options to keep layout params on init and update.
-             * @private
-             */
-            ColorAxis.buildOptions = function (chart, options, userOptions) {
-                var legend = chart.options.legend || {},
-                    horiz = userOptions.layout ?
-                        userOptions.layout !== 'vertical' :
-                        legend.layout !== 'vertical';
-                return merge(options, {
-                    side: horiz ? 2 : 1,
-                    reversed: !horiz
-                }, userOptions, {
-                    opposite: !horiz,
-                    showEmpty: false,
-                    title: null,
-                    visible: legend.enabled &&
-                        (userOptions ? userOptions.visible !== false : true)
-                });
-            };
-            /* *
-             *
              *  Functions
              *
              * */
@@ -247,11 +222,21 @@
              */
             ColorAxis.prototype.init = function (chart, userOptions) {
                 var axis = this;
-                var options = ColorAxis.buildOptions(// Build the options
-                    chart,
-                    ColorAxis.defaultOptions,
-                    userOptions);
+                var legend = chart.options.legend || {},
+                    horiz = userOptions.layout ?
+                        userOptions.layout !== 'vertical' :
+                        legend.layout !== 'vertical';
+                var options = merge(ColorAxis.defaultColorAxisOptions,
+                    userOptions, {
+                        showEmpty: false,
+                        title: null,
+                        visible: legend.enabled &&
+                            (userOptions ? userOptions.visible !== false : true)
+                    });
                 axis.coll = 'colorAxis';
+                axis.side = userOptions.side || horiz ? 2 : 1;
+                axis.reversed = userOptions.reversed || !horiz;
+                axis.opposite = !horiz;
                 _super.prototype.init.call(this, chart, options);
                 // Base init() pushes it to the xAxis array, now pop it again
                 // chart[this.isXAxis ? 'xAxis' : 'yAxis'].pop();
@@ -261,7 +246,7 @@
                 }
                 axis.initStops();
                 // Override original axis properties
-                axis.horiz = !options.opposite;
+                axis.horiz = horiz;
                 axis.zoomEnabled = false;
             };
             /**
@@ -568,7 +553,7 @@
                         cSeries.maxColorValue = cSeries[colorKey + 'Max'];
                     }
                     else {
-                        var cExtremes = LineSeries.prototype.getExtremes.call(cSeries,
+                        var cExtremes = Series.prototype.getExtremes.call(cSeries,
                             colorValArray);
                         cSeries.minColorValue = cExtremes.dataMin;
                         cSeries.maxColorValue = cExtremes.dataMax;
@@ -580,7 +565,7 @@
                             Math.max(this.dataMax, cSeries.maxColorValue);
                     }
                     if (!calculatedExtremes) {
-                        LineSeries.prototype.applyExtremes.call(cSeries);
+                        Series.prototype.applyExtremes.call(cSeries);
                     }
                 }
             };
@@ -627,7 +612,7 @@
                             .add(axis.legendGroup);
                         axis.cross.addedToColorAxis = true;
                         if (!axis.chart.styledMode &&
-                            axis.crosshair) {
+                            typeof axis.crosshair === 'object') {
                             axis.cross.attr({
                                 fill: axis.crosshair.color
                             });
@@ -677,9 +662,7 @@
             ColorAxis.prototype.update = function (newOptions, redraw) {
                 var axis = this,
                     chart = axis.chart,
-                    legend = chart.legend,
-                    updatedOptions = ColorAxis.buildOptions(chart, {},
-                    newOptions);
+                    legend = chart.legend;
                 this.series.forEach(function (series) {
                     // Needed for Axis.update when choropleth colors change
                     series.isDirtyData = true;
@@ -689,11 +672,7 @@
                 if (newOptions.dataClasses && legend.allItems || axis.dataClasses) {
                     axis.destroyItems();
                 }
-                // Keep the options structure updated for export. Unlike xAxis and
-                // yAxis, the colorAxis is not an array. (#3207)
-                chart.options[axis.coll] =
-                    merge(axis.userOptions, updatedOptions);
-                _super.prototype.update.call(this, updatedOptions, redraw);
+                _super.prototype.update.call(this, newOptions, redraw);
                 if (axis.legendItem) {
                     axis.setLegendColor();
                     legend.colorizeItem(this, true);
@@ -715,6 +694,12 @@
                     });
                 }
                 chart.isDirtyLegend = true;
+            };
+            //   Removing the whole axis (#14283)
+            ColorAxis.prototype.destroy = function () {
+                this.chart.isDirtyLegend = true;
+                this.destroyItems();
+                _super.prototype.destroy.apply(this, [].slice.call(arguments));
             };
             /**
              * Removes the color axis and the related legend item.
@@ -849,7 +834,7 @@
              * @optionparent colorAxis
              * @ignore
              */
-            ColorAxis.defaultOptions = {
+            ColorAxis.defaultColorAxisOptions = {
                 /**
                  * Whether to allow decimals on the color axis.
                  * @type      {boolean}
@@ -1079,7 +1064,7 @@
                      * @type    {Highcharts.ColorString|Highcharts.GradientColorObject|Highcharts.PatternObject}
                      * @product highcharts highstock highmaps
                      */
-                    color: '#999999'
+                    color: palette.neutralColor40
                 },
                 /**
                  * The axis labels show the number for each tick.
@@ -1121,7 +1106,7 @@
                  * @type    {Highcharts.ColorString|Highcharts.GradientColorObject|Highcharts.PatternObject}
                  * @product highcharts highstock highmaps
                  */
-                minColor: '#e6ebf5',
+                minColor: palette.highlightColor10,
                 /**
                  * The color to represent the maximum of the color axis. Unless
                  * [dataClasses](#colorAxis.dataClasses) or
@@ -1140,7 +1125,7 @@
                  * @type    {Highcharts.ColorString|Highcharts.GradientColorObject|Highcharts.PatternObject}
                  * @product highcharts highstock highmaps
                  */
-                maxColor: '#003399',
+                maxColor: palette.highlightColor100,
                 /**
                  * Color stops for the gradient of a scalar color axis. Use this in
                  * cases where a linear gradient between a `minColor` and `maxColor`
@@ -1253,7 +1238,7 @@
             }
         });
         // Add colorAxis to series axisTypes
-        addEvent(LineSeries, 'bindAxes', function () {
+        addEvent(Series, 'bindAxes', function () {
             var axisTypes = this.axisTypes;
             if (!axisTypes) {
                 this.axisTypes = ['colorAxis'];
@@ -1265,10 +1250,19 @@
         // Add the color axis. This also removes the axis' own series to prevent
         // them from showing up individually.
         addEvent(Legend, 'afterGetAllItems', function (e) {
+            var _this = this;
             var colorAxisItems = [],
                 colorAxes = this.chart.colorAxis || [],
                 options,
                 i;
+            var destroyItem = function (item) {
+                    var i = e.allItems.indexOf(item);
+                if (i !== -1) {
+                    // #15436
+                    _this.destroyItem(e.allItems[i]);
+                    e.allItems.splice(i, 1);
+                }
+            };
             colorAxes.forEach(function (colorAxis) {
                 options = colorAxis.options;
                 if (options && options.showInLegend) {
@@ -1287,11 +1281,11 @@
                         if (!series.options.showInLegend || options.dataClasses) {
                             if (series.options.legendType === 'point') {
                                 series.points.forEach(function (point) {
-                                    erase(e.allItems, point);
+                                    destroyItem(point);
                                 });
                             }
                             else {
-                                erase(e.allItems, series);
+                                destroyItem(series);
                             }
                         }
                     });
@@ -1319,7 +1313,7 @@
             }
         });
         // Calculate and set colors for points
-        addEvent(LineSeries, 'afterTranslate', function () {
+        addEvent(Series, 'afterTranslate', function () {
             if (this.chart.colorAxis &&
                 this.chart.colorAxis.length ||
                 this.colorAttribs) {

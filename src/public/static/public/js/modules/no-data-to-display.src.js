@@ -1,9 +1,9 @@
 /**
- * @license Highcharts JS v8.2.2 (2020-10-22)
+ * @license Highcharts JS v9.1.2 (2021-06-16)
  *
  * Plugin for displaying a message when there is no data visible in chart.
  *
- * (c) 2010-2019 Highsoft AS
+ * (c) 2010-2021 Highsoft AS
  * Author: Oystein Moseng
  *
  * License: www.highcharts.com/license
@@ -29,12 +29,12 @@
             obj[path] = fn.apply(null, args);
         }
     }
-    _registerModule(_modules, 'Extensions/NoDataToDisplay.js', [_modules['Core/Chart/Chart.js'], _modules['Core/Utilities.js']], function (Chart, U) {
+    _registerModule(_modules, 'Extensions/NoDataToDisplay.js', [_modules['Core/Renderer/HTML/AST.js'], _modules['Core/Chart/Chart.js'], _modules['Core/DefaultOptions.js'], _modules['Core/Color/Palette.js'], _modules['Core/Utilities.js']], function (AST, Chart, D, palette, U) {
         /* *
          *
          *  Plugin for displaying a message when there is no data visible in chart.
          *
-         *  (c) 2010-2020 Highsoft AS
+         *  (c) 2010-2021 Highsoft AS
          *
          *  Author: Oystein Moseng
          *
@@ -43,10 +43,9 @@
          *  !!!!!!! SOURCE GETS TRANSPILED BY TYPESCRIPT. EDIT TS FILE ONLY. !!!!!!!
          *
          * */
+        var getOptions = D.getOptions;
         var addEvent = U.addEvent,
-            extend = U.extend,
-            getOptions = U.getOptions,
-            merge = U.merge;
+            extend = U.extend;
         var chartPrototype = Chart.prototype,
             defaultOptions = getOptions();
         // Add language option
@@ -148,7 +147,7 @@
                 /** @ignore */
                 fontSize: '12px',
                 /** @ignore */
-                color: '#666666'
+                color: palette.neutralColor60
             }
         };
         /**
@@ -173,7 +172,7 @@
                 }
                 if (!chart.styledMode) {
                     chart.noDataLabel
-                        .attr(noDataOptions.attr)
+                        .attr(AST.filterUserAttributes(noDataOptions.attr || {}))
                         .css(noDataOptions.style || {});
                 }
                 chart.noDataLabel.align(extend(chart.noDataLabel.getBBox(), noDataOptions.position || {}), false, 'plotBox');

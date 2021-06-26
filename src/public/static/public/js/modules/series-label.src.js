@@ -1,7 +1,7 @@
 /**
- * @license Highcharts JS v8.2.2 (2020-10-22)
+ * @license Highcharts JS v9.1.2 (2021-06-16)
  *
- * (c) 2009-2019 Torstein Honsi
+ * (c) 2009-2021 Torstein Honsi
  *
  * License: www.highcharts.com/license
  */
@@ -26,10 +26,10 @@
             obj[path] = fn.apply(null, args);
         }
     }
-    _registerModule(_modules, 'Extensions/SeriesLabel.js', [_modules['Core/Animation/AnimationUtilities.js'], _modules['Core/Chart/Chart.js'], _modules['Core/Globals.js'], _modules['Core/Renderer/SVG/SVGRenderer.js'], _modules['Core/Utilities.js']], function (A, Chart, H, SVGRenderer, U) {
+    _registerModule(_modules, 'Extensions/SeriesLabel.js', [_modules['Core/Animation/AnimationUtilities.js'], _modules['Core/Chart/Chart.js'], _modules['Core/FormatUtilities.js'], _modules['Core/DefaultOptions.js'], _modules['Core/Series/Series.js'], _modules['Core/Renderer/SVG/SVGRenderer.js'], _modules['Core/Utilities.js']], function (A, Chart, F, D, Series, SVGRenderer, U) {
         /* *
          *
-         *  (c) 2009-2020 Torstein Honsi
+         *  (c) 2009-2021 Torstein Honsi
          *
          *  License: www.highcharts.com/license
          *
@@ -37,13 +37,14 @@
          *
          * */
         var animObject = A.animObject;
+        var format = F.format;
+        var setOptions = D.setOptions;
+        var symbols = SVGRenderer.prototype.symbols;
         var addEvent = U.addEvent,
             extend = U.extend,
             fireEvent = U.fireEvent,
-            format = U.format,
             isNumber = U.isNumber,
             pick = U.pick,
-            setOptions = U.setOptions,
             syncTimeout = U.syncTimeout;
         /**
          * Containing the position of a box that should be avoided by labels.
@@ -76,8 +77,7 @@
          * https://jsfiddle.net/highcharts/y5A37/
          */
         ''; // detach doclets above
-        var labelDistance = 3,
-            Series = H.Series;
+        var labelDistance = 3;
         setOptions({
             /**
              * @optionparent plotOptions
@@ -227,14 +227,11 @@
         }
         /**
          * General symbol definition for labels with connector.
-         *
-         * @private
-         * @function Highcharts.SVGRenderer#symbols.connector
          */
-        SVGRenderer.prototype.symbols.connector = function (x, y, w, h, options) {
+        symbols.connector = function (x, y, w, h, options) {
             var anchorX = options && options.anchorX,
-                anchorY = options && options.anchorY,
-                path,
+                anchorY = options && options.anchorY;
+            var path,
                 yOffset,
                 lateral = w / 2;
             if (isNumber(anchorX) && isNumber(anchorY)) {
@@ -279,17 +276,7 @@
             }
             var distance = 16,
                 points = this.points,
-                point,
-                last,
                 interpolated = [],
-                i,
-                deltaX,
-                deltaY,
-                delta,
-                len,
-                n,
-                j,
-                d,
                 graph = this.graph || this.area,
                 node = graph.element,
                 inverted = this.chart.inverted,
@@ -300,6 +287,16 @@
                 onArea = pick(this.options.label.onArea, !!this.area),
                 translatedThreshold = yAxis.getThreshold(this.options.threshold),
                 grid = {};
+            var point,
+                last,
+                i,
+                deltaX,
+                deltaY,
+                delta,
+                len,
+                n,
+                j,
+                d;
             /**
              * Push the point to the interpolated points, but only if that position in
              * the grid has not been occupied. As a performance optimization, we divide
@@ -423,16 +420,16 @@
          * @function Highcharts.Series#checkClearPoint
          */
         Series.prototype.checkClearPoint = function (x, y, bBox, checkDistance) {
+            var chart = this.chart,
+                onArea = pick(this.options.label.onArea, !!this.area),
+                findDistanceToOthers = (onArea || this.options.label.connectorAllowed),
+                leastDistance = 16;
             var distToOthersSquared = Number.MAX_VALUE, // distance to other graphs
                 distToPointSquared = Number.MAX_VALUE,
                 dist,
                 connectorPoint,
-                onArea = pick(this.options.label.onArea, !!this.area),
-                findDistanceToOthers = (onArea || this.options.label.connectorAllowed),
-                chart = this.chart,
                 series,
                 points,
-                leastDistance = 16,
                 withinRange,
                 xDist,
                 yDist,
@@ -562,7 +559,17 @@
                 if (!labelOptions || (!series.xAxis && !series.yAxis)) {
                     return;
                 }
-                var bBox, x, y, results = [], clearPoint, i, best, inverted = chart.inverted, paneLeft = (inverted ? series.yAxis.pos : series.xAxis.pos), paneTop = (inverted ? series.xAxis.pos : series.yAxis.pos), paneWidth = chart.inverted ? series.yAxis.len : series.xAxis.len, paneHeight = chart.inverted ? series.xAxis.len : series.yAxis.len, points = series.interpolatedPoints, onArea = pick(labelOptions.onArea, !!series.area), label = series.labelBySeries, isNew = !label, minFontSize = labelOptions.minFontSize, maxFontSize = labelOptions.maxFontSize, dataExtremes, areaMin, areaMax, colorClass = 'highcharts-color-' + pick(series.colorIndex, 'none');
+                var colorClass = 'highcharts-color-' + pick(series.colorIndex, 'none'), isNew = !series.labelBySeries, minFontSize = labelOptions.minFontSize, maxFontSize = labelOptions.maxFontSize, inverted = chart.inverted, paneLeft = (inverted ? series.yAxis.pos : series.xAxis.pos), paneTop = (inverted ? series.xAxis.pos : series.yAxis.pos), paneWidth = chart.inverted ? series.yAxis.len : series.xAxis.len, paneHeight = chart.inverted ? series.xAxis.len : series.yAxis.len, points = series.interpolatedPoints, onArea = pick(labelOptions.onArea, !!series.area), results = [];
+                var bBox,
+                    x,
+                    y,
+                    clearPoint,
+                    i,
+                    best,
+                    label = series.labelBySeries,
+                    dataExtremes,
+                    areaMin,
+                    areaMax;
                 // Stay within the area data bounds (#10038)
                 if (onArea && !inverted) {
                     dataExtremes = [
@@ -786,13 +793,13 @@
          */
         function drawLabels(e) {
             if (this.renderer) {
-                var chart = this,
-                    delay = animObject(chart.renderer.globalAnimation).duration;
-                chart.labelSeries = [];
-                chart.labelSeriesMaxSum = 0;
-                U.clearTimeout(chart.seriesLabelTimer);
+                var chart_1 = this;
+                var delay_1 = animObject(chart_1.renderer.globalAnimation).duration;
+                chart_1.labelSeries = [];
+                chart_1.labelSeriesMaxSum = 0;
+                U.clearTimeout(chart_1.seriesLabelTimer);
                 // Which series should have labels
-                chart.series.forEach(function (series) {
+                chart_1.series.forEach(function (series) {
                     var options = series.options.label,
                         label = series.labelBySeries,
                         closest = label && label.closest;
@@ -800,17 +807,17 @@
                         series.visible &&
                         (series.graph || series.area) &&
                         !series.isSeriesBoosting) {
-                        chart.labelSeries.push(series);
+                        chart_1.labelSeries.push(series);
                         if (options.minFontSize && options.maxFontSize) {
                             series.sum = series.yData.reduce(function (pv, cv) {
                                 return (pv || 0) + (cv || 0);
                             }, 0);
-                            chart.labelSeriesMaxSum = Math.max(chart.labelSeriesMaxSum, series.sum);
+                            chart_1.labelSeriesMaxSum = Math.max(chart_1.labelSeriesMaxSum, series.sum);
                         }
                         // The labels are processing heavy, wait until the animation is
                         // done
                         if (e.type === 'load') {
-                            delay = Math.max(delay, animObject(series.options.animation).duration);
+                            delay_1 = Math.max(delay_1, animObject(series.options.animation).duration);
                         }
                         // Keep the position updated to the axis while redrawing
                         if (closest) {
@@ -826,11 +833,11 @@
                         }
                     }
                 });
-                chart.seriesLabelTimer = syncTimeout(function () {
-                    if (chart.series && chart.labelSeries) { // #7931, chart destroyed
-                        chart.drawSeriesLabels();
+                chart_1.seriesLabelTimer = syncTimeout(function () {
+                    if (chart_1.series && chart_1.labelSeries) { // #7931, chart destroyed
+                        chart_1.drawSeriesLabels();
                     }
-                }, chart.renderer.forExport || !delay ? 0 : delay);
+                }, chart_1.renderer.forExport || !delay_1 ? 0 : delay_1);
             }
         }
         // Leave both events, we handle animation differently (#9815)

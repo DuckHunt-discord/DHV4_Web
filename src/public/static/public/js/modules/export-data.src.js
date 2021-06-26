@@ -1,9 +1,9 @@
 /**
- * @license Highcharts JS v8.2.2 (2020-10-22)
+ * @license Highcharts JS v9.1.2 (2021-06-16)
  *
  * Exporting module
  *
- * (c) 2010-2019 Torstein Honsi
+ * (c) 2010-2021 Torstein Honsi
  *
  * License: www.highcharts.com/license
  */
@@ -31,7 +31,7 @@
     _registerModule(_modules, 'Extensions/DownloadURL.js', [_modules['Core/Globals.js']], function (Highcharts) {
         /* *
          *
-         *  (c) 2015-2020 Oystein Moseng
+         *  (c) 2015-2021 Oystein Moseng
          *
          *  License: www.highcharts.com/license
          *
@@ -40,11 +40,10 @@
          *  Mixin for downloading content in the browser
          *
          * */
+        var isSafari = Highcharts.isSafari;
         var win = Highcharts.win,
-            nav = win.navigator,
             doc = win.document,
-            domurl = win.URL || win.webkitURL || win,
-            isEdgeBrowser = /Edge\/\d+/.test(nav.userAgent);
+            domurl = win.URL || win.webkitURL || win;
         /**
          * Convert base64 dataURL to Blob if supported, otherwise returns undefined.
          * @private
@@ -89,8 +88,8 @@
          */
         var downloadURL = Highcharts.downloadURL = function (dataURL,
             filename) {
-                var a = doc.createElement('a'),
-            windowRef;
+                var nav = win.navigator,
+            a = doc.createElement('a');
             // IE specific blob implementation
             // Don't use for normal dataURLs
             if (typeof dataURL !== 'string' &&
@@ -102,7 +101,12 @@
             dataURL = "" + dataURL;
             // Some browsers have limitations for data URL lengths. Try to convert to
             // Blob or fall back. Edge always needs that blob.
-            if (isEdgeBrowser || dataURL.length > 2000000) {
+            var isOldEdgeBrowser = /Edge\/\d+/.test(nav.userAgent);
+            // Safari on iOS needs Blob in order to download PDF
+            var safariBlob = (isSafari &&
+                    typeof dataURL === 'string' &&
+                    dataURL.indexOf('data:application/pdf') === 0);
+            if (safariBlob || isOldEdgeBrowser || dataURL.length > 2000000) {
                 dataURL = dataURLtoBlob(dataURL) || '';
                 if (!dataURL) {
                     throw new Error('Failed to convert to blob');
@@ -119,7 +123,7 @@
             else {
                 // No download attr, just opening data URI
                 try {
-                    windowRef = win.open(dataURL, 'chart');
+                    var windowRef = win.open(dataURL, 'chart');
                     if (typeof windowRef === 'undefined' || windowRef === null) {
                         throw new Error('Failed to open window');
                     }
@@ -137,12 +141,12 @@
 
         return exports;
     });
-    _registerModule(_modules, 'Extensions/ExportData.js', [_modules['Core/Axis/Axis.js'], _modules['Core/Chart/Chart.js'], _modules['Core/Globals.js'], _modules['Core/Utilities.js'], _modules['Extensions/DownloadURL.js']], function (Axis, Chart, H, U, DownloadURL) {
+    _registerModule(_modules, 'Extensions/ExportData.js', [_modules['Core/Axis/Axis.js'], _modules['Core/Chart/Chart.js'], _modules['Core/Renderer/HTML/AST.js'], _modules['Core/Globals.js'], _modules['Core/DefaultOptions.js'], _modules['Core/Utilities.js'], _modules['Extensions/DownloadURL.js']], function (Axis, Chart, AST, H, D, U, DownloadURL) {
         /* *
          *
          *  Experimental data export module for Highcharts
          *
-         *  (c) 2010-2020 Torstein Honsi
+         *  (c) 2010-2021 Torstein Honsi
          *
          *  License: www.highcharts.com/license
          *
@@ -155,15 +159,15 @@
         var doc = H.doc,
             seriesTypes = H.seriesTypes,
             win = H.win;
+        var getOptions = D.getOptions,
+            setOptions = D.setOptions;
         var addEvent = U.addEvent,
             defined = U.defined,
             extend = U.extend,
             find = U.find,
             fireEvent = U.fireEvent,
-            getOptions = U.getOptions,
             isNumber = U.isNumber,
-            pick = U.pick,
-            setOptions = U.setOptions;
+            pick = U.pick;
         /**
          * Function callback to execute while data rows are processed for exporting.
          * This allows the modification of data rows before processed into the final
@@ -188,22 +192,6 @@
         * @type {Array<Array<string>>}
         */
         var downloadURL = DownloadURL.downloadURL;
-        // Can we add this to utils? Also used in screen-reader.js
-        /**
-         * HTML encode some characters vulnerable for XSS.
-         * @private
-         * @param  {string} html The input string
-         * @return {string} The excaped string
-         */
-        function htmlencode(html) {
-            return html
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#x27;')
-                .replace(/\//g, '&#x2F;');
-        }
         setOptions({
             /**
              * Callback that fires while exporting data. This allows the modification of
@@ -257,7 +245,7 @@
                  * converter, as demonstrated in the sample below.
                  *
                  * @sample  highcharts/export-data/categorized/ Categorized data
-                 * @sample  highcharts/export-data/stock-timeaxis/ Highstock time axis
+                 * @sample  highcharts/export-data/stock-timeaxis/ Highcharts Stock time axis
                  * @sample  highcharts/export-data/xlsx/
                  *          Using a third party XLSX converter
                  *
@@ -596,8 +584,8 @@
                     xAxis),
                     valueCount = pointArrayMap.length,
                     xTaken = !series.requireSorting && {},
-                    xAxisIndex = xAxes.indexOf(xAxis),
-                    categoryAndDatetimeMap = getCategoryAndDateTimeMap(series,
+                    xAxisIndex = xAxes.indexOf(xAxis);
+                var categoryAndDatetimeMap = getCategoryAndDateTimeMap(series,
                     pointArrayMap),
                     mockSeries,
                     j;
@@ -757,7 +745,8 @@
          *         CSV representation of the data
          */
         Chart.prototype.getCSV = function (useLocalDecimalPoint) {
-            var csv = '', rows = this.getDataRows(), csvOptions = this.options.exporting.csv, decimalPoint = pick(csvOptions.decimalPoint, csvOptions.itemDelimiter !== ',' && useLocalDecimalPoint ?
+            var csv = '';
+            var rows = this.getDataRows(), csvOptions = this.options.exporting.csv, decimalPoint = pick(csvOptions.decimalPoint, csvOptions.itemDelimiter !== ',' && useLocalDecimalPoint ?
                     (1.1).toLocaleString()[1] :
                     '.'), 
                 // use ';' for direct to Excel
@@ -809,9 +798,58 @@
          * @fires Highcharts.Chart#event:afterGetTable
          */
         Chart.prototype.getTable = function (useLocalDecimalPoint) {
-            var html = '<table id="highcharts-data-table-' + this.index + '">', options = this.options, decimalPoint = useLocalDecimalPoint ? (1.1).toLocaleString()[1] : '.', useMultiLevelHeaders = pick(options.exporting.useMultiLevelHeaders, true), rows = this.getDataRows(useMultiLevelHeaders), rowLength = 0, topHeaders = useMultiLevelHeaders ? rows.shift() : null, subHeaders = rows.shift(), 
+            var serialize = function (node) {
+                    if (!node.tagName || node.tagName === '#text') {
+                        // Text node
+                        return node.textContent || '';
+                }
+                var attributes = node.attributes;
+                var html = "<" + node.tagName;
+                if (attributes) {
+                    Object.keys(attributes).forEach(function (key) {
+                        var value = attributes[key];
+                        html += " " + key + "=\"" + value + "\"";
+                    });
+                }
+                html += '>';
+                html += node.textContent || '';
+                (node.children || []).forEach(function (child) {
+                    html += serialize(child);
+                });
+                html += "</" + node.tagName + ">";
+                return html;
+            };
+            var tree = this.getTableAST(useLocalDecimalPoint);
+            return serialize(tree);
+        };
+        /**
+         * Get the AST of a HTML table representing the chart data.
+         *
+         * @private
+         *
+         * @function Highcharts.Chart#getTableAST
+         *
+         * @param {boolean} [useLocalDecimalPoint]
+         *        Whether to use the local decimal point as detected from the browser.
+         *        This makes it easier to export data to Excel in the same locale as the
+         *        user is.
+         *
+         * @return {Highcharts.ASTNode}
+         *         The abstract syntax tree
+         */
+        Chart.prototype.getTableAST = function (useLocalDecimalPoint) {
+            var rowLength = 0;
+            var treeChildren = [];
+            var options = this.options,
+                decimalPoint = useLocalDecimalPoint ? (1.1).toLocaleString()[1] : '.',
+                useMultiLevelHeaders = pick(options.exporting.useMultiLevelHeaders,
+                true),
+                rows = this.getDataRows(useMultiLevelHeaders),
+                topHeaders = useMultiLevelHeaders ? rows.shift() : null,
+                subHeaders = rows.shift(), 
                 // Compare two rows for equality
-                isRowEqual = function (row1, row2) {
+                isRowEqual = function (row1,
+                row2) {
                     var i = row1.length;
                 if (row2.length === i) {
                     while (i--) {
@@ -826,27 +864,30 @@
                 return true;
             }, 
             // Get table cell HTML from value
-            getCellHTMLFromValue = function (tag, classes, attrs, value) {
-                var val = pick(value, ''), className = 'text' + (classes ? ' ' + classes : '');
+            getCellHTMLFromValue = function (tagName, classes, attributes, value) {
+                var textContent = pick(value, ''), className = 'text' + (classes ? ' ' + classes : '');
                 // Convert to string if number
-                if (typeof val === 'number') {
-                    val = val.toString();
+                if (typeof textContent === 'number') {
+                    textContent = textContent.toString();
                     if (decimalPoint === ',') {
-                        val = val.replace('.', decimalPoint);
+                        textContent = textContent.replace('.', decimalPoint);
                     }
                     className = 'number';
                 }
                 else if (!value) {
                     className = 'empty';
                 }
-                return '<' + tag + (attrs ? ' ' + attrs : '') +
-                    ' class="' + className + '">' +
-                    val + '</' + tag + '>';
+                attributes = extend({ 'class': className }, attributes);
+                return {
+                    tagName: tagName,
+                    attributes: attributes,
+                    textContent: textContent
+                };
             }, 
             // Get table header markup from row data
             getTableHeaderHTML = function (topheaders, subheaders, rowLength) {
-                var html = '<thead>',
-                    i = 0,
+                var theadChildren = [];
+                var i = 0,
                     len = rowLength || subheaders && subheaders.length,
                     next,
                     cur,
@@ -860,7 +901,7 @@
                     topheaders &&
                     subheaders &&
                     !isRowEqual(topheaders, subheaders)) {
-                    html += '<tr>';
+                    var trChildren = [];
                     for (; i < len; ++i) {
                         cur = topheaders[i];
                         next = topheaders[i + 1];
@@ -870,8 +911,10 @@
                         else if (curColspan) {
                             // Ended colspan
                             // Add cur to HTML with colspan.
-                            html += getCellHTMLFromValue('th', 'highcharts-table-topheading', 'scope="col" ' +
-                                'colspan="' + (curColspan + 1) + '"', cur);
+                            trChildren.push(getCellHTMLFromValue('th', 'highcharts-table-topheading', {
+                                scope: 'col',
+                                colspan: curColspan + 1
+                            }, cur));
                             curColspan = 0;
                         }
                         else {
@@ -890,32 +933,48 @@
                             else {
                                 rowspan = 1;
                             }
-                            html += getCellHTMLFromValue('th', 'highcharts-table-topheading', 'scope="col"' +
-                                (rowspan > 1 ?
-                                    ' valign="top" rowspan="' + rowspan + '"' :
-                                    ''), cur);
+                            var cell = getCellHTMLFromValue('th', 'highcharts-table-topheading', { scope: 'col' }, cur);
+                            if (rowspan > 1 && cell.attributes) {
+                                cell.attributes.valign = 'top';
+                                cell.attributes.rowspan = rowspan;
+                            }
+                            trChildren.push(cell);
                         }
                     }
-                    html += '</tr>';
+                    theadChildren.push({
+                        tagName: 'tr',
+                        children: trChildren
+                    });
                 }
                 // Add the subheaders (the only headers if not using multilevels)
                 if (subheaders) {
-                    html += '<tr>';
+                    var trChildren = [];
                     for (i = 0, len = subheaders.length; i < len; ++i) {
                         if (typeof subheaders[i] !== 'undefined') {
-                            html += getCellHTMLFromValue('th', null, 'scope="col"', subheaders[i]);
+                            trChildren.push(getCellHTMLFromValue('th', null, { scope: 'col' }, subheaders[i]));
                         }
                     }
-                    html += '</tr>';
+                    theadChildren.push({
+                        tagName: 'tr',
+                        children: trChildren
+                    });
                 }
-                html += '</thead>';
-                return html;
+                return {
+                    tagName: 'thead',
+                    children: theadChildren
+                };
             };
             // Add table caption
             if (options.exporting.tableCaption !== false) {
-                html += '<caption class="highcharts-table-caption">' + pick(options.exporting.tableCaption, (options.title.text ?
-                    htmlencode(options.title.text) :
-                    'Chart')) + '</caption>';
+                treeChildren.push({
+                    tagName: 'caption',
+                    attributes: {
+                        'class': 'highcharts-table-caption'
+                    },
+                    textContent: pick(options.exporting.tableCaption, (options.title.text ?
+                        options.title.text :
+                        'Chart'))
+                });
             }
             // Find longest row
             for (var i = 0, len = rows.length; i < len; ++i) {
@@ -924,23 +983,35 @@
                 }
             }
             // Add header
-            html += getTableHeaderHTML(topHeaders, subHeaders, Math.max(rowLength, subHeaders.length));
+            treeChildren.push(getTableHeaderHTML(topHeaders, subHeaders, Math.max(rowLength, subHeaders.length)));
             // Transform the rows to HTML
-            html += '<tbody>';
+            var trs = [];
             rows.forEach(function (row) {
-                html += '<tr>';
+                var trChildren = [];
                 for (var j = 0; j < rowLength; j++) {
                     // Make first column a header too. Especially important for
                     // category axes, but also might make sense for datetime? Should
                     // await user feedback on this.
-                    html += getCellHTMLFromValue(j ? 'td' : 'th', null, j ? '' : 'scope="row"', row[j]);
+                    trChildren.push(getCellHTMLFromValue(j ? 'td' : 'th', null, j ? {} : { scope: 'row' }, row[j]));
                 }
-                html += '</tr>';
+                trs.push({
+                    tagName: 'tr',
+                    children: trChildren
+                });
             });
-            html += '</tbody></table>';
-            var e = { html: html };
-            fireEvent(this, 'afterGetTable', e);
-            return e.html;
+            treeChildren.push({
+                tagName: 'tbody',
+                children: trs
+            });
+            var e = {
+                    tree: {
+                        tagName: 'table',
+                        id: "highcharts-data-table-" + this.index,
+                        children: treeChildren
+                    }
+                };
+            fireEvent(this, 'aftergetTableAST', e);
+            return e.tree;
         };
         /**
          * Get a blob object from content, if blob is supported
@@ -1032,20 +1103,7 @@
          * @fires Highcharts.Chart#event:afterViewData
          */
         Chart.prototype.viewData = function () {
-            // Create div and generate the data table.
-            if (!this.dataTableDiv) {
-                this.dataTableDiv = doc.createElement('div');
-                this.dataTableDiv.className = 'highcharts-data-table';
-                // Insert after the chart container
-                this.renderTo.parentNode.insertBefore(this.dataTableDiv, this.renderTo.nextSibling);
-                this.dataTableDiv.innerHTML = this.getTable();
-            }
-            // Show the data table again.
-            if (this.dataTableDiv.style.display === '' || this.dataTableDiv.style.display === 'none') {
-                this.dataTableDiv.style.display = 'block';
-            }
-            this.isDataTableVisible = true;
-            fireEvent(this, 'afterViewData', this.dataTableDiv);
+            this.toggleDataTable(true);
         };
         /**
          * Export-data module required. Hide the data table when visible.
@@ -1053,30 +1111,46 @@
          * @function Highcharts.Chart#hideData
          */
         Chart.prototype.hideData = function () {
-            if (this.dataTableDiv && this.dataTableDiv.style.display === 'block') {
-                this.dataTableDiv.style.display = 'none';
-            }
-            this.isDataTableVisible = false;
+            this.toggleDataTable(false);
         };
-        Chart.prototype.toggleDataTable = function () {
+        Chart.prototype.toggleDataTable = function (show) {
+            show = pick(show, !this.isDataTableVisible);
+            // Create the div
+            if (show && !this.dataTableDiv) {
+                this.dataTableDiv = doc.createElement('div');
+                this.dataTableDiv.className = 'highcharts-data-table';
+                // Insert after the chart container
+                this.renderTo.parentNode.insertBefore(this.dataTableDiv, this.renderTo.nextSibling);
+            }
+            // Toggle the visibility
+            if (this.dataTableDiv) {
+                this.dataTableDiv.style.display = show ? 'block' : 'none';
+                // Generate the data table
+                if (show) {
+                    this.dataTableDiv.innerHTML = '';
+                    var ast = new AST([this.getTableAST()]);
+                    ast.addToDOM(this.dataTableDiv);
+                    fireEvent(this, 'afterViewData', this.dataTableDiv);
+                }
+            }
+            // Set the flag
+            this.isDataTableVisible = show;
+            // Change the menu item text
             var exportDivElements = this.exportDivElements,
                 options = this.options.exporting,
-                menuItems = options && options.buttons && options.buttons.contextButton.menuItems,
+                menuItems = options &&
+                    options.buttons &&
+                    options.buttons.contextButton.menuItems,
                 lang = this.options.lang;
-            if (this.isDataTableVisible) {
-                this.hideData();
-            }
-            else {
-                this.viewData();
-            }
-            // Change the button text based on table visibility.
-            if ((exportingOptions === null || exportingOptions === void 0 ? void 0 : exportingOptions.menuItemDefinitions) && (lang === null || lang === void 0 ? void 0 : lang.viewData) &&
+            if (exportingOptions &&
+                exportingOptions.menuItemDefinitions &&
+                lang &&
+                lang.viewData &&
                 lang.hideData &&
                 menuItems &&
                 exportDivElements &&
                 exportDivElements.length) {
-                exportDivElements[menuItems.indexOf('viewData')]
-                    .innerHTML = this.isDataTableVisible ? lang.hideData : lang.viewData;
+                AST.setElementHTML(exportDivElements[menuItems.indexOf('viewData')], this.isDataTableVisible ? lang.hideData : lang.viewData);
             }
         };
         // Add "Download CSV" to the exporting menu.

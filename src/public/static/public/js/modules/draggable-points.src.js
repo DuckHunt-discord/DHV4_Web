@@ -1,7 +1,7 @@
 /**
- * @license Highcharts JS v8.2.2 (2020-10-22)
+ * @license Highcharts JS v9.1.2 (2021-06-16)
  *
- * (c) 2009-2019 Torstein Honsi
+ * (c) 2009-2021 Torstein Honsi
  *
  * License: www.highcharts.com/license
  */
@@ -26,10 +26,10 @@
             obj[path] = fn.apply(null, args);
         }
     }
-    _registerModule(_modules, 'Extensions/DraggablePoints.js', [_modules['Core/Chart/Chart.js'], _modules['Core/Globals.js'], _modules['Core/Series/Point.js'], _modules['Core/Utilities.js']], function (Chart, H, Point, U) {
+    _registerModule(_modules, 'Extensions/DraggablePoints.js', [_modules['Core/Animation/AnimationUtilities.js'], _modules['Core/Chart/Chart.js'], _modules['Core/Globals.js'], _modules['Core/Series/Point.js'], _modules['Core/Series/Series.js'], _modules['Core/Series/SeriesRegistry.js'], _modules['Core/Utilities.js']], function (A, Chart, H, Point, Series, SeriesRegistry, U) {
         /* *
          *
-         *  (c) 2009-2020 Highsoft AS
+         *  (c) 2009-2021 Highsoft AS
          *
          *  Authors: Øystein Moseng, Torstein Hønsi, Jon A. Nygård
          *
@@ -38,169 +38,13 @@
          *  !!!!!!! SOURCE GETS TRANSPILED BY TYPESCRIPT. EDIT TS FILE ONLY. !!!!!!!
          *
          * */
+        var animObject = A.animObject;
+        var seriesTypes = SeriesRegistry.seriesTypes;
         var addEvent = U.addEvent,
             clamp = U.clamp,
             merge = U.merge,
             objectEach = U.objectEach,
             pick = U.pick;
-        /**
-         * Current drag and drop position.
-         *
-         * @interface Highcharts.DragDropPositionObject
-         */ /**
-        * Chart x position
-        * @name Highcharts.DragDropPositionObject#chartX
-        * @type {number}
-        */ /**
-        * Chart y position
-        * @name Highcharts.DragDropPositionObject#chartY
-        * @type {number}
-        */ /**
-        * Drag and drop guide box.
-        * @name Highcharts.DragDropPositionObject#guideBox
-        * @type {Highcharts.BBoxObject|undefined}
-        */ /**
-        * Updated point data.
-        * @name Highcharts.DragDropPositionObject#points
-        * @type {Highcharts.Dictionary<Highcharts.Dictionary<number>>}
-        */ /**
-        * Delta of previous x position.
-        * @name Highcharts.DragDropPositionObject#prevdX
-        * @type {number|undefined}
-        */ /**
-        * Delta of previous y position.
-        * @name Highcharts.DragDropPositionObject#prevdY
-        * @type {number|undefined}
-        */
-        /**
-         * Function callback to execute while series points are dragged. Return false to
-         * stop the default drag action.
-         *
-         * @callback Highcharts.PointDragCallbackFunction
-         *
-         * @param {Highcharts.Point} this
-         *        Point where the event occured.
-         *
-         * @param {Highcharts.PointDragEventObject} event
-         *        Event arguments.
-         */
-        /**
-         * Contains information about a points new values.
-         *
-         * @interface Highcharts.PointDragDropObject
-         */ /**
-        * New values.
-        * @name Highcharts.PointDragDropObject#newValues
-        * @type {Highcharts.Dictionary<number>}
-        */ /**
-        * Updated point.
-        * @name Highcharts.PointDragDropObject#point
-        * @type {Highcharts.Point}
-        */
-        /**
-         * Contains common information for a drag event on series points.
-         *
-         * @interface Highcharts.PointDragEventObject
-         */ /**
-        * New point after drag if only a single one.
-        * @name Highcharts.PointDropEventObject#newPoint
-        * @type {Highcharts.PointDragDropObject|undefined}
-        */ /**
-        * New point id after drag if only a single one.
-        * @name Highcharts.PointDropEventObject#newPointId
-        * @type {string|undefined}
-        */ /**
-        * New points during drag.
-        * @name Highcharts.PointDragEventObject#newPoints
-        * @type {Highcharts.Dictionary<Highcharts.PointDragDropObject>}
-        */ /**
-        * Original data.
-        * @name Highcharts.PointDragEventObject#origin
-        * @type {Highcharts.DragDropPositionObject}
-        */ /**
-        * Prevent default drag action.
-        * @name Highcharts.PointDragEventObject#preventDefault
-        * @type {Function}
-        */ /**
-        * Target point that caused the event.
-        * @name Highcharts.PointDragEventObject#target
-        * @type {Highcharts.Point}
-        */ /**
-        * Event type.
-        * @name Highcharts.PointDragEventObject#type
-        * @type {"drag"}
-        */
-        /**
-         * Function callback to execute when a series point is dragged.
-         *
-         * @callback Highcharts.PointDragStartCallbackFunction
-         *
-         * @param {Highcharts.Point} this
-         *        Point where the event occured.
-         *
-         * @param {Highcharts.PointDragStartEventObject} event
-         *        Event arguments.
-         */
-        /**
-         * Contains common information for a drag event on series point.
-         *
-         * @interface Highcharts.PointDragStartEventObject
-         * @extends global.MouseEvent
-         */ /**
-        * Data property being dragged.
-        * @name Highcharts.PointDragStartEventObject#updateProp
-        * @type {string|undefined}
-        */
-        /**
-         * Function callback to execute when series points are dropped.
-         *
-         * @callback Highcharts.PointDropCallbackFunction
-         *
-         * @param {Highcharts.Point} this
-         *        Point where the event occured.
-         *
-         * @param {Highcharts.PointDropEventObject} event
-         *        Event arguments.
-         */
-        /**
-         * Contains common information for a drop event on series points.
-         *
-         * @interface Highcharts.PointDropEventObject
-         */ /**
-        * New point after drop if only a single one.
-        * @name Highcharts.PointDropEventObject#newPoint
-        * @type {Highcharts.PointDragDropObject|undefined}
-        */ /**
-        * New point id after drop if only a single one.
-        * @name Highcharts.PointDropEventObject#newPointId
-        * @type {string|undefined}
-        */ /**
-        * New points after drop.
-        * @name Highcharts.PointDropEventObject#newPoints
-        * @type {Highcharts.Dictionary<Highcharts.PointDragDropObject>}
-        */ /**
-        * Number of new points.
-        * @name Highcharts.PointDropEventObject#numNewPoints
-        * @type {number}
-        */ /**
-        * Original data.
-        * @name Highcharts.PointDropEventObject#origin
-        * @type {Highcharts.DragDropPositionObject}
-        */ /**
-        * Prevent default drop action.
-        * @name Highcharts.PointDropEventObject#preventDefault
-        * @type {Function}
-        */ /**
-        * Target point that caused the event.
-        * @name Highcharts.PointDropEventObject#target
-        * @type {Highcharts.Point}
-        */ /**
-        * Event type.
-        * @name Highcharts.PointDropEventObject#type
-        * @type {"drop"}
-        */
-        ''; // detaches doclets above
-        var seriesTypes = H.seriesTypes;
         /**
          * Flip a side property, used with resizeRect. If input side is "left", return
          * "right" etc.
@@ -283,7 +127,7 @@
             ];
         };
         // Line series - only draggableX/Y, no drag handles
-        var lineDragDropProps = seriesTypes.line.prototype.dragDropProps = {
+        var lineDragDropProps = Series.prototype.dragDropProps = {
                 x: {
                     axis: 'x',
                     move: true
@@ -354,11 +198,17 @@
                 },
                 // Position handle at bottom if column is below threshold
                 handlePositioner: function (point) {
-                    var bBox = point.shapeArgs || point.graphic.getBBox();
+                    var bBox = (point.shapeArgs ||
+                            (point.graphic && point.graphic.getBBox()) ||
+                            {}),
+                        reversed = point.series.yAxis.reversed,
+                        threshold = point.series.options.threshold || 0,
+                        y = point.y || 0,
+                        bottom = (!reversed && y >= threshold) ||
+                            (reversed && y < threshold);
                     return {
-                        x: bBox.x,
-                        y: point.y >= (point.series.options.threshold || 0) ?
-                            bBox.y : bBox.y + bBox.height
+                        x: bBox.x || 0,
+                        y: bottom ? (bBox.y || 0) : (bBox.y || 0) + (bBox.height || 0)
                     };
                 },
                 // Horizontal handle
@@ -435,8 +285,8 @@
                     handlePositioner: function (point) {
                         var bBox = point.shapeArgs || point.graphic.getBBox();
                         return {
-                            x: bBox.x,
-                            y: bBox.y + bBox.height
+                            x: bBox.x || 0,
+                            y: (bBox.y || 0) + (bBox.height || 0)
                         };
                     },
                     handleFormatter: columnDragDropProps.y.handleFormatter,
@@ -461,8 +311,8 @@
                     handlePositioner: function (point) {
                         var bBox = point.shapeArgs || point.graphic.getBBox();
                         return {
-                            x: bBox.x,
-                            y: bBox.y
+                            x: bBox.x || 0,
+                            y: bBox.y || 0
                         };
                     },
                     handleFormatter: columnDragDropProps.y.handleFormatter,
@@ -492,7 +342,7 @@
                     resizeSide: 'bottom',
                     handlePositioner: function (point) {
                         return {
-                            x: point.shapeArgs.x,
+                            x: point.shapeArgs.x || 0,
                             y: point.lowPlot
                         };
                     },
@@ -517,7 +367,7 @@
                     resizeSide: 'bottom',
                     handlePositioner: function (point) {
                         return {
-                            x: point.shapeArgs.x,
+                            x: point.shapeArgs.x || 0,
                             y: point.q1Plot
                         };
                     },
@@ -548,7 +398,7 @@
                     resizeSide: 'top',
                     handlePositioner: function (point) {
                         return {
-                            x: point.shapeArgs.x,
+                            x: point.shapeArgs.x || 0,
                             y: point.q3Plot
                         };
                     },
@@ -573,7 +423,7 @@
                     resizeSide: 'top',
                     handlePositioner: function (point) {
                         return {
-                            x: point.shapeArgs.x,
+                            x: point.shapeArgs.x || 0,
                             y: point.highPlot
                         };
                     },
@@ -777,7 +627,7 @@
             // Handle positioner logic is the same for x and x2 apart from the
             // x value. shapeArgs does not take yAxis reversed etc into account, so we
             // use axis.toPixels to handle positioning.
-            var xrangeHandlePositioner = function (point,
+            var xrangeHandlePositioner_1 = function (point,
                 xProp) {
                     var series = point.series,
                 xAxis = series.xAxis,
@@ -821,7 +671,7 @@
                     resize: true,
                     resizeSide: 'left',
                     handlePositioner: function (point) {
-                        return xrangeHandlePositioner(point, 'x');
+                        return xrangeHandlePositioner_1(point, 'x');
                     },
                     handleFormatter: horizHandleFormatter,
                     propValidate: function (val, point) {
@@ -843,7 +693,7 @@
                     resize: true,
                     resizeSide: 'right',
                     handlePositioner: function (point) {
-                        return xrangeHandlePositioner(point, 'x2');
+                        return xrangeHandlePositioner_1(point, 'x2');
                     },
                     handleFormatter: horizHandleFormatter,
                     propValidate: function (val, point) {
@@ -1641,15 +1491,12 @@
          * @function updatePoints
          * @param {Highcharts.Chart} chart
          *        A chart with dragDropData.newPoints.
-         * @param {boolean} [animate=true]
+         * @param {boolean} [animation=true]
          *        Animate updating points?
          */
-        function updatePoints(chart, animate) {
+        function updatePoints(chart, animation) {
             var newPoints = chart.dragDropData.newPoints,
-                animOptions = animate === false ? false : merge({
-                    duration: 400 // 400 is the default in animate
-                },
-                chart.options.chart.animation);
+                animOptions = animObject(animation);
             chart.isDragDropAnimating = true;
             // Update the points
             objectEach(newPoints, function (newPoint) {
@@ -1881,7 +1728,7 @@
          * @return {Highcharts.SVGElement}
          *         An SVG element for the guide box, not added to DOM.
          */
-        H.Series.prototype.getGuideBox = function (points) {
+        Series.prototype.getGuideBox = function (points) {
             var chart = this.chart,
                 minX = Infinity,
                 maxX = -Infinity,
@@ -1893,10 +1740,10 @@
                 var bBox = point.graphic && point.graphic.getBBox() || point.shapeArgs;
                 if (bBox && (bBox.width || bBox.height || bBox.x || bBox.y)) {
                     changed = true;
-                    minX = Math.min(bBox.x, minX);
-                    maxX = Math.max(bBox.x + bBox.width, maxX);
-                    minY = Math.min(bBox.y, minY);
-                    maxY = Math.max(bBox.y + bBox.height, maxY);
+                    minX = Math.min(point.plotX || 0, bBox.x || 0, minX);
+                    maxX = Math.max((bBox.x || 0) + (bBox.width || 0), maxX);
+                    minY = Math.min(point.plotY || 0, bBox.y || 0, minY);
+                    maxY = Math.max((bBox.y || 0) + (bBox.height || 0), maxY);
                 }
             });
             return changed ? chart.renderer.rect(minX, minY, maxX - minX, maxY - minY) : chart.renderer.g();
@@ -1990,7 +1837,7 @@
                     val.handleOptions,
                     options.dragHandle),
                     handleAttrs = {
-                        className: handleOptions.className,
+                        'class': handleOptions.className,
                         'stroke-width': handleOptions.lineWidth,
                         fill: handleOptions.color,
                         stroke: handleOptions.lineColor
@@ -2043,7 +1890,7 @@
                     // Add events
                     addEvents(handle.element, ['touchstart', 'mousedown'], function (e) {
                         onResizeHandleMouseDown(getNormalizedEvent(e, chart), point, key);
-                    });
+                    }, { passive: false });
                     addEvent(chart.dragHandles.group.element, 'mouseover', function () {
                         chart.dragDropData = chart.dragDropData || {};
                         chart.dragDropData.isHoveringHandle = point.id;
@@ -2164,7 +2011,7 @@
                 newPoints,
                 numNewPoints = 0,
                 newPoint;
-            if (dragDropData && dragDropData.isDragging) {
+            if (dragDropData && dragDropData.isDragging && dragDropData.point.series) {
                 point = dragDropData.point;
                 seriesDragDropOpts = point.series.options.dragDrop;
                 // No tooltip for dragging
@@ -2215,7 +2062,8 @@
             var dragDropData = chart.dragDropData;
             if (dragDropData &&
                 dragDropData.isDragging &&
-                dragDropData.draggedPastSensitivity) {
+                dragDropData.draggedPastSensitivity &&
+                dragDropData.point.series) {
                 var point = dragDropData.point,
                     newPoints = dragDropData.newPoints,
                     numNewPoints = countProps(newPoints),
@@ -2353,13 +2201,13 @@
                 });
                 addEvents(container, ['mousemove', 'touchmove'], function (e) {
                     mouseMove(getNormalizedEvent(e, chart), chart);
-                });
+                }, { passive: false });
                 addEvent(container, 'mouseleave', function (e) {
                     mouseUp(getNormalizedEvent(e, chart), chart);
                 });
                 chart.unbindDragDropMouseUp = addEvents(doc, ['mouseup', 'touchend'], function (e) {
                     mouseUp(getNormalizedEvent(e, chart), chart);
-                });
+                }, { passive: false });
                 // Add flag to avoid doing this again
                 chart.hasAddedDragDropEvents = true;
                 // Add cleanup to make sure we don't pollute document
@@ -2378,6 +2226,168 @@
                 addDragDropEvents(this);
             }
         });
+        /* *
+         *
+         *  API Options
+         *
+         * */
+        /**
+         * Current drag and drop position.
+         *
+         * @interface Highcharts.DragDropPositionObject
+         */ /**
+        * Chart x position
+        * @name Highcharts.DragDropPositionObject#chartX
+        * @type {number}
+        */ /**
+        * Chart y position
+        * @name Highcharts.DragDropPositionObject#chartY
+        * @type {number}
+        */ /**
+        * Drag and drop guide box.
+        * @name Highcharts.DragDropPositionObject#guideBox
+        * @type {Highcharts.BBoxObject|undefined}
+        */ /**
+        * Updated point data.
+        * @name Highcharts.DragDropPositionObject#points
+        * @type {Highcharts.Dictionary<Highcharts.Dictionary<number>>}
+        */ /**
+        * Delta of previous x position.
+        * @name Highcharts.DragDropPositionObject#prevdX
+        * @type {number|undefined}
+        */ /**
+        * Delta of previous y position.
+        * @name Highcharts.DragDropPositionObject#prevdY
+        * @type {number|undefined}
+        */
+        /**
+         * Function callback to execute while series points are dragged. Return false to
+         * stop the default drag action.
+         *
+         * @callback Highcharts.PointDragCallbackFunction
+         *
+         * @param {Highcharts.Point} this
+         *        Point where the event occured.
+         *
+         * @param {Highcharts.PointDragEventObject} event
+         *        Event arguments.
+         */
+        /**
+         * Contains information about a points new values.
+         *
+         * @interface Highcharts.PointDragDropObject
+         */ /**
+        * New values.
+        * @name Highcharts.PointDragDropObject#newValues
+        * @type {Highcharts.Dictionary<number>}
+        */ /**
+        * Updated point.
+        * @name Highcharts.PointDragDropObject#point
+        * @type {Highcharts.Point}
+        */
+        /**
+         * Contains common information for a drag event on series points.
+         *
+         * @interface Highcharts.PointDragEventObject
+         */ /**
+        * New point after drag if only a single one.
+        * @name Highcharts.PointDropEventObject#newPoint
+        * @type {Highcharts.PointDragDropObject|undefined}
+        */ /**
+        * New point id after drag if only a single one.
+        * @name Highcharts.PointDropEventObject#newPointId
+        * @type {string|undefined}
+        */ /**
+        * New points during drag.
+        * @name Highcharts.PointDragEventObject#newPoints
+        * @type {Highcharts.Dictionary<Highcharts.PointDragDropObject>}
+        */ /**
+        * Original data.
+        * @name Highcharts.PointDragEventObject#origin
+        * @type {Highcharts.DragDropPositionObject}
+        */ /**
+        * Prevent default drag action.
+        * @name Highcharts.PointDragEventObject#preventDefault
+        * @type {Function}
+        */ /**
+        * Target point that caused the event.
+        * @name Highcharts.PointDragEventObject#target
+        * @type {Highcharts.Point}
+        */ /**
+        * Event type.
+        * @name Highcharts.PointDragEventObject#type
+        * @type {"drag"}
+        */
+        /**
+         * Function callback to execute when a series point is dragged.
+         *
+         * @callback Highcharts.PointDragStartCallbackFunction
+         *
+         * @param {Highcharts.Point} this
+         *        Point where the event occured.
+         *
+         * @param {Highcharts.PointDragStartEventObject} event
+         *        Event arguments.
+         */
+        /**
+         * Contains common information for a drag event on series point.
+         *
+         * @interface Highcharts.PointDragStartEventObject
+         * @extends global.MouseEvent
+         */ /**
+        * Data property being dragged.
+        * @name Highcharts.PointDragStartEventObject#updateProp
+        * @type {string|undefined}
+        */
+        /**
+         * Function callback to execute when series points are dropped.
+         *
+         * @callback Highcharts.PointDropCallbackFunction
+         *
+         * @param {Highcharts.Point} this
+         *        Point where the event occured.
+         *
+         * @param {Highcharts.PointDropEventObject} event
+         *        Event arguments.
+         */
+        /**
+         * Contains common information for a drop event on series points.
+         *
+         * @interface Highcharts.PointDropEventObject
+         */ /**
+        * New point after drop if only a single one.
+        * @name Highcharts.PointDropEventObject#newPoint
+        * @type {Highcharts.PointDragDropObject|undefined}
+        */ /**
+        * New point id after drop if only a single one.
+        * @name Highcharts.PointDropEventObject#newPointId
+        * @type {string|undefined}
+        */ /**
+        * New points after drop.
+        * @name Highcharts.PointDropEventObject#newPoints
+        * @type {Highcharts.Dictionary<Highcharts.PointDragDropObject>}
+        */ /**
+        * Number of new points.
+        * @name Highcharts.PointDropEventObject#numNewPoints
+        * @type {number}
+        */ /**
+        * Original data.
+        * @name Highcharts.PointDropEventObject#origin
+        * @type {Highcharts.DragDropPositionObject}
+        */ /**
+        * Prevent default drop action.
+        * @name Highcharts.PointDropEventObject#preventDefault
+        * @type {Function}
+        */ /**
+        * Target point that caused the event.
+        * @name Highcharts.PointDropEventObject#target
+        * @type {Highcharts.Point}
+        */ /**
+        * Event type.
+        * @name Highcharts.PointDropEventObject#type
+        * @type {"drop"}
+        */
+        ''; // detaches doclets above
 
     });
     _registerModule(_modules, 'masters/modules/draggable-points.src.js', [], function () {

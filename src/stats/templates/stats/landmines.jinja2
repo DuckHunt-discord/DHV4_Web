@@ -19,31 +19,52 @@
 {% block content %}
     <h1>Landmines online wartracker</h1>
 
-    <h2>Our beloved moderators</h2>
-    <ul>
-        <li>Did send a total of {{ total_messages_sent }} messages</li>
-        <li>... made of {{ total_words_sent }} words in total</li>
-        <li>... and earning them {{ total_points_acquired }} points for talking</li>
-        <li>They recovered {{ total_points_recovered }} points by defusing active landmines</li>
-        <li>They earned {{ total_points_won }} points enforcing rules (and lost {{ total_points_exploded }} points being
-            enforced)
-        </li>
-        <li>They currently own {{ total_points_current }} points overall</li>
-        <li>They spent {{ total_points_spent }} points overall</li>
-    </ul>
+    <div class="row">
+        <div class="col-12 col-lg-6">
+            <h2>Our beloved moderators</h2>
+            <ul>
+                <li>Did send a total of {{ total_messages_sent }} messages</li>
+                <li>... made of {{ total_words_sent }} words in total</li>
+                <li>... and earning them {{ total_points_acquired }} points for talking</li>
+                <li>They recovered {{ total_points_recovered }} points by defusing active landmines</li>
+                <li>They earned {{ total_points_won }} points enforcing rules (and lost {{ total_points_exploded }}
+                    points being
+                    enforced)
+                </li>
+                <li>They currently own {{ total_points_current }} points overall</li>
+                <li>They spent {{ total_points_spent }} points overall</li>
+            </ul>
+        </div>
+        <div class="col-12 col-lg-6">
+            <h2>Currently on the battlefield</h2>
+            <ul>
+                <li>{{ total_landmines_count }} total landmines</li>
+                <li>... of which {{ tripped_landmines_count }} exploded</li>
+                <li>... of which {{ disarmed_landmines_count }} were defused</li>
+                <li>... of which {{ active_landmines_count }} are still active</li>
+            </ul>
+        </div>
+    </div>
 
-    <h2>Currently on the battlefield</h2>
-    <ul>
-        <li>{{ total_landmines_count }} total landmines</li>
-        <li>... of which {{ tripped_landmines_count }} exploded</li>
-        <li>... of which {{ disarmed_landmines_count }} were defused</li>
-        <li>... of which {{ active_landmines_count }} are still active</li>
-    </ul>
+
+
+    <h2>Most common landmines</h2>
+    <div id="chart_landmines_wordcloud" class="mb-2"></div>
 
     <h2>Over time...</h2>
     <div id="chart_landmines_active_over_time" class="mb-2"></div>
     <div id="chart_landmines_stopped_over_time" class="mb-2"></div>
     <script>
+        Highcharts.chart('chart_landmines_wordcloud', {
+            title: {
+                text: 'Most common landmine words'
+            },
+            series: [{
+                type: 'wordcloud',
+                data: {{ most_common_words|tojson }},
+                name: 'Occurrences'
+            }],
+        });
         Highcharts.setOptions({
             chart: {
                 zoomType: 'x'
@@ -81,7 +102,7 @@
                 }, {
                     name: 'Active landmines',
                     data: {{ active_landmines_over_time|tojson }}
-                },{
+                }, {
                     name: 'Destroyed landmines',
                     data: {{ destroyed_landmines_over_time|tojson }}
                 },
@@ -110,5 +131,6 @@
                 },
             ]
         });
+
     </script>
 {% endblock %}

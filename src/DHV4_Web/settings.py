@@ -279,6 +279,7 @@ PIPELINE = {
                 'public/js/highcharts.js',
                 'public/js/highcharts-more.js',
                 'public/js/modules/item-series.js',
+                'public/js/modules/wordcloud.js',
                 'public/js/themes/high-contrast-dark.js',
                 'public/js/hcinit.js',
             ),

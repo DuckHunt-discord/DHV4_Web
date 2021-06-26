@@ -41,6 +41,7 @@ def landmines(request):
     # Landmines
     landmines_qs = models.Event2021Landmines.objects.all().order_by('placed')
 
+    words = Counter()
     total_landmines_count = 0
     tripped_landmines_count = 0
     disarmed_landmines_count = 0
@@ -59,9 +60,11 @@ def landmines(request):
         # Counts
         total_landmines_count += 1
         if landmine.tripped:
+            words[landmine.word] += 1
             events.append((stopped_at_ts, LandmineEventType.TRIPPED, landmine))
             tripped_landmines_count += 1
         elif landmine.disarmed:
+            words[landmine.word] += 1
             events.append((stopped_at_ts, LandmineEventType.DISARMED, landmine))
             disarmed_landmines_count += 1
         else:
@@ -130,6 +133,7 @@ def landmines(request):
         "tripped_landmines_count": tripped_landmines_count,
         "disarmed_landmines_count": disarmed_landmines_count,
         "active_landmines_count": active_landmines_count,
+        "most_common_words": words.most_common(),
 
         "total_mines_over_time": total_mines_over_time,
         "active_landmines_over_time": active_landmines_over_time,
