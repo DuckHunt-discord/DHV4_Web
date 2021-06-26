@@ -1,5 +1,8 @@
 Highcharts.setOptions({
     credits: false,
+    time: {
+        useUTC: false
+    },
     chart: {
         backgroundColor: '#2f3136',
         borderWidth: 0,
