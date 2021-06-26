@@ -40,6 +40,14 @@ trophys = \
             "name": _("Artist"),
             "description": _("That person made some art for the bot 🎨.")
         },
+        "landmines_player": {
+            "name": _("2021 landmines event player"),
+            "description": _("That person took part in the landmines event on the DuckHunt support server.")
+        },
+        "landmines_winner": {
+            "name": _("2021 landmines event winner"),
+            "description": _("That person won the landmines event.")
+        },
     }
 
 achievements = \
