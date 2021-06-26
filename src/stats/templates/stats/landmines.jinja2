@@ -25,7 +25,9 @@
         <li>... made of {{ total_words_sent }} words in total</li>
         <li>... and earning them {{ total_points_acquired }} points for talking</li>
         <li>They recovered {{ total_points_recovered }} points by defusing active landmines</li>
-        <li>They earned {{ total_points_won }} points enforcing rules (and lost {{ total_points_exploded }} points being enforced)</li>
+        <li>They earned {{ total_points_won }} points enforcing rules (and lost {{ total_points_exploded }} points being
+            enforced)
+        </li>
         <li>They currently own {{ total_points_current }} points overall</li>
         <li>They spent {{ total_points_spent }} points overall</li>
     </ul>
@@ -68,10 +70,7 @@
                 {
                     name: 'Total landmines',
                     data: {{ total_mines_over_time|tojson }}
-                }, {
-                    name: 'Active landmines',
-                    data: {{ active_landmines_over_time|tojson }}
-                },
+                }
             ]
         });
 
@@ -86,6 +85,9 @@
             },
             series: [
                 {
+                    name: 'Active landmines',
+                    data: {{ active_landmines_over_time|tojson }}
+                }, {
                     name: 'Defused landmines',
                     data: {{ disarmed_landmines_over_time|tojson }}
                 }, {
