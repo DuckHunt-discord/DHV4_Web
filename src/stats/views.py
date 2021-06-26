@@ -175,6 +175,7 @@ def support(request):
     if events:
         last_event_time = events[-1][0]
         total_tickets_over_time.append((last_event_time, total_tickets))
+    total_tickets_over_time.sort(key=lambda r: r[0])
 
     best_closers_graph = []
 
