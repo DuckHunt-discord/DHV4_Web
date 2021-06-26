@@ -138,7 +138,7 @@ class TicketEventType(enum.IntEnum):
 
 
 def support(request):
-    tickets_qs = models.SupportTicket.objects.all().prefetch_related('closed_by')
+    tickets_qs = models.SupportTicket.objects.all().prefetch_related('closed_by').order_by('opened_at')
 
     total_tickets = 0
     total_open_tickets = 0
@@ -175,7 +175,6 @@ def support(request):
     if events:
         last_event_time = events[-1][0]
         total_tickets_over_time.append((last_event_time, total_tickets))
-    total_tickets_over_time.sort(key=lambda r: r[0])
 
     best_closers_graph = []
 
