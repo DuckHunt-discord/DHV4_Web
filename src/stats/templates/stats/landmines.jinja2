@@ -75,7 +75,10 @@
                 {
                     name: 'Total landmines',
                     data: {{ total_mines_over_time|tojson }}
-                }
+                }, {
+                    name: 'Active landmines',
+                    data: {{ active_landmines_over_time|tojson }}
+                },
             ]
         });
 
