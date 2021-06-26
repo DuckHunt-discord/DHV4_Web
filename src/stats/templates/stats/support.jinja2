@@ -1,0 +1,124 @@
+{% extends "base.jinja2" %}
+
+{% block metadesc %}
+    <meta name="description"
+          content="{{ _('DuckHunt V4 - Statistics for DM support tickets') }}">
+{% endblock %}
+
+{% block title %}
+    {% trans %}
+        DuckHunt V4 - Statistics for DM support tickets
+    {% endtrans %}
+{% endblock %}
+
+{% block head %}
+    {% javascript 'highcharts' %}
+    <script src="{{ static('public/js/sorttable.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+    <h1>DuckHunt DM support</h1>
+    Of all the {{ total_tickets }} tickets ever opened, {{ total_open_tickets }} are still open.
+
+
+    <div id="chart_tickets_opened_over_time" class="mb-2"></div>
+    <div id="chart_best_closers" class="mb-2"></div>
+    <script>
+        Highcharts.setOptions({
+            plotOptions: {
+                line: {
+                    step: 'left',
+                    marker: {
+                        enabled: false
+                    }
+                }
+            }
+        });
+
+        Highcharts.chart('chart_tickets_opened_over_time', {
+            subtitle: {
+                text: document.ontouchstart === undefined ?
+                    'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
+            },
+            chart: {
+                zoomType: 'x'
+            },
+            title: {
+                text: 'Tickets opened'
+            },
+            xAxis: {
+                type: 'datetime'
+            },
+            yAxis: {
+                title: {
+                    text: 'Tickets count'
+                }
+            },
+            series: [
+                {
+                    name: 'Total tickets',
+                    data: {{ total_tickets_over_time|tojson }}
+                }, {
+                    name: 'Active tickets',
+                    data: {{ opened_tickets_over_time|tojson }}
+                },
+            ]
+        });
+
+        Highcharts.chart('chart_tickets_opened_over_time', {
+            title: {
+                text: 'Tickets opened'
+            },
+            yAxis: {
+                title: {
+                    text: 'Tickets count'
+                }
+            },
+            series: [
+                {
+                    name: 'Total tickets',
+                    data: {{ total_tickets_over_time|tojson }}
+                }, {
+                    name: 'Active tickets',
+                    data: {{ opened_tickets_over_time|tojson }}
+                },
+            ]
+        });
+
+        Highcharts.chart('chart_best_closers', {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
+            },
+            title: {
+                text: 'Best ticket closers'
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            accessibility: {
+                point: {
+                    valueSuffix: '%'
+                }
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                    }
+                }
+            },
+            series: [{
+                name: 'Closers',
+                colorByPoint: true,
+                data: {{ best_closers|tojson }}
+            }]
+        });
+
+    </script>
+{% endblock %}
