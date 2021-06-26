@@ -22,69 +22,9 @@
 
 
     <div id="chart_tickets_opened_over_time" class="mb-2"></div>
+    <div id="chart_tickets_active_over_time" class="mb-2"></div>
     <div id="chart_best_closers" class="mb-2"></div>
     <script>
-        Highcharts.setOptions({
-            plotOptions: {
-                line: {
-                    step: 'left',
-                    marker: {
-                        enabled: false
-                    }
-                }
-            }
-        });
-
-        Highcharts.chart('chart_tickets_opened_over_time', {
-            subtitle: {
-                text: document.ontouchstart === undefined ?
-                    'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
-            },
-            chart: {
-                zoomType: 'xy'
-            },
-            title: {
-                text: 'Tickets opened'
-            },
-            xAxis: {
-                type: 'datetime'
-            },
-            yAxis: {
-                title: {
-                    text: 'Tickets count'
-                }
-            },
-            series: [
-                {
-                    name: 'Total tickets',
-                    data: {{ total_tickets_over_time|tojson }}
-                }, {
-                    name: 'Active tickets',
-                    data: {{ opened_tickets_over_time|tojson }}
-                },
-            ]
-        });
-
-        Highcharts.chart('chart_tickets_opened_over_time', {
-            title: {
-                text: 'Tickets opened'
-            },
-            yAxis: {
-                title: {
-                    text: 'Tickets count'
-                }
-            },
-            series: [
-                {
-                    name: 'Total tickets',
-                    data: {{ total_tickets_over_time|tojson }}
-                }, {
-                    name: 'Active tickets',
-                    data: {{ opened_tickets_over_time|tojson }}
-                },
-            ]
-        });
-
         Highcharts.chart('chart_best_closers', {
             chart: {
                 plotBackgroundColor: null,
@@ -120,5 +60,59 @@
             }]
         });
 
+        Highcharts.setOptions({
+            chart: {
+                zoomType: 'xy'
+            },
+            subtitle: {
+                text: document.ontouchstart === undefined ?
+                    'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
+            },
+            xAxis: {
+                type: 'datetime'
+            },
+            plotOptions: {
+                line: {
+                    step: 'left',
+                    marker: {
+                        enabled: false
+                    }
+                }
+            }
+        });
+
+        Highcharts.chart('chart_tickets_opened_over_time', {
+            title: {
+                text: 'Total tickets created'
+            },
+            yAxis: {
+                title: {
+                    text: 'Tickets count'
+                }
+            },
+            series: [
+                {
+                    name: 'Total tickets',
+                    data: {{ total_tickets_over_time|tojson }}
+                },
+            ]
+        });
+
+        Highcharts.chart('chart_tickets_active_over_time', {
+            title: {
+                text: 'Active tickets over time'
+            },
+            yAxis: {
+                title: {
+                    text: 'Tickets count'
+                }
+            },
+            series: [
+                {
+                    name: 'Active tickets',
+                    data: {{ opened_tickets_over_time|tojson }}
+                },
+            ]
+        });
     </script>
 {% endblock %}
