@@ -77,6 +77,12 @@ def landmines(request):
 
     tripped_landmines_over_time = []
     tripped_landmines_stack = 0
+    if events:
+        # Fix to have the graph start at the same place.
+        first_event_time = events[0][0]
+        disarmed_landmines_over_time.append((first_event_time, 0))
+        tripped_landmines_over_time.append((first_event_time, 0))
+
     for event in events:
         event_time, event_type, event_landmine = event
         if event_type == EventType.PLACED:
@@ -93,13 +99,8 @@ def landmines(request):
         active_landmines_over_time.append((event_time, active_landmines_stack))
 
     if events:
-        # Fix to have the graph start/end at the same place.
-        first_event_time = events[0][0]
-        disarmed_landmines_over_time.append((first_event_time, 0))
-        tripped_landmines_over_time.append((first_event_time, 0))
-
+        # Fix to have the graph end at the same place.
         last_event_time = events[-1][0]
-
         disarmed_landmines_over_time.append((last_event_time, disarmed_landmines_stack))
         tripped_landmines_over_time.append((last_event_time, tripped_landmines_stack))
 
