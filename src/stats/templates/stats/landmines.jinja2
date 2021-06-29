@@ -55,6 +55,9 @@
     <h2>Most common landmines</h2>
     <div id="chart_landmines_wordcloud" class="mb-2"></div>
 
+    <h2>All the players...</h2>
+    <div id="chart_players_compared" class="mb-2"></div>
+
     <h2>Over time...</h2>
     <div id="chart_landmines_active_over_time" class="mb-2"></div>
     <div id="chart_landmines_stopped_over_time" class="mb-2"></div>
@@ -70,6 +73,52 @@
                 name: 'Occurrences'
             }],
         });
+
+        Highcharts.chart('chart_players_compared', {
+            chart: {
+                type: "bubble",
+                zoomType: 'xy'
+            },
+            legend: {
+                enabled: false
+            },
+
+            title: {
+                text: 'Compare players'
+            },
+
+            subtitle: {
+                text: 'Mines placed vs mines exploded vs mines stepped on'
+            },
+
+            xAxis: {
+                title: {
+                    text: 'Mines placed'
+                }
+            },
+
+            yAxis: {
+                title: {
+                    text: 'Mines exploded'
+                }
+            },
+
+            tooltip: {
+                useHTML: true,
+                headerFormat: '<table>',
+                pointFormat: '<tr><th colspan="2"><h5>{point.player}</h5></th></tr>' +
+                    '<tr><th>Mines placed:</th><td>{point.x}</td></tr>' +
+                    '<tr><th>Mines exploded:</th><td>{point.y}</td></tr>' +
+                    '<tr><th>Mines tripped:</th><td>{point.z}</td></tr>',
+                footerFormat: '</table>',
+                followPointer: true
+            },
+
+            series: [{
+                data: {{ players_compare_graph|tojson }},
+            }],
+        });
+
         Highcharts.setOptions({
             chart: {
                 zoomType: 'x'

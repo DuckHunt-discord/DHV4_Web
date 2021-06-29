@@ -1,6 +1,6 @@
 import datetime
 import enum
-from collections import Counter
+from collections import Counter, defaultdict
 
 from django.shortcuts import render
 from botdata import models
@@ -28,6 +28,8 @@ def landmines(request):
     total_points_exploded = 0
     total_points_spent = 0
 
+    players_compare = defaultdict(lambda: defaultdict(int))
+
     for player in players_qs:
         total_messages_sent += player.messages_sent
         total_words_sent += player.words_sent
@@ -39,7 +41,7 @@ def landmines(request):
         total_points_spent += player.points_spent
 
     # Landmines
-    landmines_qs = models.Event2021Landmines.objects.all().order_by('placed').prefetch_related('placed_by__user')
+    landmines_qs = models.Event2021Landmines.objects.all().order_by('placed').prefetch_related('placed_by__user', 'stopped_by__user')
 
     words = Counter()
     total_landmines_count = 0
@@ -49,6 +51,8 @@ def landmines(request):
     total_mines_over_time = []
     events = []
     for landmine in landmines_qs:
+        placed_by = landmine.placed_by.user
+        players_compare[placed_by]["placed"] += 1
         placed_at_ts = landmine.placed.timestamp() * 1000
         if landmine.stopped_at:
             stopped_at_ts = landmine.stopped_at.timestamp() * 1000
@@ -60,6 +64,8 @@ def landmines(request):
         # Counts
         total_landmines_count += 1
         if landmine.tripped:
+            players_compare[placed_by]["tripped"] += 1
+            players_compare[landmine.stopped_by.user]["stepped"] += 1
             words[landmine.word] += 1
             events.append((stopped_at_ts, LandmineEventType.TRIPPED, landmine))
             tripped_landmines_count += 1
@@ -72,6 +78,15 @@ def landmines(request):
 
         # Timeseries
         total_mines_over_time.append((placed_at_ts, total_landmines_count))
+
+    players_compare_graph = []
+    for player_compared, player_data in players_compare.items():
+        players_compare_graph.append({
+            "player": str(player_compared),
+            "x": player_data["placed"],
+            "y": player_data["stepped"],
+            "z": player_data["tripped"],
+        })
 
     events.sort(key=lambda r: r[0])
 
@@ -143,6 +158,8 @@ def landmines(request):
         destroyed_landmines_over_time.append((last_event_time, destroyed_landmines_stack))
         total_mines_over_time.append((last_event_time, total_landmines_count))
 
+
+
     ctx = {
         "total_messages_sent": total_messages_sent,
         "total_words_sent": total_words_sent,
@@ -158,6 +175,8 @@ def landmines(request):
         "disarmed_landmines_count": disarmed_landmines_count,
         "active_landmines_count": active_landmines_count,
         "most_common_words": words.most_common(),
+
+        "players_compare_graph": players_compare_graph,
 
         "total_mines_over_time": total_mines_over_time,
         "active_landmines_over_time": active_landmines_over_time,
