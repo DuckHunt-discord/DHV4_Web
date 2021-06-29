@@ -59,6 +59,7 @@
     <div id="chart_players_compared" class="mb-2"></div>
 
     <h2>Over time...</h2>
+    <div id="chart_landmines_value_over_time" class="mb-2"></div>
     <div id="chart_landmines_active_over_time" class="mb-2"></div>
     <div id="chart_landmines_stopped_over_time" class="mb-2"></div>
     <div id="chart_landmines_by_user_over_time" class="mb-2"></div>
@@ -139,6 +140,51 @@
                 }
             }
         });
+
+        Highcharts.chart('chart_landmines_value_over_time', {
+            chart: {
+                type: "bubble",
+                zoomType: 'xy'
+            },
+
+            title: {
+                text: 'Landmines values over time'
+            },
+
+            tooltip: {
+                useHTML: true,
+                headerFormat: '<table>',
+                pointFormat: '<tr><th colspan="2"><h5>{point.word}</h5></th></tr>' +
+                    '<tr><th>Placed by:</th><td>{point.player}</td></tr>' +
+                    '<tr><th>At:</th><td>{point.x}</td></tr>' +
+                    '<tr><th>Value:</th><td>{point.y} points</td></tr>',
+                footerFormat: '</table>',
+                followPointer: true
+            },
+
+            yAxis: {
+                reversed: true,
+                title: {
+                    text: 'Landmine value'
+                }
+            },
+            series: [
+                {
+                    name: 'Active landmines',
+                    data: {{ all_active_mines_over_time|tojson }},
+                    color: 'red',
+                }, {
+                    name: 'Defused landmines',
+                    data: {{ all_disarmed_mines_over_time|tojson }},
+                    color: 'green',
+                }, {
+                    name: 'Tripped landmines',
+                    data: {{ all_tripped_mines_over_time|tojson }},
+                    color: 'orange',
+                },
+            ]
+        });
+
 
         Highcharts.chart('chart_landmines_active_over_time', {
             title: {
