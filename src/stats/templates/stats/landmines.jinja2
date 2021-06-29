@@ -143,7 +143,7 @@
 
         Highcharts.chart('chart_landmines_value_over_time', {
             chart: {
-                type: "bubble",
+                type: "scatter",
                 zoomType: 'xy'
             },
 
@@ -156,13 +156,14 @@
                 headerFormat: '<table>',
                 pointFormat: '<tr><th colspan="2"><h5>{point.word}</h5></th></tr>' +
                     '<tr><th>Placed by:</th><td>{point.player}</td></tr>' +
-                    '<tr><th>At:</th><td>{point.x}</td></tr>' +
+                    '<tr><th>At:</th><td>{point.x:%Y-%m-%d %H:%M}</td></tr>' +
                     '<tr><th>Value:</th><td>{point.y} points</td></tr>',
                 footerFormat: '</table>',
                 followPointer: true
             },
 
             yAxis: {
+                min: 0,
                 reversed: true,
                 title: {
                     text: 'Landmine value'
