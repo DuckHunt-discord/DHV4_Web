@@ -1,0 +1,14 @@
+{
+  "extends": [
+    "config:base",
+    ":assignee(paris-ci)",
+    ":automergeBranch",
+    ":automergeDigest",
+    ":automergeMinor",
+    ":disableRateLimiting",
+    ":label(🤖 Automatic)"
+  ],
+  "git-submodules": {
+    "enabled": true
+  }
+}
