@@ -69,7 +69,7 @@
                     {% endfor %}
                 </h6>
             {% endif %}
-            <p>{{ command['help']|nl2br }}</p>
+            <p>{% if command['help'] %}{{ command['help']|nl2br }}{% else %}No help for this command, sorry.{% endif %}</p>
             {{ _("Invoke with:") }}
             <pre>{{ prefix }}{{ command['invoke_with'] }}</pre>
 
