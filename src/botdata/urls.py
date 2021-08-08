@@ -7,6 +7,7 @@ urlpatterns = [
     path('guilds/lang/<str:language>', views.guilds, name="guilds"),
     path('guilds/', views.guild, name="guild_nopk"),  # for faster perf in guilds_list
     path('guilds/<int:pk>', views.guild, name="guild"),
+    path('guilds/<int:pk>/landmines/', views.guild_landmines, name="guild_landmines"),
     path('channels/<int:pk>', views.channel, name="channel"),
     path('channels/', views.channel, name="channel_nopk"),  # for faster perf in guilds_list
     path('channels/<int:pk>/settings', views.channel_settings, name="channel_settings"),

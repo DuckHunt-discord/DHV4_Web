@@ -71,7 +71,7 @@ class Event2021UserDataAdmin(DynamicRawIDMixin, admin.ModelAdmin):
     dynamic_raw_id_fields = ["user"]
 
 
-admin.site.register(models.Event2021UserData, Event2021UserDataAdmin)
+admin.site.register(models.LandminesUserData, Event2021UserDataAdmin)
 
 
 class Event2021LandminesAdmin(DynamicRawIDMixin, admin.ModelAdmin):
@@ -81,7 +81,7 @@ class Event2021LandminesAdmin(DynamicRawIDMixin, admin.ModelAdmin):
     list_select_related = ["placed_by", "stopped_by"]
 
 
-admin.site.register(models.Event2021Landmines, Event2021LandminesAdmin)
+admin.site.register(models.LandminesPlaced, Event2021LandminesAdmin)
 
 
 class BotListAdmin(admin.ModelAdmin):

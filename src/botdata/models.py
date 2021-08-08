@@ -105,7 +105,11 @@ class DiscordChannel(models.Model):
 
     use_webhooks = models.BooleanField(default=True)
     use_emojis = models.BooleanField(default=True)
+
     enabled = models.BooleanField(default=False, db_index=True)
+
+    landmines_commands_enabled = models.BooleanField(default=False)  # Can members run landmine commands here
+    landmines_enabled = models.BooleanField(default=False)  # Do messages sent here count in the game ?
 
     allow_global_items = models.BooleanField(default=True)
     anti_trigger_wording = models.BooleanField(default=False)
@@ -211,8 +215,14 @@ class DiscordUser(models.Model):
         db_table = 'users'
 
 
-class Event2021UserData(models.Model):
-    user = models.OneToOneField(DiscordUser, related_name='event2021data', on_delete=models.CASCADE, primary_key=True)
+class LandminesUserData(models.Model):
+    # Ideally, member should be a OneToOneField and the primary key for the table
+    # Unfortunately, https://github.com/tortoise/tortoise-orm/issues/822 wasn't fixed
+    # So we have to find a workaround.
+    # For that, we are just going to remove the primary_key attribute from member, and add another
+    # column for the ID, but keep an index on member.
+    # It might be a little slower, but at least it will work...
+    member = models.OneToOneField('DiscordMember', related_name='landmines_data', on_delete=models.CASCADE, db_index=True)
 
     # General statistics
     first_played = models.DateTimeField(auto_now_add=True)
@@ -232,14 +242,14 @@ class Event2021UserData(models.Model):
     defuse_kits_bought = models.IntegerField(default=0)
 
     def __str__(self):
-        return f"{self.user} 2021 event data"
+        return f"{self.member} landmines data"
 
     class Meta:
-        db_table = 'event2021userdata'
+        db_table = 'landmines_userdata'
 
 
-class Event2021Landmines(models.Model):
-    placed_by = models.ForeignKey(Event2021UserData, related_name='landmines_bought', on_delete=models.CASCADE)
+class LandminesPlaced(models.Model):
+    placed_by = models.ForeignKey(LandminesUserData, related_name='landmines_bought', on_delete=models.CASCADE)
     placed = models.DateTimeField(auto_now_add=True)
     word = models.CharField(max_length=50)
     message = models.CharField(blank=True, default="", max_length=2000)
@@ -250,15 +260,15 @@ class Event2021Landmines(models.Model):
     tripped = models.BooleanField(default=False)
     disarmed = models.BooleanField(default=False)
 
-    stopped_by = models.ForeignKey(Event2021UserData, null=True, blank=True, on_delete=models.SET_NULL,
+    stopped_by = models.ForeignKey(LandminesUserData, null=True, blank=True, on_delete=models.SET_NULL,
                                    related_name='landmines_stopped')
     stopped_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        return f"{self.placed_by.user} 2021 event landmine on {self.word} for {self.value}"
+        return f"{self.placed_by.member} landmine on {self.word} for {self.value}"
 
     class Meta:
-        db_table = 'event2021landmines'
+        db_table = 'landmines_placed'
 
 
 class UserInventory(models.Model):

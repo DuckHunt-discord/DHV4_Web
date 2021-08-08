@@ -132,28 +132,16 @@ WSGI_APPLICATION = 'DHV4_Web.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-if DEBUG:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': os.environ.get("DB_NAME", "mybot"),
-            'USER': os.environ.get("DB_USER", "mybot"),
-            'PASSWORD': os.environ.get("DB_PASSWORD", "mybot"),
-            'HOST': os.environ.get("DB_HOST", "localhost"),
-            'PORT': os.environ.get("DB_PORT", "5432"),
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get("DB_NAME", "duckhunt"),
+        'USER': os.environ.get("DB_USER", "duckhunt"),
+        'PASSWORD': os.environ.get("DB_PASSWORD", "duckhunt"),
+        'HOST': os.environ.get("DB_HOST", "localhost"),
+        'PORT': os.environ.get("DB_PORT", "5432"),
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': os.environ.get("DB_NAME", "mybot"),
-            'USER': os.environ.get("DB_USER", "mybot"),
-            'PASSWORD': os.environ.get("DB_PASSWORD", ""),
-            'HOST': os.environ.get("DB_HOST", "localhost"),
-            'PORT': os.environ.get("DB_PORT", "5432"),
-        }
-    }
+}
 
 CONN_MAX_AGE = None
 
