@@ -188,7 +188,7 @@ def guild(request, pk: int):
     if not channels.count():
         return render(request, "botdata/no_guild.jinja2", {"guild": current_guild})
 
-    return render(request, "botdata/guild.jinja2", {"guild": current_guild, "channels": channels})
+    return render(request, "botdata/guild.jinja2", {"guild": current_guild, "channels": channels, "landmines_players": LandminesUserData.objects.all().filter(member__guild=current_guild).count()})
 
 
 class LandmineEventType(enum.IntEnum):
