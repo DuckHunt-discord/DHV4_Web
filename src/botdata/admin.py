@@ -84,6 +84,16 @@ class Event2021LandminesAdmin(DynamicRawIDMixin, admin.ModelAdmin):
 admin.site.register(models.LandminesPlaced, Event2021LandminesAdmin)
 
 
+class Event2021LandminesAdmin(DynamicRawIDMixin, admin.ModelAdmin):
+    dynamic_raw_id_fields = ["protected_by", ]
+
+    list_display = ["word", "protected_by", "placed"]
+    list_select_related = ["protected_by"]
+
+
+admin.site.register(models.LandminesProtects, Event2021LandminesAdmin)
+
+
 class BotListAdmin(admin.ModelAdmin):
 
     list_display = ["name", "can_vote", "webhook_handler", "post_stats_method", "bot_verified", "bot_certified"]

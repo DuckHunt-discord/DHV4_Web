@@ -271,6 +271,19 @@ class LandminesPlaced(models.Model):
         db_table = 'landmines_placed'
 
 
+class LandminesProtects(models.Model):
+    protected_by = models.ForeignKey(LandminesUserData, related_name='words_protected', on_delete=models.CASCADE)
+    placed = models.DateTimeField(auto_now_add=True)
+    word = models.CharField(max_length=50)
+    message = models.CharField(blank=True, default="", max_length=2000)
+
+    def __str__(self):
+        return f"{self.protected_by.member} protected word on {self.word}"
+
+    class Meta:
+        db_table = 'landmines_protected'
+
+
 class UserInventory(models.Model):
     user = models.OneToOneField(DiscordUser, related_name='inventory', on_delete=models.CASCADE, primary_key=True)
 
