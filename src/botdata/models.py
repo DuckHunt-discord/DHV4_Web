@@ -240,6 +240,7 @@ class LandminesUserData(models.Model):
 
     ## Defuse kits
     defuse_kits_bought = models.IntegerField(default=0)
+    shields_bought = models.IntegerField(default=0)
 
     def __str__(self):
         return f"{self.member} landmines data"
