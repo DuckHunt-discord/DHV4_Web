@@ -603,3 +603,25 @@ class SupportTicket(models.Model):
     class Meta:
         db_table = 'supportticket'
         ordering = ["-opened_at"]
+
+
+class BotState(models.Model):
+    datetime = models.DateTimeField(auto_now_add=True)
+
+    measure_interval = models.IntegerField()  # The event stats are (usually) based on a 10 minutes interval
+    ws_send = models.IntegerField()
+    ws_recv = models.IntegerField()
+    messages = models.IntegerField()
+    commands = models.IntegerField()
+    command_errors = models.IntegerField()
+    command_completions = models.IntegerField()
+
+    guilds = models.IntegerField()
+    users = models.IntegerField()
+    shards = models.IntegerField()
+    ready = models.BooleanField()
+    ws_ratelimited = models.BooleanField()
+    ws_latency = models.FloatField()  # miliseconds
+
+    class Meta:
+        db_table = 'botstate'
