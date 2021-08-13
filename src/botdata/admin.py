@@ -155,7 +155,7 @@ admin.site.register(models.Vote, VoteAdmin)
 
 
 class SupportTicketAdmin(DynamicRawIDMixin, admin.ModelAdmin):
-    list_display = ["user", "opened_at", "opened_for", "closed"]
+    list_display = ["user", "opened_at", "opened_for", "closed", "close_reason"]
     readonly_fields = ('opened_at',)
     ordering = ["-opened_at"]
 
