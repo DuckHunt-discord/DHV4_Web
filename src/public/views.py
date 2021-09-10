@@ -61,7 +61,15 @@ def index(request):
 
     parsed_stats = [
         {
-            "name": "Guilds",
+            "name": "Members",
+            "numerical_value": api_stats['members_count'],
+            "value": intcomma(api_stats['members_count']),
+            "color": "success",
+            "icon": "fas fa-users",
+            "odometer": True,
+        },
+        {
+            "name": "Servers",
             "numerical_value": api_stats['guilds_count'],
             "value": intcomma(api_stats['guilds_count']),
             "color": "success",
@@ -77,19 +85,11 @@ def index(request):
             "odometer": True,
         },
         {
-            "name": "Players",
+            "name": "Active players",
             "numerical_value": api_stats['players_count'],
             "value": intcomma(api_stats['players_count']),
             "color": "success",
             "icon": "fas fa-hat-cowboy-side",
-            "odometer": True,
-        },
-        {
-            "name": "Members",
-            "numerical_value": api_stats['members_count'],
-            "value": intcomma(api_stats['members_count']),
-            "color": "success",
-            "icon": "fas fa-users",
             "odometer": True,
         },
         {
