@@ -42,7 +42,10 @@ class Tag(models.Model):
 
     @property
     def description(self):
-        return mark_safe(markdown.markdown(self.content.splitlines()[0]))
+        try:
+            return mark_safe(markdown.markdown(self.content.splitlines()[0]))
+        except KeyError:
+            return ''
 
     def __str__(self):
         return f"{self.name}"
