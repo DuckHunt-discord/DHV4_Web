@@ -221,7 +221,10 @@ def bot_commands(request, command: str = None):
                     raise Http404("No such command")
 
                 parent = commands
-                commands = get_command(commands['subcommands'], sc)
+                try:
+                    commands = get_command(commands['subcommands'], sc)
+                except Keyerror:
+                    raise Http404("No such subcommand")
 
         if commands is None:
             raise Http404("No such subcommand")
