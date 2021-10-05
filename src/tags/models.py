@@ -44,7 +44,7 @@ class Tag(models.Model):
     def description(self):
         try:
             return mark_safe(markdown.markdown(self.content.splitlines()[0]))
-        except KeyError:
+        except IndexError:
             return ''
 
     def __str__(self):
