@@ -1,6 +1,6 @@
 django==3.2.9
 django-enumfield
-django_extensions==3.1.4
+django_extensions==3.1.5
 django-debug-toolbar==3.2.2
 django-jinja
 django-pipeline==2.0.7
