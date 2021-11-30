@@ -13,6 +13,7 @@ import typing
 from enum import unique
 
 import pytz
+from django.templatetags.static import static
 from django.utils import timezone
 from django_enumfield.enum import EnumField, Enum
 
@@ -20,6 +21,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 # https://www.colorschemer.com/color-picker/
+from botdata.achievements import trophys, achievements
 from botdata.coats import Coats
 
 from django.utils.translation import gettext_lazy as _
@@ -207,6 +209,19 @@ class DiscordUser(models.Model):
     access_level_override = EnumField(AccessLevel, default=AccessLevel.DEFAULT)
 
     boss_kills = models.IntegerField(default=0)
+
+    @property
+    def trophies_data(self):
+        trophies_parsed = []
+        for trophy_id, have in self.trophys.items():
+            trophy = trophys[trophy_id]
+            if have:
+                trophies_parsed.append({"id": trophy_id,
+                                        "image_url": static("botdata/trophies/{}.png".format(trophy_id)),
+                                        "name": trophy["name"],
+                                        "description": trophy["description"]})
+
+        return trophies_parsed
 
     def __str__(self):
         return f"{self.name}#{self.discriminator}"
@@ -396,6 +411,17 @@ class Player(models.Model):
             if unlocked:
                 l.append(achievement)
         return l
+
+    @property
+    def achievements_data(self):
+        achievements_parsed = []
+        for achievement_id in self.unlocked_achievements:
+            achievement = achievements[achievement_id]
+            achievements_parsed.append({"id": achievement_id,
+                                        "image_url": static("botdata/achievements/{}.png".format(achievement_id)),
+                                        "name": achievement["name"],
+                                        "description": achievement["description"]})
+        return achievements_parsed
 
     def sorted_killed(self):
         return dict(sorted(self.killed.items(), key=lambda e: -e[1]))

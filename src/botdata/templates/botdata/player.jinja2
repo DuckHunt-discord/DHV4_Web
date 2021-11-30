@@ -76,23 +76,39 @@
 
         {% if current_user.trophys|length %}
             <div class="h2">🏆️ {{ _("Trophies") }}</div>
-            <ul>
-                {% for trophy, unlocked in current_user.trophys.items() %}
-                    {% if unlocked %}
-                        <li itemprop="award">{{ _(trophys[trophy]['name']) }}: {{ _(trophys[trophy]['description']) }}</li>
-                    {% endif %}
+            <div class="row">
+                {% for trophy_data in current_user.trophies_data %}
+                    <div class="col-4 col-md-2 col-xxl"
+                         itemprop="award"
+                         data-trophy-id="{{ trophy_data['id'] }}"
+                         data-bs-toggle="tooltip"
+                         data-bs-html="true"
+                         title="<h5>{{ _(trophy_data['name']) }}</h5>{{ _(trophy_data['description']) }}">
+                        <img class="img-fluid"
+                             src="{{ trophy_data['image_url'] }}"
+                             alt="{{ _(trophy_data['name']) }}">
+                    </div>
                 {% endfor %}
-            </ul>
+            </div>
         {% endif %}
 
         {% if player.unlocked_achievements|length %}
             <div class="h2">✨ {{ _("Achievements") }}</div>
 
-            <ul>
-                {% for achievement in player.unlocked_achievements %}
-                    <li itemprop="award">{{ _(achievements[achievement]['name']) }}: {{ _(achievements[achievement]['description']) }}</li>
+            <div class="row">
+                {% for achievement_data in player.achievements_data %}
+                    <div class="col-4 col-md-2"
+                         itemprop="award"
+                         data-achievement-id="{{ achievement_data['id'] }}"
+                         data-bs-toggle="tooltip"
+                         data-bs-html="true"
+                         title="<h5>{{ _(achievement_data['name']) }}</h5>{{ _(achievement_data['description']) }}">
+                        <img class="img-fluid"
+                             src="{{ achievement_data['image_url'] }}"
+                             alt="{{ _(achievement_data['name']) }}">
+                    </div>
                 {% endfor %}
-            </ul>
+            </div>
         {% endif %}
 
         {% if player.prestige >= 1 %}
