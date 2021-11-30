@@ -78,7 +78,7 @@
             <div class="h2">🏆️ {{ _("Trophies") }}</div>
             <div class="row">
                 {% for trophy_data in current_user.trophies_data %}
-                    <div class="col-4 col-md-2 col-xxl"
+                    <div class="col-4 col-md-2"
                          itemprop="award"
                          data-trophy-id="{{ trophy_data['id'] }}"
                          data-bs-toggle="tooltip"
