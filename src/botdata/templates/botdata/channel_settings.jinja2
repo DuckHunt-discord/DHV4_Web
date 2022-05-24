@@ -1,5 +1,14 @@
 {% extends "base.jinja2" %}
 
+{% block ogp %}
+    <meta property="og:title" content="DuckHunt"/>
+    <meta property="og:type" content="guild settings"/>
+    <meta property="og:url" content="{{ canonical_domain_uri }}{{ request.get_full_path() }}"/>
+    <meta property="og:site_name" content="DuckHunt Discord V4"/>
+    <meta property="og:description"
+          content="DuckHunt settings for #{{ channel_name }}."/>
+{% endblock %}
+
 {% block metadesc %}
     <meta name="description"
           content="{% trans channel_name=channel.name %}DuckHunt settings for #{{ channel_name }}.{% endtrans %}">

@@ -1,5 +1,14 @@
 {% extends "base.jinja2" %}
 
+{% block ogp %}
+    <meta property="og:title" content="DuckHunt"/>
+    <meta property="og:type" content="guilds"/>
+    <meta property="og:url" content="{{ canonical_domain_uri }}{{ request.get_full_path() }}"/>
+    <meta property="og:site_name" content="DuckHunt Discord V4"/>
+    <meta property="og:description"
+          content="All the DuckHunt servers{% if language %} in {{ language }}{% endif %}."/>
+{% endblock %}
+
 {% block metadesc %}
     <meta name="description" content="All the DuckHunt servers{% if language %} in {{ language }}{% endif %}.">
 {% endblock %}
