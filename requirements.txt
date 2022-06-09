@@ -6,7 +6,7 @@ django-jinja
 django-pipeline==2.0.8
 psycopg2
 gunicorn
-requests==2.27.1
+requests==2.28.0
 babel==2.10.1
 pytz==2021.3
 markdown==3.3.7
