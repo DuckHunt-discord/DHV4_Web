@@ -7,7 +7,7 @@ django-pipeline==2.0.8
 psycopg2
 gunicorn
 requests==2.28.0
-babel==2.10.1
+babel==2.10.2
 pytz==2021.3
 markdown==3.3.7
 pylibmc==1.6.1
