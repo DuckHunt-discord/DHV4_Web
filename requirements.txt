@@ -13,6 +13,6 @@ markdown==3.4.1
 pylibmc==1.6.1
 jsmin==3.0.1
 css-html-js-minify==2.5.5
-django-dynamic-raw-id==2.8
+django-dynamic-raw-id==3.0
 Pillow
 django-imagekit
