@@ -197,7 +197,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR.parent.parent / "static"
 
 MEDIA_URL = "/images/"
-MEDIA_ROOT = BASE_DIR.parent / "images"
+MEDIA_ROOT = BASE_DIR.parent.parent / "images"
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
