@@ -21,7 +21,13 @@
 {% endblock %}
 
 {% block head %}
-    {% javascript 'highcharts' %}
+    <script src="{{ static('public/js/highstock.js') }}"></script>
+    <script src="{{ static('public/js/highcharts-more.js') }}"></script>
+    <script src="{{ static('public/js/modules/item-series.js') }}"></script>
+    <script src="{{ static('public/js/modules/wordcloud.js') }}"></script>
+    <script src="{{ static('public/js/themes/high-contrast-dark.js') }}"></script>
+    <script src="{{ static('public/js/hcinit.js') }}"></script>
+
     <script src="{{ static('public/js/sorttable.js') }}"></script>
 {% endblock %}
 

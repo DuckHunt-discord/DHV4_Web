@@ -59,7 +59,6 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'pipeline.middleware.MinifyHTMLMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
@@ -84,7 +83,6 @@ INSTALLED_APPS.extend(['django.contrib.sites',
                        'stats.apps.StatsConfig',
                        'django_jinja',
                        'django_extensions',
-                       'pipeline',
                        'dynamic_raw_id',
                        'imagekit',
                        ])
@@ -107,9 +105,7 @@ TEMPLATES = [
             "constants": {
                 "canonical_domain_uri": "https://" + os.environ.get("DOMAIN", "duckhunt.me"),
             },
-            "extensions": DEFAULT_EXTENSIONS + [
-                'pipeline.jinja2.PipelineExtension'
-            ]
+            "extensions": DEFAULT_EXTENSIONS
         },
     },
     {
@@ -201,14 +197,11 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR.parent.parent / "static"
 
 MEDIA_URL = "/images/"
-MEDIA_ROOT = BASE_DIR.parent.parent / "images"
-
-STATICFILES_STORAGE = 'pipeline.storage.PipelineManifestStorage'
+MEDIA_ROOT = BASE_DIR.parent / "images"
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'pipeline.finders.PipelineFinder',
 )
 
 DH_API_KEY = os.environ.get("DH_API_KEY", "")
@@ -259,38 +252,6 @@ if not DEBUG:
             },
         },
     }
-
-PIPELINE = {
-    'JAVASCRIPT': {
-        'highcharts': {
-            'source_filenames': (
-                'public/js/highstock.js',
-                'public/js/highcharts-more.js',
-                'public/js/modules/item-series.js',
-                'public/js/modules/wordcloud.js',
-                'public/js/themes/high-contrast-dark.js',
-                'public/js/hcinit.js',
-            ),
-            'output_filename': 'js/highcharts_pip.js',
-        },
-
-    },
-    'STYLESHEETS': {
-        'base': {
-            'source_filenames': (
-                'public/css/all.min.css',
-                'public/css/odometer.css',
-                'public/css/base.css',
-            ),
-            'output_filename': 'css/allthecss.css',
-            'extra_context': {
-                'media': 'screen,projection',
-            },
-        },
-    },
-    'CSS_COMPRESSOR': 'pipeline.compressors.csshtmljsminify.CssHtmlJsMinifyCompressor',
-    'JS_COMPRESSOR': 'pipeline.compressors.jsmin.JSMinCompressor',
-}
 
 IMAGEKIT_DEFAULT_CACHEFILE_STRATEGY = 'imagekit.cachefiles.strategies.Optimistic'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
