@@ -46,7 +46,8 @@ DUCKS_COLORS = {
     "nothing": "#827B7E",
     "players": "#B8CEB8",
     "when_dead": "#827B7C",
-    "duckhunt": "#2193DE"
+    "duckhunt": "#2193DE",
+    "cartographer": "#8B0000",
 }
 
 SHOP_ITEMS = ["ap_ammo", "explosive_ammo", "grease", "sight", "detector", "silencer", "clover", "sunglasses", "coat",
