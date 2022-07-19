@@ -52,7 +52,7 @@ DUCKS_COLORS = {
 SHOP_ITEMS = ["ap_ammo", "explosive_ammo", "grease", "sight", "detector", "silencer", "clover", "sunglasses", "coat",
               "licence", "reloader", "homing_bullets"]
 DUCKS_DAY_CATEGORIES = ["normal", "ghost", "prof", "baby", "golden", "plastic", "kamikaze", "mechanical", "super",
-                        "moad", "armored"]
+                        "moad", "armored", "cartographer"]
 DUCKS_NIGHT_CATEGORIES = ["night", "sleeping"]
 
 
@@ -147,6 +147,7 @@ class DiscordChannel(models.Model):
     spawn_weight_kamikaze_ducks = models.SmallIntegerField(default=6)
     spawn_weight_night_ducks = models.SmallIntegerField(default=100)
     spawn_weight_sleeping_ducks = models.SmallIntegerField(default=5)
+    spawn_weight_cartographer_ducks = models.SmallIntegerField(default=3)
     ducks_time_to_live = models.SmallIntegerField(default=660)
     super_ducks_min_life = models.SmallIntegerField(default=2)
     super_ducks_max_life = models.SmallIntegerField(default=7)
