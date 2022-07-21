@@ -249,7 +249,7 @@ def robots_txt(request):
 
 
 def duckroll(request):
-    return HttpResponsePermanentRedirect('https://www.youtube.com/watch?v=YbaTur4A1OU')
+    return HttpResponsePermanentRedirect('https://www.youtube.com/watch?v=HP362ccZBmY')
 
 
 def handler404(request, exception=None):
