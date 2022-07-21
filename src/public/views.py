@@ -248,6 +248,10 @@ def robots_txt(request):
     return HttpResponse("\n".join(lines), content_type="text/plain")
 
 
+def duckroll(request):
+    return HttpResponsePermanentRedirect('https://www.youtube.com/watch?v=YbaTur4A1OU')
+
+
 def handler404(request, exception=None):
     content = loader.render_to_string('public/404.jinja2', None, request)
     return HttpResponse(content, None, 404)

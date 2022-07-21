@@ -12,6 +12,7 @@ urlpatterns = [
     path('privacy_policy', views.privacy_policy, name="privacy_policy"),
     path('botlists', views.botlists, name="botlists"),
     path('robots.txt', views.robots_txt, name="robotstxt"),
+    path('cartographer', views.duckroll, name="duckroll"),
     path('commands', views.bot_commands, name="bot_commands"),
     re_path(r'commands/(?P<command>(?:[A-z0-9\-]*/?)*)', views.bot_commands, name="bot_commands"),
     path('status', views.status, name="bot_status"),
