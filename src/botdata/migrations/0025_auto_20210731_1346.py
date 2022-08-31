@@ -11,7 +11,7 @@ def setup_member_from_user_on_support_server(apps, schema_editor):
     DiscordGuild = apps.get_model('botdata', 'DiscordGuild')
     try:
         dh_guild = DiscordGuild.objects.get(discord_id=195260081036591104)
-    except DiscordGuild.DoesNotExist:
+    except:
         return
 
     for userdata in LandminesUserData.objects.all():
