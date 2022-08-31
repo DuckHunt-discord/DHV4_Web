@@ -11,7 +11,10 @@ def move_primary_keys_from_user_to_member_on_landmines(apps, schema_editor):
     DiscordMember = apps.get_model('botdata', 'DiscordMember')
     DiscordGuild = apps.get_model('botdata', 'DiscordGuild')
 
-    dh_guild = DiscordGuild.objects.get(discord_id=195260081036591104)
+    try:
+        dh_guild = DiscordGuild.objects.get(discord_id=195260081036591104)
+    except:
+        return
 
     for landmine in LandminesPlaced.objects.all():
         placed_by_user_id = landmine.placed_by_id
