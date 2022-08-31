@@ -9,8 +9,10 @@ def setup_member_from_user_on_support_server(apps, schema_editor):
     LandminesUserData = apps.get_model('botdata', 'LandminesUserData')
     DiscordMember = apps.get_model('botdata', 'DiscordMember')
     DiscordGuild = apps.get_model('botdata', 'DiscordGuild')
-
-    dh_guild = DiscordGuild.objects.get(discord_id=195260081036591104)
+    try:
+        dh_guild = DiscordGuild.objects.get(discord_id=195260081036591104)
+    except DiscordGuild.DoesNotExist:
+        return
 
     for userdata in LandminesUserData.objects.all():
         user = userdata.user
