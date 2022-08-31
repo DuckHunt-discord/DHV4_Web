@@ -182,7 +182,10 @@ def get_designs():
     return designs
 
 
-designs = get_designs()
+try:
+    designs = get_designs()
+except:
+    designs = []
 
 
 def view_designs(request):
