@@ -9,6 +9,7 @@ def setup_member_from_user_on_support_server(apps, schema_editor):
     LandminesUserData = apps.get_model('botdata', 'LandminesUserData')
     DiscordMember = apps.get_model('botdata', 'DiscordMember')
     DiscordGuild = apps.get_model('botdata', 'DiscordGuild')
+
     try:
         dh_guild = DiscordGuild.objects.get(discord_id=195260081036591104)
     except:
