@@ -37,6 +37,9 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     os.environ.get("DOMAIN", "localhost")
 ]
+
+CSRF_TRUSTED_ORIGINS = ["https://" + host for host in ALLOWED_HOSTS]
+
 SITE_ID = 1
 
 if not DEBUG:
