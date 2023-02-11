@@ -27,6 +27,7 @@ from botdata.coats import Coats
 from django.utils.translation import gettext_lazy as _
 
 DUCKS_COLORS = {
+    "roles": "#2D882D",
     "normal": "#55C8CE",
     "ghost": "#5294CE",
     "prof": "#4460CE",
