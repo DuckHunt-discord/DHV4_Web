@@ -1,5 +1,5 @@
 django==4.1.7
-django-enumfield==3.0
+django-enumfield==3.1
 django_extensions==3.2.1
 django-debug-toolbar==3.8.1
 django-jinja==2.10.2
