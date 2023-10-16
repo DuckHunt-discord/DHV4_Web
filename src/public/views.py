@@ -29,16 +29,16 @@ def get_from_api(url, cache_for=60):
     if not r:
         try:
             r = requests.get(url).json()
-            cache.set('duckhunt_api_' + url, r, cache_for)
-            return r
-        except:
+        except Exception as e:
             if "api/status" in url:
+                print(f"Error while getting status : {e}")
                 return {
                     "bot_latency": 0,
                     "shards_status": [],
                     "unsharded_guilds": []
                 }
             elif "api/stats" in url:
+                print(f"Error while getting stats : {e}")
                 return {
                     "members_count": 0,
                     "guilds_count": 0,
@@ -51,7 +51,12 @@ def get_from_api(url, cache_for=60):
                     "global_ready": False,
                 }
             elif "api/commands" in url:
+                print(f"Error while getting commands : {e}")
                 return None
+    else:
+        if len(r) <= 2000:
+            cache.set('duckhunt_api_' + url, r, cache_for)
+        return r
     return r
 
 
