@@ -30,7 +30,8 @@ class LogMiddleware:
         # the view (and later middleware) are called.
         if request.META["REMOTE_ADDR"] in self.banned_ips:
             # Get fucked
-            return HttpResponse("Blocked for spam. https://discord.gg/duckhunt", status=420)
+            # 320 since 4XX requests are logged to console
+            return HttpResponse("Blocked for spam. https://discord.gg/duckhunt", status=320)
 
         start_ts = time.time()
 
