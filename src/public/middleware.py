@@ -27,7 +27,13 @@ class LogMiddleware:
         # the view (and later middleware) are called.
         start_ts = time.time()
 
-        path_str = link(request.build_absolute_uri(request.get_full_path()), label=str(request.path)[:80].ljust(80))
+        full_path = str(request.path)
+        trunc_path = full_path[:80]
+
+        misssing = 80 - len(trunc_path)
+
+        path_str = link(request.build_absolute_uri(request.get_full_path()), label=trunc_path)
+        path_str += " " * misssing
 
         if request.user.is_authenticated:
             user = request.user
