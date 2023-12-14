@@ -66,6 +66,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'xff.middleware.XForwardedForMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -214,47 +215,99 @@ if not DEBUG:
     LOGGING = {
         "version": 1,
         "disable_existing_loggers": False,
-        "root": {"level": "DEBUG", "handlers": ["stream"]},
-        "filters": {
-            "require_debug_false": {
-                "()": 'django.utils.log.RequireDebugFalse'
-            }
+        "formatters": {
+            "verbose": {
+                "()": "colorlog.ColoredFormatter",
+                "format": "{log_color}{levelname}\t {asctime}\t [{name}]{reset} {message}",
+                "style": "{",
+            },
+            "simple": {
+                "format": "{levelname} {message}",
+                "style": "{",
+            },
         },
         "handlers": {
-            "stream": {
-                "level": "DEBUG",
+            "console": {
                 "class": "logging.StreamHandler",
-                "formatter": "app",
-                "stream": sys.stdout,
+                "formatter": "verbose",
             },
             "mail_admins": {
-                "level": 'ERROR',
-                "filters": ['require_debug_false'],
-                "class": 'django.utils.log.AdminEmailHandler'
+                "level": "ERROR",
+                # "class": "django.utils.log.AdminEmailHandler",
+                "class": "logging.NullHandler",
+                # "include_html": True,
             },
+        },
+        "root": {
+            "handlers": ["console", "mail_admins"],
+            "level": "DEBUG",
         },
         "loggers": {
             "django": {
-                "handlers": ["stream"],
-                "level": "DEBUG",
-                "propagate": True
+                "handlers": ["console", "mail_admins"],
+                "level": "INFO",
+                "propagate": False,
             },
-            'django.request': {
-                'handlers': ['mail_admins'],
-                'level': 'ERROR',
-                'propagate': True,
+            "discord": {
+                "handlers": ["console", "mail_admins"],
+                "level": "INFO",
+                "propagate": False,
             },
-        },
-        "formatters": {
-            "app": {
-                "format": (
-                    u"%(asctime)s [%(levelname)-8s] "
-                    "(%(module)s.%(funcName)s) %(message)s"
-                ),
-                "datefmt": "%Y-%m-%d %H:%M:%S",
+            "asyncio": {
+                "handlers": ["console", "mail_admins"],
+                "level": "INFO",
+                "propagate": False,
+            },
+            "parso.*": {
+                "handlers": ["console", "mail_admins"],
+                "level": "INFO",
+                "propagate": False,
+            },
+            "paramiko.transport": {
+                "handlers": ["console", "mail_admins"],
+                "level": "INFO",
+                "propagate": False,
+            },
+            "urllib3.connectionpool": {
+                "handlers": ["console", "mail_admins"],
+                "level": "INFO",
+                "propagate": False,
+            },
+            "PIL.*": {
+                "handlers": ["console", "mail_admins"],
+                "level": "INFO",
+                "propagate": False,
+            },
+            "MARKDOWN": {
+                "handlers": ["console", "mail_admins"],
+                "level": "INFO",
+                "propagate": False,
+            },
+            "parso.python.diff": {
+                "handlers": ["console", "mail_admins"],
+                "level": "INFO",
+                "propagate": False,
+            },
+            "fontTools": {
+                "handlers": ["console", "mail_admins"],
+                "level": "INFO",
+                "propagate": False,
+            },
+            "fontTools.subset": {
+                "handlers": ["console", "mail_admins"],
+                "level": "WARNING",
+                "propagate": False,
             },
         },
     }
+
+    XFF_TRUSTED_PROXY_DEPTH = 1
+    XFF_STRICT = False
+
+    SECURE_PROXY_SSL_HEADER = (
+        "HTTP_X_FORWARDED_PROTO",
+        "https",
+    )  # https://caddyserver.com/docs/caddyfile/directives/reverse_proxy#headers
 
 IMAGEKIT_DEFAULT_CACHEFILE_STRATEGY = 'imagekit.cachefiles.strategies.Optimistic'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
