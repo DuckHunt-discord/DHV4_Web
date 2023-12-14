@@ -249,6 +249,11 @@ if not DEBUG:
                 "level": "INFO",
                 "propagate": False,
             },
+            "xff.middleware": {
+                "handlers": ["console"],
+                "level": "DEBUG",
+                "propagate": False,
+            },
             "discord": {
                 "handlers": ["console", "mail_admins"],
                 "level": "INFO",
@@ -304,7 +309,7 @@ if not DEBUG:
 
     print("XFF")
 
-    XFF_TRUSTED_PROXY_DEPTH = 1
+    XFF_TRUSTED_PROXY_DEPTH = 2
     # XFF_STRICT = False
 
     SECURE_PROXY_SSL_HEADER = (
