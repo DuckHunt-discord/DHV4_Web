@@ -307,7 +307,7 @@ if not DEBUG:
         },
     }
 
-    XFF_TRUSTED_PROXY_DEPTH = 2
+    XFF_TRUSTED_PROXY_DEPTH = 3
     # XFF_STRICT = False
 
     SECURE_PROXY_SSL_HEADER = (
