@@ -307,8 +307,6 @@ if not DEBUG:
         },
     }
 
-    print("XFF")
-
     XFF_TRUSTED_PROXY_DEPTH = 2
     # XFF_STRICT = False
 
