@@ -305,7 +305,7 @@ if not DEBUG:
     print("XFF")
 
     XFF_TRUSTED_PROXY_DEPTH = 1
-    XFF_STRICT = False
+    # XFF_STRICT = False
 
     SECURE_PROXY_SSL_HEADER = (
         "HTTP_X_FORWARDED_PROTO",
