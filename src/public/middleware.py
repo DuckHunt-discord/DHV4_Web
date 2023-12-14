@@ -1,7 +1,7 @@
 import logging
 import time
 
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponse
 
 logger = logging.getLogger(__name__)
 accesslog = logging.getLogger(name="access_log")
@@ -30,7 +30,7 @@ class LogMiddleware:
         # the view (and later middleware) are called.
         if request.META["REMOTE_ADDR"] in self.banned_ips:
             # Get fucked
-            return HttpResponseForbidden("Blocked for spam. https://discord.gg/duckhunt")
+            return HttpResponse("Blocked for spam. https://discord.gg/duckhunt", status=420)
 
         start_ts = time.time()
 
