@@ -353,6 +353,9 @@ class Player(models.Model):
     prestige_last_daily = models.DateTimeField(auto_now_add=True)
     prestige_dailies = models.IntegerField(default=0)
 
+    ducks_killed_today = DefaultDictJSONField(default_factory=int)
+    ducks_killed_today_last_reset = models.DateTimeField(auto_now_add=True)
+
     active_powerups = DefaultDictJSONField(default_factory=int)
     shooting_stats = DefaultDictJSONField(default_factory=int)
 
