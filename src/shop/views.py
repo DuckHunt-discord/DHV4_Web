@@ -1,14 +1,11 @@
 
 from django.core.cache import cache
-from django.core.files.storage import get_storage_class
 from django.db import connection
 from django.http import HttpResponseNotAllowed, JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 
 from . import models
 import random
-
-storage = get_storage_class()()
 
 
 # Create your views here.
