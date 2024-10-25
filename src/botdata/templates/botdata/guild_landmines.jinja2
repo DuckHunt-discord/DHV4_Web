@@ -235,6 +235,10 @@
                     text: 'Landmines count'
                 }
             },
+            // Disable turbo mode, we are passing objects and not just numbers (required to show the words)...
+            // Probably a bad practice
+            // If you enable turbo mode, some/all series might not show up at all. Tradeoffs...
+            turboThreshold: 0, 
             series: [
                 {
                     name: 'Active landmines',
