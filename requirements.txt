@@ -17,4 +17,4 @@ django-dynamic-raw-id==3.0
 Pillow==10.4.0
 django-imagekit
 django-xff==1.4.0
-colorlog==6.8.2
+colorlog==6.9.0
