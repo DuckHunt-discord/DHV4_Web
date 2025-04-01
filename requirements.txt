@@ -14,7 +14,7 @@ pylibmc==1.6.3
 jsmin==3.0.1
 css-html-js-minify==2.5.5
 django-dynamic-raw-id==4.4
-Pillow==11.1.0
+Pillow==11.2.0
 django-imagekit
 django-xff==1.5.0
 colorlog==6.9.0
