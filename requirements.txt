@@ -9,7 +9,7 @@ gunicorn==23.0.0
 requests==2.32.3
 babel==2.17.0
 pytz
-markdown==3.7
+markdown==3.8
 pylibmc==1.6.3
 jsmin==3.0.1
 css-html-js-minify==2.5.5
