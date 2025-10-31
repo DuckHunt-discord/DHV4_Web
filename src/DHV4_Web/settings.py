@@ -72,11 +72,10 @@ MIDDLEWARE = [
     'public.middleware.LogMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware'
 ]
 
-if DEBUG:
-    MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
-    INSTALLED_APPS.append('debug_toolbar')
+INSTALLED_APPS.append('debug_toolbar')
 
 INSTALLED_APPS.extend(['django.contrib.sites',
                        'django.contrib.sitemaps',
