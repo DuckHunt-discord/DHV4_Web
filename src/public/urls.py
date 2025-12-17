@@ -28,6 +28,6 @@ urlpatterns = [
     re_path(r'commands/(?P<command>(?:[A-z0-9\-]*/?)*)', bot_commands, name="bot_commands"),
     path('status', status, name="bot_status"),
     path('status/<int:shard_id>', shard_status, name="bot_shard_status"),
-    path('api/tombstone/', tombstone, name="tombstone"),
+    path('web_api/tombstone/', tombstone, name="tombstone"),
     path('404page', handler404),
 ]
