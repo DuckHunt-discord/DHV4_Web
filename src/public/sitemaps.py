@@ -1,8 +1,8 @@
 from django.urls import reverse
 
-from DHV4_Web import settings
+from django.conf import settings
 from DHV4_Web.sitemaps_classes import Sitemap
-from public.views import get_from_api
+from public.views.utils import get_from_api
 
 
 class BasePagesSitemap(Sitemap):

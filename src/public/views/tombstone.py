@@ -1,0 +1,396 @@
+import io
+import logging
+import unicodedata
+
+from django.contrib.staticfiles import finders
+from django.http import Http404, HttpResponse
+from PIL import Image, ImageChops, ImageDraw, ImageEnhance, ImageFilter, ImageFont
+
+try:
+    from fontTools.ttLib import TTFont  # type: ignore
+
+    _FONTTOOLS_AVAILABLE = True
+except Exception:  # pragma: no cover - optional dependency
+    TTFont = None
+    _FONTTOOLS_AVAILABLE = False
+
+TOMBSTONE_TEXT_BOX = (245, 184, 753, 689)
+DEFAULT_TOMBSTONE_REASON = "Forgot to Duck"
+MAX_FONT_SIZE = 200
+MIN_FONT_SIZE = 8
+RIP_SCALE = 1.2
+REASON_SCALE = 0.9
+logger = logging.getLogger(__name__)
+_FONT_CACHE = {}
+_TTFONT_CACHE = {}
+
+
+def _find_static(path: str):
+    resolved = finders.find(path)
+    if not resolved:
+        logger.warning("Static asset not found: %s", path)
+    return resolved
+
+
+def _font_candidates():
+    font_dir = "public/font"
+    specific = [
+        f"{font_dir}/Cinzel-Bold.ttf",
+        f"{font_dir}/Cinzel-Regular.ttf",
+        f"{font_dir}/NotoSerif-VariableFont_wdth,wght.ttf",
+        f"{font_dir}/NotoEmoji-VariableFont_wght.ttf",
+        f"{font_dir}/NotoEmoji-Regular.ttf",
+    ]
+    resolved_specific = [p for rel in specific if (p := _find_static(rel))]
+    return [
+        *resolved_specific,
+        "DejaVuSerif-Bold.ttf",
+        "DejaVuSerif.ttf",
+        "DejaVuSans-Bold.ttf",
+        "DejaVuSans.ttf",
+    ]
+
+
+def _load_tombstone_font(size: int):
+    for candidate in _font_candidates():
+        cache_key = (candidate, size)
+        if cache_key in _FONT_CACHE:
+            return _FONT_CACHE[cache_key]
+        if hasattr(candidate, "exists") and not candidate.exists():
+            continue
+        try:
+            font = ImageFont.truetype(str(candidate), size=size)
+            _FONT_CACHE[cache_key] = font
+            logger.debug("Loaded tombstone font %s at size %s", candidate, size)
+            return font
+        except OSError:
+            continue
+    logger.warning("Falling back to default font for tombstone (size=%s)", size)
+    return ImageFont.load_default()
+
+
+def _fonts_for_size(size: int):
+    fonts = []
+    for candidate in _font_candidates():
+        cache_key = (candidate, size)
+        if cache_key in _FONT_CACHE:
+            fonts.append(_FONT_CACHE[cache_key])
+            continue
+        try:
+            font = ImageFont.truetype(str(candidate), size=size)
+            _FONT_CACHE[cache_key] = font
+            fonts.append(font)
+        except OSError:
+            continue
+    if not fonts:
+        fonts.append(ImageFont.load_default())
+    return fonts
+
+
+def _ttfont_for_imagefont(font):
+    if not _FONTTOOLS_AVAILABLE:
+        return None
+    path = getattr(font, "path", getattr(font, "font", None))
+    if not path:
+        return None
+    cached = _TTFONT_CACHE.get(path)
+    if cached is not None:
+        return cached
+    try:
+        tt = TTFont(path)
+    except Exception as exc:  # pragma: no cover - optional dependency failures
+        logger.debug("Could not load TTFont for %s: %s", path, exc)
+        _TTFONT_CACHE[path] = None
+        return None
+    _TTFONT_CACHE[path] = tt
+    return tt
+
+
+def _wrap_line(text: str, font: ImageFont.FreeTypeFont, max_width: int, measure_draw: ImageDraw.ImageDraw):
+    clean_text = text.strip() or ""
+
+    def text_width(content: str) -> int:
+        bbox = measure_draw.textbbox((0, 0), content, font=font)
+        return bbox[2] - bbox[0]
+
+    def split_long_word(word: str):
+        parts = []
+        current = ""
+        for char in word:
+            candidate = current + char
+            if text_width(candidate) <= max_width or not current:
+                current = candidate
+            else:
+                parts.append(current)
+                current = char
+        if current:
+            parts.append(current)
+        return parts or [word]
+
+    words = [w for w in clean_text.split(" ") if w]
+    if not words:
+        return [clean_text] if clean_text else [""]
+
+    lines = []
+    current_line = ""
+
+    for word in words:
+        candidate = word if not current_line else f"{current_line} {word}"
+        if text_width(candidate) <= max_width:
+            current_line = candidate
+        else:
+            if current_line:
+                lines.append(current_line)
+                current_line = ""
+            split_parts = split_long_word(word)
+            lines.extend(split_parts[:-1])
+            current_line = split_parts[-1]
+
+    if current_line:
+        lines.append(current_line)
+
+    return lines or [clean_text]
+
+
+def _is_emoji_char(char: str) -> bool:
+    cp = ord(char)
+    if cp >= 0x1F000:
+        return True
+    if 0x2600 <= cp <= 0x27BF:
+        return True
+    if 0x1F1E6 <= cp <= 0x1F1FF:
+        return True
+    if unicodedata.category(char) == "So":
+        return True
+    return False
+
+
+def _select_font_for_char(char: str, fonts, measure_draw: ImageDraw.ImageDraw):
+    if char.strip() == "":
+        return fonts[0]
+
+    emoji_fonts = [f for f in fonts if "emoji" in str(getattr(f, "path", getattr(f, "font", ""))).lower()]
+    font_order = emoji_fonts + [f for f in fonts if f not in emoji_fonts] if _is_emoji_char(char) else fonts
+
+    for font in font_order:
+        supported = False
+        if _FONTTOOLS_AVAILABLE:
+            ttfont = _ttfont_for_imagefont(font)
+            if ttfont:
+                try:
+                    supported = any(ord(char) in table.cmap for table in ttfont["cmap"].tables)
+                except Exception as exc:  # pragma: no cover - defensive
+                    logger.debug("TTFont cmap check failed for %s: %s", font, exc)
+        if not supported:
+            bbox = measure_draw.textbbox((0, 0), char, font=font)
+            supported = bbox and (bbox[2] - bbox[0] > 0 or bbox[3] - bbox[1] > 0)
+        if supported:
+            return font
+    return fonts[-1]
+
+
+def _measure_line_with_fallback(text: str, fonts, measure_draw: ImageDraw.ImageDraw):
+    width = 0
+    max_height = 0
+    for char in text:
+        font = _select_font_for_char(char, fonts, measure_draw)
+        bbox = measure_draw.textbbox((0, 0), char, font=font)
+        char_width = bbox[2] - bbox[0]
+        char_height = bbox[3] - bbox[1]
+        width += char_width
+        max_height = max(max_height, char_height)
+    return width, max_height
+
+
+def _wrap_line_fallback(text: str, fonts, max_width: int, measure_draw: ImageDraw.ImageDraw):
+    clean_text = text.strip() or ""
+
+    def text_width(content: str) -> int:
+        width, _ = _measure_line_with_fallback(content, fonts, measure_draw)
+        return width
+
+    def split_long_word(word: str):
+        parts = []
+        current = ""
+        for char in word:
+            candidate = current + char
+            if text_width(candidate) <= max_width or not current:
+                current = candidate
+            else:
+                parts.append(current)
+                current = char
+        if current:
+            parts.append(current)
+        return parts or [word]
+
+    words = [w for w in clean_text.split(" ") if w]
+    if not words:
+        return [clean_text] if clean_text else [""]
+
+    lines = []
+    current_line = ""
+
+    for word in words:
+        candidate = word if not current_line else f"{current_line} {word}"
+        if text_width(candidate) <= max_width:
+            current_line = candidate
+        else:
+            if current_line:
+                lines.append(current_line)
+                current_line = ""
+            split_parts = split_long_word(word)
+            lines.extend(split_parts[:-1])
+            current_line = split_parts[-1]
+
+    if current_line:
+        lines.append(current_line)
+
+    return lines or [clean_text]
+
+
+def tombstone(request):
+    name = (request.GET.get("name") or "Unknown hunter").strip()
+    reason = (request.GET.get("reason") or DEFAULT_TOMBSTONE_REASON).strip() or DEFAULT_TOMBSTONE_REASON
+
+    base_image_path = _find_static("public/tombstone.jpg") or _find_static("tombstone.jpg")
+    if not base_image_path:
+        logger.error("Tombstone base image not found in staticfiles.")
+        raise Http404("Tombstone template not found.")
+
+    base_image = Image.open(base_image_path).convert("RGBA")
+
+    x0, y0, x1, y1 = TOMBSTONE_TEXT_BOX
+    text_width_limit = x1 - x0
+    text_height_limit = y1 - y0
+
+    measure_draw = ImageDraw.Draw(Image.new("RGB", (10, 10)))
+
+    def layout_for_font(font: ImageFont.FreeTypeFont):
+        size_for_spacing = getattr(font, "size", MIN_FONT_SIZE)
+        line_spacing = max(2, int(size_for_spacing * 0.18))
+        reason_gap = max(line_spacing, int(size_for_spacing * 0.4))
+
+        base_fonts = _fonts_for_size(size_for_spacing)
+        rip_fonts = _fonts_for_size(max(int(size_for_spacing * RIP_SCALE), size_for_spacing + 1))
+        reason_fonts = _fonts_for_size(max(MIN_FONT_SIZE, int(size_for_spacing * REASON_SCALE)))
+        rip_lines = ["R.I.P."]
+
+        name_lines = _wrap_line_fallback(name, base_fonts, text_width_limit, measure_draw)
+        if len(name_lines) > 1:
+            return None
+
+        reason_lines = _wrap_line_fallback(reason, reason_fonts, text_width_limit, measure_draw)
+        if len(reason_lines) > 2:
+            return None
+
+        lines = [(line, rip_fonts, False) for line in rip_lines] + \
+                [(line, base_fonts, False) for line in name_lines] + \
+                [(line, reason_fonts, True) for line in reason_lines]  # mark reason lines
+
+        heights = []
+        widths = []
+        for line, line_font, _is_reason in lines:
+            width, height = _measure_line_with_fallback(line, line_font, measure_draw)
+            widths.append(width)
+            heights.append(height)
+
+        base_spacing = line_spacing * (len(lines) - 1 if len(lines) > 1 else 0)
+        extra_reason_spacing = reason_gap if reason_lines else 0
+        total_height = sum(heights) + base_spacing + extra_reason_spacing
+        max_line_width = max(widths) if widths else 0
+        reason_start_index = len(rip_lines) + len(name_lines)
+        return lines, max_line_width, total_height, line_spacing, reason_gap, reason_start_index
+
+    chosen = None
+    for size in range(min(text_height_limit, MAX_FONT_SIZE), MIN_FONT_SIZE - 1, -1):
+        font = _load_tombstone_font(size)
+        layout = layout_for_font(font)
+        if not layout:
+            continue
+        lines, block_width, block_height, spacing, reason_gap, reason_start_index = layout
+        if block_width <= text_width_limit and block_height <= text_height_limit:
+            chosen = (font, lines, block_width, block_height, spacing, reason_gap, reason_start_index)
+            break
+
+    if not chosen:
+        font = _load_tombstone_font(MIN_FONT_SIZE)
+        layout = layout_for_font(font)
+        if not layout:
+            layout = ([], 0, 0, 0, line_spacing, 0)
+        lines, block_width, block_height, spacing, reason_gap, reason_start_index = layout
+        chosen = (font, lines, block_width, block_height, spacing, reason_gap, reason_start_index)
+
+    font, lines, block_width, block_height, spacing, reason_gap, reason_start_index = chosen
+
+    if block_height > text_height_limit and len(lines) > 1:
+        old_spacing = spacing
+        spacing = max(1, int(spacing * text_height_limit / block_height))
+        block_height = block_height - (old_spacing - spacing) * (len(lines) - 1)
+
+    text_mask = Image.new("L", base_image.size, 0)
+    mask_draw = ImageDraw.Draw(text_mask)
+
+    if block_height > text_height_limit:
+        start_y = y0
+    else:
+        start_y = y0 + (text_height_limit - block_height) / 2
+
+    logger.warning(
+        "Rendering tombstone for name=%s reason=%s font=%s size=%s lines=%s block=%sx%s",
+        name,
+        reason,
+        getattr(font, "path", getattr(font, "font", None)),
+        getattr(font, "size", None),
+        len(lines),
+        block_width,
+        block_height,
+    )
+
+    for idx, (line, line_fonts, is_reason) in enumerate(lines):
+        if is_reason and idx == reason_start_index:
+            start_y += reason_gap
+
+        width, height = _measure_line_with_fallback(line, line_fonts, measure_draw)
+        start_x = x0 + (text_width_limit - width) / 2
+
+        cursor_x = start_x
+        for char in line:
+            font_for_char = _select_font_for_char(char, line_fonts, measure_draw)
+            bbox = measure_draw.textbbox((0, 0), char, font=font_for_char)
+            char_width = bbox[2] - bbox[0]
+            mask_draw.text((cursor_x, start_y), char, font=font_for_char, fill=255)
+            cursor_x += char_width
+
+        start_y += height + spacing
+
+    # Darken existing stone texture inside the glyphs instead of flat color fills.
+    blur_radius = 1.1
+    softened = text_mask.filter(ImageFilter.GaussianBlur(radius=blur_radius))
+
+    darker_stone = ImageEnhance.Brightness(base_image).enhance(0.4)
+    carved_base = Image.composite(darker_stone, base_image, softened)
+
+    inner_shadow = ImageChops.offset(softened, -1, -1)
+    highlight_mask = ImageChops.offset(softened, 1, 1)
+
+    shadow_layer = Image.new("RGBA", base_image.size, (5, 5, 5, 180))
+    shadow_layer.putalpha(inner_shadow)
+
+    highlight_layer = Image.new("RGBA", base_image.size, (180, 180, 180, 20))
+    highlight_layer.putalpha(highlight_mask)
+
+    carved = Image.alpha_composite(carved_base, shadow_layer)
+    carved = Image.alpha_composite(carved, highlight_layer)
+
+    # Apply a multiply pass only where text exists, keeping the rest of the stone unchanged.
+    multiply_target = ImageEnhance.Brightness(base_image).enhance(0.8)
+    multiplied_carved = ImageChops.multiply(carved, multiply_target)
+    carved = Image.composite(multiplied_carved, carved, softened)
+
+    composed = carved.convert("RGB")
+
+    buffer = io.BytesIO()
+    composed.save(buffer, format="JPEG", quality=95)
+    buffer.seek(0)
+
+    return HttpResponse(buffer.getvalue(), content_type="image/jpeg")
