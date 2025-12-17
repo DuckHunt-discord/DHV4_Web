@@ -18,6 +18,7 @@ logger = logging.getLogger(__name__)
 _FONT_CACHE = {}
 _TTFONT_CACHE = {}
 _EMOJI_FONT_CACHE = {}
+_FONT_CANDIDATES = None
 
 
 def _find_static(path: str):
@@ -28,22 +29,26 @@ def _find_static(path: str):
 
 
 def _font_candidates():
-    font_dir = "public/font"
-    specific = [
-        f"{font_dir}/Cinzel-Bold.ttf",
-        f"{font_dir}/Cinzel-Regular.ttf",
-        f"{font_dir}/NotoSerif-VariableFont_wdth,wght.ttf",
-        f"{font_dir}/NotoEmoji-VariableFont_wght.ttf",
-        f"{font_dir}/NotoEmoji-Regular.ttf",
-    ]
-    resolved_specific = [p for rel in specific if (p := _find_static(rel))]
-    return [
-        *resolved_specific,
-        "DejaVuSerif-Bold.ttf",
-        "DejaVuSerif.ttf",
-        "DejaVuSans-Bold.ttf",
-        "DejaVuSans.ttf",
-    ]
+    # Cache resolved candidates to avoid repeated filesystem lookups per request.
+    global _FONT_CANDIDATES
+    if _FONT_CANDIDATES is None:
+        font_dir = "public/font"
+        specific = [
+            f"{font_dir}/Cinzel-Bold.ttf",
+            f"{font_dir}/Cinzel-Regular.ttf",
+            f"{font_dir}/NotoSerif-VariableFont_wdth,wght.ttf",
+            f"{font_dir}/NotoEmoji-VariableFont_wght.ttf",
+            f"{font_dir}/NotoEmoji-Regular.ttf",
+        ]
+        resolved_specific = [p for rel in specific if (p := _find_static(rel))]
+        _FONT_CANDIDATES = [
+            *resolved_specific,
+            "DejaVuSerif-Bold.ttf",
+            "DejaVuSerif.ttf",
+            "DejaVuSans-Bold.ttf",
+            "DejaVuSans.ttf",
+        ]
+    return _FONT_CANDIDATES
 
 
 def _fonts_for_size(size: int):
@@ -253,7 +258,8 @@ def tombstone(request):
         logger.error("Tombstone base image not found in staticfiles.")
         raise Http404("Tombstone template not found.")
 
-    base_image = Image.open(base_image_path).convert("RGBA")
+    with Image.open(base_image_path) as img:
+        base_image = img.convert("RGBA")
 
     x0, y0, x1, y1 = TOMBSTONE_TEXT_BOX
     text_width_limit = x1 - x0
@@ -295,7 +301,7 @@ def tombstone(request):
     else:
         start_y = y0 + (text_height_limit - block_height) / 2
 
-    logger.warning(
+    logger.debug(
         "Rendering tombstone for name=%s reason=%s font=%s size=%s lines=%s block=%sx%s",
         name,
         reason,
