@@ -18,3 +18,4 @@ Pillow==12.0.0
 django-imagekit
 django-xff==1.5.0
 colorlog==6.10.1
+fonttools==4.61.1

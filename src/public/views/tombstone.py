@@ -6,13 +6,7 @@ from django.contrib.staticfiles import finders
 from django.http import Http404, HttpResponse
 from PIL import Image, ImageChops, ImageDraw, ImageEnhance, ImageFilter, ImageFont
 
-try:
-    from fontTools.ttLib import TTFont  # type: ignore
-
-    _FONTTOOLS_AVAILABLE = True
-except Exception:  # pragma: no cover - optional dependency
-    TTFont = None
-    _FONTTOOLS_AVAILABLE = False
+from fontTools.ttLib import TTFont  # type: ignore
 
 TOMBSTONE_TEXT_BOX = (245, 184, 753, 689)
 DEFAULT_TOMBSTONE_REASON = "Forgot to Duck"
@@ -23,6 +17,7 @@ REASON_SCALE = 0.9
 logger = logging.getLogger(__name__)
 _FONT_CACHE = {}
 _TTFONT_CACHE = {}
+_EMOJI_FONT_CACHE = {}
 
 
 def _find_static(path: str):
@@ -51,24 +46,6 @@ def _font_candidates():
     ]
 
 
-def _load_tombstone_font(size: int):
-    for candidate in _font_candidates():
-        cache_key = (candidate, size)
-        if cache_key in _FONT_CACHE:
-            return _FONT_CACHE[cache_key]
-        if hasattr(candidate, "exists") and not candidate.exists():
-            continue
-        try:
-            font = ImageFont.truetype(str(candidate), size=size)
-            _FONT_CACHE[cache_key] = font
-            logger.debug("Loaded tombstone font %s at size %s", candidate, size)
-            return font
-        except OSError:
-            continue
-    logger.warning("Falling back to default font for tombstone (size=%s)", size)
-    return ImageFont.load_default()
-
-
 def _fonts_for_size(size: int):
     fonts = []
     for candidate in _font_candidates():
@@ -76,20 +53,36 @@ def _fonts_for_size(size: int):
         if cache_key in _FONT_CACHE:
             fonts.append(_FONT_CACHE[cache_key])
             continue
+        if hasattr(candidate, "exists") and not candidate.exists():
+            continue
         try:
             font = ImageFont.truetype(str(candidate), size=size)
             _FONT_CACHE[cache_key] = font
             fonts.append(font)
+            logger.debug("Loaded tombstone font %s at size %s", candidate, size)
         except OSError:
             continue
     if not fonts:
+        logger.warning("Falling back to default font for tombstone (size=%s)", size)
         fonts.append(ImageFont.load_default())
+
+    # Pre-populate emoji font cache for this font set
+    fonts_key = tuple(id(f) for f in fonts)
+    if fonts_key not in _EMOJI_FONT_CACHE:
+        _EMOJI_FONT_CACHE[fonts_key] = (
+            [f for f in fonts if "emoji" in str(getattr(f, "path", getattr(f, "font", ""))).lower()],
+            [f for f in fonts if "emoji" not in str(getattr(f, "path", getattr(f, "font", ""))).lower()]
+        )
+
     return fonts
 
 
+def _load_tombstone_font(size: int):
+    """Returns the first available font for the given size."""
+    return _fonts_for_size(size)[0]
+
+
 def _ttfont_for_imagefont(font):
-    if not _FONTTOOLS_AVAILABLE:
-        return None
     path = getattr(font, "path", getattr(font, "font", None))
     if not path:
         return None
@@ -98,58 +91,12 @@ def _ttfont_for_imagefont(font):
         return cached
     try:
         tt = TTFont(path)
-    except Exception as exc:  # pragma: no cover - optional dependency failures
+        _TTFONT_CACHE[path] = tt
+        return tt
+    except Exception as exc:
         logger.debug("Could not load TTFont for %s: %s", path, exc)
         _TTFONT_CACHE[path] = None
         return None
-    _TTFONT_CACHE[path] = tt
-    return tt
-
-
-def _wrap_line(text: str, font: ImageFont.FreeTypeFont, max_width: int, measure_draw: ImageDraw.ImageDraw):
-    clean_text = text.strip() or ""
-
-    def text_width(content: str) -> int:
-        bbox = measure_draw.textbbox((0, 0), content, font=font)
-        return bbox[2] - bbox[0]
-
-    def split_long_word(word: str):
-        parts = []
-        current = ""
-        for char in word:
-            candidate = current + char
-            if text_width(candidate) <= max_width or not current:
-                current = candidate
-            else:
-                parts.append(current)
-                current = char
-        if current:
-            parts.append(current)
-        return parts or [word]
-
-    words = [w for w in clean_text.split(" ") if w]
-    if not words:
-        return [clean_text] if clean_text else [""]
-
-    lines = []
-    current_line = ""
-
-    for word in words:
-        candidate = word if not current_line else f"{current_line} {word}"
-        if text_width(candidate) <= max_width:
-            current_line = candidate
-        else:
-            if current_line:
-                lines.append(current_line)
-                current_line = ""
-            split_parts = split_long_word(word)
-            lines.extend(split_parts[:-1])
-            current_line = split_parts[-1]
-
-    if current_line:
-        lines.append(current_line)
-
-    return lines or [clean_text]
 
 
 def _is_emoji_char(char: str) -> bool:
@@ -169,27 +116,27 @@ def _select_font_for_char(char: str, fonts, measure_draw: ImageDraw.ImageDraw):
     if char.strip() == "":
         return fonts[0]
 
-    emoji_fonts = [f for f in fonts if "emoji" in str(getattr(f, "path", getattr(f, "font", ""))).lower()]
-    font_order = emoji_fonts + [f for f in fonts if f not in emoji_fonts] if _is_emoji_char(char) else fonts
+    # Emoji font cache is pre-populated in _fonts_for_size
+    fonts_key = tuple(id(f) for f in fonts)
+    emoji_fonts, non_emoji_fonts = _EMOJI_FONT_CACHE[fonts_key]
+    font_order = emoji_fonts + non_emoji_fonts if _is_emoji_char(char) else fonts
 
     for font in font_order:
-        supported = False
-        if _FONTTOOLS_AVAILABLE:
-            ttfont = _ttfont_for_imagefont(font)
-            if ttfont:
-                try:
-                    supported = any(ord(char) in table.cmap for table in ttfont["cmap"].tables)
-                except Exception as exc:  # pragma: no cover - defensive
-                    logger.debug("TTFont cmap check failed for %s: %s", font, exc)
-        if not supported:
-            bbox = measure_draw.textbbox((0, 0), char, font=font)
-            supported = bbox and (bbox[2] - bbox[0] > 0 or bbox[3] - bbox[1] > 0)
-        if supported:
+        ttfont = _ttfont_for_imagefont(font)
+        if ttfont:
+            try:
+                if any(ord(char) in table.cmap for table in ttfont["cmap"].tables):
+                    return font
+            except Exception as exc:
+                logger.debug("TTFont cmap check failed for %s: %s", font, exc)
+
+        bbox = measure_draw.textbbox((0, 0), char, font=font)
+        if bbox and (bbox[2] - bbox[0] > 0 or bbox[3] - bbox[1] > 0):
             return font
     return fonts[-1]
 
 
-def _measure_line_with_fallback(text: str, fonts, measure_draw: ImageDraw.ImageDraw):
+def _measure_text(text: str, fonts, measure_draw: ImageDraw.ImageDraw):
     width = 0
     max_height = 0
     for char in text:
@@ -202,12 +149,61 @@ def _measure_line_with_fallback(text: str, fonts, measure_draw: ImageDraw.ImageD
     return width, max_height
 
 
-def _wrap_line_fallback(text: str, fonts, max_width: int, measure_draw: ImageDraw.ImageDraw):
+def _layout_for_font(font: ImageFont.FreeTypeFont, name: str, reason: str, text_width_limit: int, measure_draw: ImageDraw.ImageDraw):
+    size_for_spacing = getattr(font, "size", MIN_FONT_SIZE)
+    line_spacing = max(2, int(size_for_spacing * 0.18))
+    reason_gap = max(line_spacing, int(size_for_spacing * 0.4))
+
+    base_fonts = _fonts_for_size(size_for_spacing)
+    rip_fonts = _fonts_for_size(max(int(size_for_spacing * RIP_SCALE), size_for_spacing + 1))
+    reason_fonts = _fonts_for_size(max(MIN_FONT_SIZE, int(size_for_spacing * REASON_SCALE)))
+    rip_lines = ["R.I.P."]
+
+    # Share cache across wrapping and measuring for this layout
+    measure_cache = {}
+    name_lines = _wrap_text(name, base_fonts, text_width_limit, measure_draw, measure_cache)
+    if len(name_lines) > 1:
+        return None
+
+    reason_lines = _wrap_text(reason, reason_fonts, text_width_limit, measure_draw, measure_cache)
+    if len(reason_lines) > 2:
+        return None
+
+    # Build lines with their measurements
+    lines_with_measurements = []
+    for line_text, line_font in [(l, rip_fonts) for l in rip_lines] + \
+                                 [(l, base_fonts) for l in name_lines] + \
+                                 [(l, reason_fonts) for l in reason_lines]:
+        cache_key = (line_text, tuple(id(f) for f in line_font))
+        if cache_key not in measure_cache:
+            measure_cache[cache_key] = _measure_text(line_text, line_font, measure_draw)
+        width, height = measure_cache[cache_key]
+        is_reason = line_text in reason_lines
+        lines_with_measurements.append((line_text, line_font, is_reason, width, height))
+
+    widths = [w for _, _, _, w, _ in lines_with_measurements]
+    heights = [h for _, _, _, _, h in lines_with_measurements]
+
+    base_spacing = line_spacing * (len(lines_with_measurements) - 1 if len(lines_with_measurements) > 1 else 0)
+    extra_reason_spacing = reason_gap if reason_lines else 0
+    total_height = sum(heights) + base_spacing + extra_reason_spacing
+    max_line_width = max(widths) if widths else 0
+    reason_start_index = len(rip_lines) + len(name_lines)
+    return lines_with_measurements, max_line_width, total_height, line_spacing, reason_gap, reason_start_index
+
+
+def _wrap_text(text: str, fonts, max_width: int, measure_draw: ImageDraw.ImageDraw, measure_cache=None):
     clean_text = text.strip() or ""
+    if measure_cache is None:
+        measure_cache = {}
+
+    fonts_key = tuple(id(f) for f in fonts)
 
     def text_width(content: str) -> int:
-        width, _ = _measure_line_with_fallback(content, fonts, measure_draw)
-        return width
+        cache_key = (content, fonts_key)
+        if cache_key not in measure_cache:
+            measure_cache[cache_key] = _measure_text(content, fonts, measure_draw)
+        return measure_cache[cache_key][0]
 
     def split_long_word(word: str):
         parts = []
@@ -265,46 +261,10 @@ def tombstone(request):
 
     measure_draw = ImageDraw.Draw(Image.new("RGB", (10, 10)))
 
-    def layout_for_font(font: ImageFont.FreeTypeFont):
-        size_for_spacing = getattr(font, "size", MIN_FONT_SIZE)
-        line_spacing = max(2, int(size_for_spacing * 0.18))
-        reason_gap = max(line_spacing, int(size_for_spacing * 0.4))
-
-        base_fonts = _fonts_for_size(size_for_spacing)
-        rip_fonts = _fonts_for_size(max(int(size_for_spacing * RIP_SCALE), size_for_spacing + 1))
-        reason_fonts = _fonts_for_size(max(MIN_FONT_SIZE, int(size_for_spacing * REASON_SCALE)))
-        rip_lines = ["R.I.P."]
-
-        name_lines = _wrap_line_fallback(name, base_fonts, text_width_limit, measure_draw)
-        if len(name_lines) > 1:
-            return None
-
-        reason_lines = _wrap_line_fallback(reason, reason_fonts, text_width_limit, measure_draw)
-        if len(reason_lines) > 2:
-            return None
-
-        lines = [(line, rip_fonts, False) for line in rip_lines] + \
-                [(line, base_fonts, False) for line in name_lines] + \
-                [(line, reason_fonts, True) for line in reason_lines]  # mark reason lines
-
-        heights = []
-        widths = []
-        for line, line_font, _is_reason in lines:
-            width, height = _measure_line_with_fallback(line, line_font, measure_draw)
-            widths.append(width)
-            heights.append(height)
-
-        base_spacing = line_spacing * (len(lines) - 1 if len(lines) > 1 else 0)
-        extra_reason_spacing = reason_gap if reason_lines else 0
-        total_height = sum(heights) + base_spacing + extra_reason_spacing
-        max_line_width = max(widths) if widths else 0
-        reason_start_index = len(rip_lines) + len(name_lines)
-        return lines, max_line_width, total_height, line_spacing, reason_gap, reason_start_index
-
     chosen = None
     for size in range(min(text_height_limit, MAX_FONT_SIZE), MIN_FONT_SIZE - 1, -1):
         font = _load_tombstone_font(size)
-        layout = layout_for_font(font)
+        layout = _layout_for_font(font, name, reason, text_width_limit, measure_draw)
         if not layout:
             continue
         lines, block_width, block_height, spacing, reason_gap, reason_start_index = layout
@@ -314,9 +274,9 @@ def tombstone(request):
 
     if not chosen:
         font = _load_tombstone_font(MIN_FONT_SIZE)
-        layout = layout_for_font(font)
+        layout = _layout_for_font(font, name, reason, text_width_limit, measure_draw)
         if not layout:
-            layout = ([], 0, 0, 0, line_spacing, 0)
+            layout = ([], 0, 0, 0, 2, 0)
         lines, block_width, block_height, spacing, reason_gap, reason_start_index = layout
         chosen = (font, lines, block_width, block_height, spacing, reason_gap, reason_start_index)
 
@@ -346,11 +306,10 @@ def tombstone(request):
         block_height,
     )
 
-    for idx, (line, line_fonts, is_reason) in enumerate(lines):
+    for idx, (line, line_fonts, is_reason, width, height) in enumerate(lines):
         if is_reason and idx == reason_start_index:
             start_y += reason_gap
 
-        width, height = _measure_line_with_fallback(line, line_fonts, measure_draw)
         start_x = x0 + (text_width_limit - width) / 2
 
         cursor_x = start_x
