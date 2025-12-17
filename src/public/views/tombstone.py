@@ -19,6 +19,8 @@ _FONT_CACHE = {}
 _TTFONT_CACHE = {}
 _EMOJI_FONT_CACHE = {}
 _FONT_CANDIDATES = None
+_CHAR_FONT_CACHE = {}
+_CHAR_METRICS_CACHE = {}
 
 
 def _find_static(path: str):
@@ -118,11 +120,16 @@ def _is_emoji_char(char: str) -> bool:
 
 
 def _select_font_for_char(char: str, fonts, measure_draw: ImageDraw.ImageDraw):
+    fonts_key = tuple(id(f) for f in fonts)
+    font_cache = _CHAR_FONT_CACHE.setdefault(fonts_key, {})
+    if char in font_cache:
+        return font_cache[char]
+
     if char.strip() == "":
+        font_cache[char] = fonts[0]
         return fonts[0]
 
     # Emoji font cache is pre-populated in _fonts_for_size
-    fonts_key = tuple(id(f) for f in fonts)
     emoji_fonts, non_emoji_fonts = _EMOJI_FONT_CACHE[fonts_key]
     font_order = emoji_fonts + non_emoji_fonts if _is_emoji_char(char) else fonts
 
@@ -131,27 +138,75 @@ def _select_font_for_char(char: str, fonts, measure_draw: ImageDraw.ImageDraw):
         if ttfont:
             try:
                 if any(ord(char) in table.cmap for table in ttfont["cmap"].tables):
+                    font_cache[char] = font
                     return font
             except Exception as exc:
                 logger.debug("TTFont cmap check failed for %s: %s", font, exc)
 
         bbox = measure_draw.textbbox((0, 0), char, font=font)
         if bbox and (bbox[2] - bbox[0] > 0 or bbox[3] - bbox[1] > 0):
+            font_cache[char] = font
             return font
-    return fonts[-1]
+
+    fallback = fonts[-1]
+    font_cache[char] = fallback
+    return fallback
+
+
+def _font_metrics_for_char(char: str, fonts, measure_draw: ImageDraw.ImageDraw):
+    fonts_key = tuple(id(f) for f in fonts)
+    metrics_cache = _CHAR_METRICS_CACHE.setdefault(fonts_key, {})
+    if char in metrics_cache:
+        return metrics_cache[char]
+
+    font = _select_font_for_char(char, fonts, measure_draw)
+    bbox = measure_draw.textbbox((0, 0), char, font=font)
+    char_width = bbox[2] - bbox[0]
+    char_height = bbox[3] - bbox[1]
+    metrics_cache[char] = (font, char_width, char_height)
+    return metrics_cache[char]
 
 
 def _measure_text(text: str, fonts, measure_draw: ImageDraw.ImageDraw):
     width = 0
     max_height = 0
     for char in text:
-        font = _select_font_for_char(char, fonts, measure_draw)
-        bbox = measure_draw.textbbox((0, 0), char, font=font)
-        char_width = bbox[2] - bbox[0]
-        char_height = bbox[3] - bbox[1]
+        _, char_width, char_height = _font_metrics_for_char(char, fonts, measure_draw)
         width += char_width
         max_height = max(max_height, char_height)
     return width, max_height
+
+
+def _choose_layout(name: str, reason: str, text_width_limit: int, text_height_limit: int, measure_draw: ImageDraw.ImageDraw):
+    max_size = min(text_height_limit, MAX_FONT_SIZE)
+    low, high = MIN_FONT_SIZE, max_size
+    best = None
+
+    while low <= high:
+        size = (low + high) // 2
+        font = _load_tombstone_font(size)
+        layout = _layout_for_font(font, name, reason, text_width_limit, measure_draw)
+        if not layout:
+            high = size - 1
+            continue
+
+        lines, block_width, block_height, spacing, reason_gap, reason_start_index = layout
+        fits = block_width <= text_width_limit and block_height <= text_height_limit
+        if fits:
+            best = (font, lines, block_width, block_height, spacing, reason_gap, reason_start_index)
+            low = size + 1  # try to grow
+        else:
+            high = size - 1  # shrink
+
+    if best:
+        return best
+
+    fallback_font = _load_tombstone_font(MIN_FONT_SIZE)
+    layout = _layout_for_font(fallback_font, name, reason, text_width_limit, measure_draw)
+    if not layout:
+        layout = ([], 0, 0, 0, 2, 0)
+    lines, block_width, block_height, spacing, reason_gap, reason_start_index = layout
+    return fallback_font, lines, block_width, block_height, spacing, reason_gap, reason_start_index
 
 
 def _layout_for_font(font: ImageFont.FreeTypeFont, name: str, reason: str, text_width_limit: int, measure_draw: ImageDraw.ImageDraw):
@@ -267,26 +322,9 @@ def tombstone(request):
 
     measure_draw = ImageDraw.Draw(Image.new("RGB", (10, 10)))
 
-    chosen = None
-    for size in range(min(text_height_limit, MAX_FONT_SIZE), MIN_FONT_SIZE - 1, -1):
-        font = _load_tombstone_font(size)
-        layout = _layout_for_font(font, name, reason, text_width_limit, measure_draw)
-        if not layout:
-            continue
-        lines, block_width, block_height, spacing, reason_gap, reason_start_index = layout
-        if block_width <= text_width_limit and block_height <= text_height_limit:
-            chosen = (font, lines, block_width, block_height, spacing, reason_gap, reason_start_index)
-            break
-
-    if not chosen:
-        font = _load_tombstone_font(MIN_FONT_SIZE)
-        layout = _layout_for_font(font, name, reason, text_width_limit, measure_draw)
-        if not layout:
-            layout = ([], 0, 0, 0, 2, 0)
-        lines, block_width, block_height, spacing, reason_gap, reason_start_index = layout
-        chosen = (font, lines, block_width, block_height, spacing, reason_gap, reason_start_index)
-
-    font, lines, block_width, block_height, spacing, reason_gap, reason_start_index = chosen
+    font, lines, block_width, block_height, spacing, reason_gap, reason_start_index = _choose_layout(
+        name, reason, text_width_limit, text_height_limit, measure_draw
+    )
 
     if block_height > text_height_limit and len(lines) > 1:
         old_spacing = spacing
