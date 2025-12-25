@@ -1,4 +1,5 @@
 import logging
+import pickle
 from typing import Any
 
 import requests
@@ -12,6 +13,14 @@ HOUR = 60 * MINUTE
 DAY = 24 * HOUR
 MONTH = 30 * DAY
 YEAR = 365 * DAY
+MAX_CACHE_BYTES = 900_000
+
+
+def _get_cache_payload_size(value: Any) -> int | None:
+    try:
+        return len(pickle.dumps(value, protocol=pickle.HIGHEST_PROTOCOL))
+    except Exception:
+        return None
 
 
 def get_from_api(url: str, cache_for: int = 60) -> Any:
@@ -49,12 +58,11 @@ def get_from_api(url: str, cache_for: int = 60) -> Any:
             return None
         return None
 
-    try:
-        size = len(data)  # some responses may not be sized; best-effort cache limit
-    except Exception:
-        size = None
-
-    if size is None or size <= 2000:
-        cache.set(cache_key, data, cache_for)
+    payload_size = _get_cache_payload_size(data)
+    if payload_size is None or payload_size <= MAX_CACHE_BYTES:
+        try:
+            cache.set(cache_key, data, cache_for)
+        except Exception as exc:
+            logger.warning("Cache set failed for %s: %s", url, exc)
 
     return data
