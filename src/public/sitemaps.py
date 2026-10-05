@@ -10,7 +10,7 @@ class BasePagesSitemap(Sitemap):
     protocol = 'https'
 
     def items(self):
-        return ['index', 'bot_commands', 'bot_status']
+        return ['index', 'bot_commands', 'bot_status', 'privacy_policy']
 
     def location(self, item):
         return reverse(item)
