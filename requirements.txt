@@ -1,4 +1,4 @@
-django==5.2.18
+django==5.2.19
 django-enumfield==3.1
 django_extensions==4.1
 django-debug-toolbar==6.3.0
@@ -9,8 +9,8 @@ gunicorn==25.3.0
 requests==2.34.2
 babel==2.18.0
 pytz
-markdown==3.11.2
-pylibmc==1.6.3
+markdown==3.11.3
+pylibmc==1.7.1
 jsmin==3.0.1
 css-html-js-minify==2.5.5
 django-dynamic-raw-id==4.4
