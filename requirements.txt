@@ -10,7 +10,7 @@ requests==2.34.2
 babel==2.18.0
 pytz
 markdown==3.11.3
-pylibmc==1.7.1
+pylibmc==1.8.0
 jsmin==3.0.1
 css-html-js-minify==2.5.5
 django-dynamic-raw-id==4.4
