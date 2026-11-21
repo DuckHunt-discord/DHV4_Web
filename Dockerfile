@@ -38,7 +38,7 @@ ENV GIT_VERSION="1:2.47.3-0+deb13u1"
 # renovate: suite=trixie depName=libmemcached-dev
 ENV LIBMEMCACHED_DEV_VERSION="1.1.4-1.1+b2"
 # renovate: suite=trixie depName=zlib1g-dev
-ENV ZLIB1G_DEV_VERSION="1:1.3.dfsg+really1.3.1-1+b1"
+ENV ZLIB1G_DEV_VERSION="1:1.3.dfsg+really1.3.1-1+deb13u1"
 
 RUN apt-get update; \
     apt-get install -y --no-install-recommends \
