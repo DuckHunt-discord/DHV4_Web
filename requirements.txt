@@ -9,7 +9,7 @@ gunicorn==25.3.0
 requests==2.34.2
 babel==2.19.0
 pytz
-markdown==3.11.3
+markdown==3.11.4
 pylibmc==1.8.0
 jsmin==3.0.1
 css-html-js-minify==2.5.5
@@ -18,4 +18,4 @@ Pillow==12.3.0
 django-imagekit
 django-xff==1.5.0
 colorlog==6.12.0
-fonttools==4.68.0
+fonttools==4.69.1
